@@ -4,10 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách danh mục'; ?></title>
-    <!-- <link rel="icon" href="/Project-One-FPT/asset/images/favicon.ico" type="image/x-icon" /> -->
+    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách voucher đã xoá'; ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 
@@ -18,7 +16,7 @@
     }
     $filterAll = filter();
     $data = [
-        'pageTitle' => 'Danh sách danh mục đã xoá',
+        'pageTitle' => 'Danh sách voucher đã xoá',
         'userId' => 1
     ];
     layout('header_admin', $data);
@@ -31,15 +29,15 @@
     // Kiểm tra có search hay không
     if (!empty($filterAll['search'])) {
         $value = $filterAll['search'];
-        $amount = getCountRows("SELECT * FROM categories WHERE id LIKE '%$value%'");
+        $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
         if ($amount > 0) {
-            $listCategories = selectAll("SELECT * FROM categories WHERE id LIKE '%$value%'");
+            $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
         } else {
-            setFlashData('smg', 'danh mục không tồn tại');
+            setFlashData('smg', 'Voucher không tồn tại');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        $listCategories = selectAll("SELECT * FROM categories ORDER BY id");
+        $listVouchers = selectAll("SELECT * FROM vouchers ORDER BY id");
     }
 
     $smg = getFlashData('smg');
@@ -49,16 +47,16 @@
     <div class="min-h-full">
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center justify-between">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Quản lý danh mục</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Quản lý Voucher</h1>
                 <div class="flex gap-4">
                     <form method="post" action="">
                         <div class="flex">
-                            <input type="hidden" name='act' value="categories" class="hidden">
-                            <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Danh Mục">
+                            <input type="hidden" name='act' value="vouchers" class="hidden">
+                            <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Voucher">
                             <?php if (!empty($data['userId'])): ?>
                                 <input type="hidden" class="form-control" name="userId" value="<?php echo $data['userId']; ?>">
                             <?php endif; ?>
-                            <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
+                            <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
                     </form>
                 </div>
@@ -68,7 +66,7 @@
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
                 <div class="flex mb-4 gap-2">
                     <!-- Nút quay lại -->
-                    <a href="?module=categories&action=list"
+                    <a href="?module=vouchers&action=list"
                         class="text-gray-700 bg-gray-200 hover:bg-gray-300 
                                 focus:ring-4 focus:outline-none focus:ring-gray-300 
                                 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center gap-2">
@@ -83,27 +81,33 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                             <tr>
                                 <th scope="col" class="px-6 py-3">STT</th>
-                                <th scope="col" class="px-6 py-3">Mã danh mục</th>
-                                <th scope="col" class="px-6 py-3">Tên danh mục</th>
-                                <th scope="col" class="px-6 py-3">Ảnh</th>
+                                <th scope="col" class="px-6 py-3">Mã Voucher</th>
+                                <th scope="col" class="px-6 py-3">Giảm giá</th>
+                                <th scope="col" class="px-6 py-3">Đơn vị</th>
+                                <th scope="col" class="px-6 py-3">Ngày bắt đầu</th>
+                                <th scope="col" class="px-6 py-3">Ngày kết thúc</th>
                                 <th scope="col" class="px-6 py-3" width="10%">Khôi phục</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if (!empty($listCategories)):
+                            if (!empty($listVouchers)):
                                 $count = 0;
-                                foreach ($listCategories as $item):
-                                    if ($item["is_deleted"] == 1):
+                                foreach ($listVouchers as $item):
+                                    if (!empty($item["is_deleted"]) && $item["is_deleted"] == 1):
                                         $count++;
                             ?>
                                         <tr class="bg-white hover:bg-gray-50">
                                             <td class="px-6 py-4"><?php echo $count; ?></td>
-                                            <td class="px-6 py-4"><?php echo $item['id']; ?></td>
-                                            <td class="px-6 py-4"><?php echo $item['name_category']; ?></td>
-                                            <td class="px-6 py-4"><?php echo $item['image']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['code']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['discount']; ?></td>
                                             <td class="px-6 py-4">
-                                                <a href="<?php echo _WEB_HOST; ?>?module=categories&action=restore&id=<?php echo $item['id']; ?>"
+                                                <?php echo $item['unit'] == 0 ? '%' : 'VND'; ?>
+                                            </td>
+                                            <td class="px-6 py-4"><?php echo $item['start']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['end']; ?></td>
+                                            <td class="px-6 py-4">
+                                                <a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=restore&id=<?php echo $item['id']; ?>"
                                                     class="text-white bg-green-500 hover:bg-green-600 
                                                         focus:ring-4 focus:outline-none focus:ring-green-300 
                                                         font-medium rounded-lg text-sm px-3 py-1.5 text-center">
@@ -117,7 +121,7 @@
                             else:
                                 ?>
                                 <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-red-600 bg-red-100">Không có danh mục nào!!</td>
+                                    <td colspan="7" class="px-6 py-4 text-center text-red-600 bg-red-100">Không có voucher nào!!</td>
                                 </tr>
                             <?php
                             endif;

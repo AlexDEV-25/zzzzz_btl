@@ -68,8 +68,13 @@ $data = [
         </header>
         <main>
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                <div class="flex mb-4">
-                    <a href="?module=products&action=list" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Quay lại <i class="fa-solid fa-plus"></i></a>
+                <div class="flex mb-4 gap-2">
+                    <a href="?module=products&action=list"
+                        class="text-gray-700 bg-gray-200 hover:bg-gray-300 
+                                focus:ring-4 focus:outline-none focus:ring-gray-300 
+                                font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Quay lại
+                    </a>
                 </div>
                 <?php if (!empty($smg)) {
                     echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
@@ -106,7 +111,14 @@ $data = [
                                             <td class="px-6 py-4"><?php echo $item['origin_price']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['sold']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['created_at']; ?></td>
-                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=products&action=restore&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                            <td class="px-6 py-4">
+                                                <a href="<?php echo _WEB_HOST; ?>?module=products&action=restore&id=<?php echo $item['id']; ?>"
+                                                    class="text-white bg-green-500 hover:bg-green-600 
+                                                        focus:ring-4 focus:outline-none focus:ring-green-300 
+                                                        font-medium rounded-lg text-sm px-3 py-1.5 text-center">
+                                                    <i class="fa-solid fa-rotate-left"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                 <?php
                                     endif;

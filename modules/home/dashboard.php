@@ -62,7 +62,7 @@ $data = ['pageTitle' => 'Trang chủ',];
     ?>
 
     <!-- Banner -->
-    <div class="my-10 max-w-7xl mx-auto relative isolate bg-cover bg-bottom bg-[url('/zzzzz_btl/templates/image/banner/banner.jpg')] h-[400px] rounded-xl">
+    <div class="my-10 max-w-7xl mx-auto relative isolate bg-cover bg-bottom bg-[url('/zzzzzz_btl/zzzzz_btl/templates/image/banner/banner.jpg')] h-[400px] rounded-xl">
 
         <div class="bg-black/30 absolute inset-0 flex flex-col items-center justify-center w-full px-10 lg:px-80 rounded-xl">
             <div class="text-center">
@@ -162,6 +162,50 @@ $data = ['pageTitle' => 'Trang chủ',];
         layout('footer_dashboard', $data);
     }
     ?>
+    <!-- Hộp quà -->
+    <?php if (!empty($userId) && $userId != 1): ?>
+        <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>" class="gift-icon">
+            <img src="/zzzzzz_btl/zzzzz_btl/templates/image/gift/git.png"
+                alt="Gift"
+                style="width:60px; height:60px;">
+        </a>
+
+        <style>
+            .gift-icon {
+                position: fixed;
+                bottom: 20px;
+                /* cách đáy */
+                left: 20px;
+                /* cách trái */
+                cursor: pointer;
+                z-index: 9999;
+                animation: bounce 1.5s infinite;
+            }
+
+            @keyframes bounce {
+
+                0%,
+                20%,
+                50%,
+                80%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                40% {
+                    transform: translateY(-20px);
+                }
+
+                60% {
+                    transform: translateY(-10px);
+                }
+            }
+        </style>
+    <?php endif; ?>
+</body>
+
+</html>
+
 </body>
 
 </html>

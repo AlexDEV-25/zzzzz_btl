@@ -13,9 +13,26 @@ if (isPost()) {
                     'end_date' => date('Y-m-d H:i:s'),
                     'status' => $filterAll['status']
                 ];
+            } elseif ($filterAll['status'] == -1) {
+                $dataUpdate = [
+                    'end_date' => date('Y-m-d H:i:s'),
+                    'status' => $filterAll['status']
+                ];
+                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
+
+                foreach ($listBillDetail as $item):
+                    $productDetailId = $item['id_product_detail'];
+                    $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
+                    $dataUpdateAmount = [
+                        'amount' => $productDetail['amount'] + $item['amount_buy'],
+                    ];
+                    $conditionProductDetail = "id = $productDetailId";
+                    $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
+                endforeach;
             } else {
                 $dataUpdate = [
                     'status' => $filterAll['status'],
+                    'status' => $filterAll['status']
                 ];
             }
 

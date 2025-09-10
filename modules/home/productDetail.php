@@ -37,7 +37,7 @@ if (!empty($filterAll['userId'])) {
         $cartId = $cart['id'];
 
         if (isPost()) {
-            if (!empty($cartCount) && !empty($filterAll['detailId'])) {
+            if (!empty($filterAll['detailId'])) {
                 $detailId = $filterAll['detailId'];
                 $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
                 if ($rowProductCart > 0) {
@@ -52,7 +52,7 @@ if (!empty($filterAll['userId'])) {
                 }
             }
         } else {
-            $count = 0;
+            $count = $cartCount;
         }
         $data = [
             'productId' => $productId,
@@ -127,7 +127,7 @@ if (!empty($filterAll['userId'])) {
                     </span>
                 </div>
 
-                <form action="" method="post" class="space-y-4">
+                <form action="" method="POST" class="space-y-4">
                     <div>
                         <label class="text-sm text-gray-600">Màu sắc:</label>
                         <input type="color" value="<?php echo $detail['code_color']; ?>" disabled class="ml-2">

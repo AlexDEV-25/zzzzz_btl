@@ -31,7 +31,9 @@
                     <a href="<?php echo _WEB_HOST; ?>?module=categories&action=list" class="block p-2 font-medium text-gray-900">Danh mục</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=products&action=list" class="block p-2 font-medium text-gray-900">Sản phẩm</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=users&action=list" class="block p-2 font-medium text-gray-900">Tài khoản</a>
+                    <a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=list" class="block p-2 font-medium text-gray-900">Voucher</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=bills&action=list" class="block p-2 font-medium text-gray-900">Đơn hàng</a>
+
                 </div>
             </div>
             <div class="flex-1 bg-black bg-opacity-25 overlay"></div>
@@ -62,7 +64,9 @@
                     <a href="<?php echo _WEB_HOST; ?>?module=categories&action=list" class="font-medium text-gray-700 hover:text-gray-800">Danh mục</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=products&action=list" class="font-medium text-gray-700 hover:text-gray-800">Sản phẩm</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=users&action=list" class="font-medium text-gray-700 hover:text-gray-800">Tài khoản</a>
+                    <a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=list" class="font-medium text-gray-700 hover:text-gray-800">Voucher</a>
                     <a href="<?php echo _WEB_HOST; ?>?module=bills&action=list" class="font-medium text-gray-700 hover:text-gray-800">Đơn hàng</a>
+
                 </div>
 
                 <!-- Thanh tìm kiếm -->

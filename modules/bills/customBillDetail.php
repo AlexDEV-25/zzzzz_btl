@@ -3,14 +3,13 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 
-
 $filterAll = filter();
 $userId =  $filterAll['userId'];
 $billId =  $filterAll['billId'];
+
 $bill = selectOne("SELECT * FROM bills WHERE id = $billId ");
 $billDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId ");
 $cartCount = getCountCart($userId);
-
 
 $data = [
     'pageTitle' => 'Chi tiết đơn hàng',
@@ -21,6 +20,39 @@ layout('header_custom', $data);
 
 if (!isLogin()) {
     redirect('?module=auth&action=login');
+}
+
+// ====== Xử lý voucher ======
+$voucherInfo = null;
+$beforeDiscount = 0;
+foreach ($billDetail as $item) {
+    $productDetailId = $item['id_product_detail'];
+    $productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId ");
+    $productId = $productDetail['id_product'];
+    $product = selectOne("SELECT * FROM products WHERE id = $productId");
+
+    $beforeDiscount += $item['amount_buy'] * $product['price'];
+}
+
+if (!empty($bill['id_voucher'])) {
+    $voucherId = $bill['id_voucher'];
+    $voucherInfo = selectOne("SELECT * FROM vouchers WHERE id = $voucherId");
+
+    if ($voucherInfo) {
+        if ($voucherInfo['unit'] == 0) {
+            // Giảm theo %
+            $discountValue = ($beforeDiscount * $voucherInfo['discount']) / 100;
+        } else {
+            // Giảm theo số tiền
+            $discountValue = $voucherInfo['discount'];
+        }
+
+        $afterDiscount = max(0, $beforeDiscount - $discountValue);
+    } else {
+        $afterDiscount = $beforeDiscount;
+    }
+} else {
+    $afterDiscount = $beforeDiscount;
 }
 ?>
 
@@ -54,9 +86,9 @@ if (!isLogin()) {
                     </p>
                 </div>
                 <div>
-                    <p class="font-medium text-gray-600">Tổng tiền:</p>
+                    <p class="font-medium text-gray-600">Tổng tiền (sau giảm):</p>
                     <p class="text-xl font-bold text-gray-900">
-                        <?php echo number_format($bill['total'], 0, ',', '.'); ?> đ
+                        <?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ
                     </p>
                 </div>
             </div>
@@ -71,7 +103,7 @@ if (!isLogin()) {
                         <th class="px-6 py-3 font-semibold">Số lượng</th>
                         <th class="px-6 py-3 font-semibold">Đơn giá</th>
                         <th class="px-6 py-3 font-semibold">Thành tiền</th>
-                        <th class="px-6 py-3 font-semibold">Hành động</th>
+
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -116,10 +148,28 @@ if (!isLogin()) {
         </div>
 
         <!-- Tổng kết -->
-        <div class="bg-white mt-6 p-6 shadow-md rounded-md">
-            <div class="flex justify-between text-lg font-bold text-gray-900">
+        <div class="bg-white mt-6 p-6 shadow-md rounded-md space-y-3">
+            <div class="flex justify-between text-gray-700">
+                <span>Tạm tính</span>
+                <span><?php echo number_format($beforeDiscount, 0, ',', '.'); ?> đ</span>
+            </div>
+
+            <?php if ($voucherInfo): ?>
+                <div class="flex justify-between text-gray-700">
+                    <span>Voucher đã áp dụng (<?php echo $voucherInfo['code']; ?>)</span>
+                    <span>
+                        -<?php
+                            echo ($voucherInfo['unit'] == 0)
+                                ? $voucherInfo['discount'] . '%'
+                                : number_format($voucherInfo['discount'], 0, ',', '.') . ' đ';
+                            ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+
+            <div class="flex justify-between text-lg font-bold text-gray-900 border-t pt-3">
                 <span>Thành tiền</span>
-                <span><?php echo number_format($bill['total'], 0, ',', '.'); ?> đ</span>
+                <span><?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ</span>
             </div>
         </div>
     </div>
