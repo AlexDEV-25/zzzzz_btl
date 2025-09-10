@@ -86,24 +86,11 @@ if (isPost()) {
             'thumbnail' => $thumbnail,
         ];
 
-        $condition = "id = $productId";
-        $UpdateStatus = update('products', $dataUpdate, $condition);
-        if ($UpdateStatus) {
-            // setFlashData('smg', 'Sửa sản phẩm dùng thành công!!');
-            // setFlashData('smg_type', 'success');
-            $name_product = $filterAll['name_product'];
-            $nameQuery = selectOne("SELECT id FROM products WHERE name_product = '$name_product'");
-            if (!empty($nameQuery)) {
-                $productId = $nameQuery['id'];
-                // setSession('productId', $productId); // quan trọng
-                redirect('?module=products&action=editDetail&id=' . $productId);
-            } else {
-                redirect('?module=products&action=list');
-            }
-        } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
-            setFlashData('smg_type', 'danger');
-        }
+        // Lưu dữ liệu vào session
+        setSession('previewEditProduct', $dataUpdate);
+
+        // Chuyển sang editDetail
+        redirect('?module=products&action=editDetail&id=' . $productId);
     } else {
         setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');

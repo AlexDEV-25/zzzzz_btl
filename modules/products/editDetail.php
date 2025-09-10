@@ -4,31 +4,22 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-$productId = $filterAll['id'];
-if (!empty($productId)) {
-    $detaiOld = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
-    if (!empty($detaiOld)) {
-        // Tồn tại 
+$productId = $filterAll['id'] ?? 0;
 
-        // echo '<pre>';
-        // print_r($detaiOld);
-        // echo '</pre>';
-        // die();
-        setFlashData('detaiOld', $detaiOld);
-    } else {
-        // redirect('?module=products&action=list');
+if (!empty($productId)) {
+    $detailOld = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
+    if (!empty($detailOld)) {
+        setFlashData('detailOld', $detailOld);
     }
 }
 
 if (isPost()) {
-    $errors = []; // Mảng chữa các lỗi
+    $errors = [];
 
     if (empty($filterAll['amount'])) {
         $errors['amount']['required'] = 'lỗi không nhập';
-    } else {
-        if ($filterAll['amount'] < 0) {
-            $errors['amount']['min'] = 'số lượng không được nhỏ hơn 0';
-        }
+    } elseif ($filterAll['amount'] < 0) {
+        $errors['amount']['min'] = 'số lượng không được nhỏ hơn 0';
     }
 
     if (empty($filterAll['size'])) {
@@ -40,13 +31,15 @@ if (isPost()) {
     }
 
     if (empty($errors)) {
-        $result = move_uploaded_file(
-            $_FILES['image']['tmp_name'], // đường đẫn gốc
-            _WEB_PATH . '\\templates\\image\\products\\' . // đường đẫn  mới nhớ thêm \\ ở cuối
-                $_FILES['image']['name']
-        ); // file  muốn chuyển
-        $anh_string = (string)$_FILES['image']['name'];
-        $image = $anh_string;
+        // Nếu có upload ảnh mới thì lưu, không thì giữ ảnh cũ
+        $image = $filterAll['image_old'] ?? '';
+        if (!empty($_FILES['image']['name'])) {
+            move_uploaded_file(
+                $_FILES['image']['tmp_name'],
+                _WEB_PATH . '\\templates\\image\\products\\' . $_FILES['image']['name']
+            );
+            $image = $_FILES['image']['name'];
+        }
 
         $dataUpdate = [
             'amount' => $filterAll['amount'],
@@ -64,12 +57,12 @@ if (isPost()) {
         } else {
             $UpdateStatus = insert('products_detail', $dataUpdate);
         }
+
         if ($UpdateStatus) {
-            setFlashData('smg', 'Sửa sản phẩm dùng thành công!!');
+            setFlashData('smg', 'Cập nhật chi tiết sản phẩm thành công!');
             setFlashData('smg_type', 'success');
-            // removeSession('productId');
         } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
+            setFlashData('smg', 'Hệ thống đang lỗi, vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
         }
     } else {
@@ -82,34 +75,24 @@ if (isPost()) {
     redirect('?module=products&action=editDetail&id=' . $productId);
 }
 
-
 layout('header');
-
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
 $oldData = getFlashData('old');
-$oldData = getFlashData('detaiOld');
-
+$detailOld = getFlashData('detailOld');
 
 if (!empty($detailOld)) {
     $oldData = $detailOld;
 }
 ?>
-
 <div class="container">
     <div class="row" style="margin: 50px auto;">
+        <h2 class="text-center text-uppercase">Update chi tiết sản phẩm</h2>
+        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
 
-        <h2 class="text-center text-uppercase">Update sản phẩm </h2>
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
-
-        ?>
         <form action="" method="post" enctype="multipart/form-data">
-
             <div class="row">
                 <div class="col">
                     <div class="form-group mg-form">
@@ -137,39 +120,36 @@ if (!empty($detailOld)) {
 
                     <div class="form-group mg-form">
                         <div class="color-picker">
-                            <div class="color-preview" id="colorPreview">#000000</div>
+                            <div class="color-preview" id="colorPreview"><?php echo oldData($oldData, 'code_color', '#000000'); ?></div>
                             <div class="color-input">
                                 <label for="colorInput">Chọn màu:</label>
-                                <input type="color" id="colorInput" value="#000000" name="code_color">
+                                <input type="color" id="colorInput" value="<?php echo oldData($oldData, 'code_color', '#000000'); ?>" name="code_color">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
-                    <div id="uploadForm" class="row">
-                        <div style=" padding-top: 50px;box-sizing: border-box;" class="col">
-                            <h2 style="font-size: 25px;">Ảnh cũ</h2>
-                            <div>
-                                <img style="width: 500px; height: 300px;box-sizing: border-box; margin-top: 30px;"
-                                    src="<?php echo _IMGP_ . $oldData['image']; ?>"
-                                    alt="Ảnh cũ">
-                            </div>
+                <div class="upload-container row" style="margin-left: 5px;">
+                    <div class="col" style="padding-top: 50px;">
+                        <h2 style="font-size: 25px;">Ảnh cũ</h2>
+                        <div>
+                            <img style="width: 500px; height: 300px; margin-top: 30px;"
+                                src="<?php echo _IMGP_ . $oldData['image']; ?>" alt="Ảnh cũ">
                         </div>
-                        <div class="col">
-                            <h2>Chọn ảnh mới</h2>
-                            <div class="file-upload">
-                                <label for="file">Chọn ảnh:</label>
-                                <input type="file" id="file" accept="image/*" name="image">
-                            </div>
-                            <div id="preview-container" class="preview-container">
-                                <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
-                            </div>
+                        <input type="hidden" name="image_old" value="<?php echo $oldData['image']; ?>">
+                    </div>
+                    <div class="col">
+                        <h2>Chọn ảnh mới</h2>
+                        <div class="file-upload">
+                            <label for="file">Chọn ảnh:</label>
+                            <input type="file" id="file" accept="image/*" name="image">
+                        </div>
+                        <div id="preview-container" class="preview-container">
+                            <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <input type="hidden" name="id" value="<?php echo $productId ?>">
 
@@ -179,8 +159,4 @@ if (!empty($detailOld)) {
         </form>
     </div>
 </div>
-
-
-<?php
-layout('footer');
-?>
+<?php layout('footer'); ?>

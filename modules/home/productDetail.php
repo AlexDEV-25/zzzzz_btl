@@ -170,7 +170,7 @@ if (!empty($filterAll['userId'])) {
             <h2 class="text-lg font-semibold text-gray-900 mb-4">Đánh giá sản phẩm</h2>
 
             <!-- Form đánh giá: chỉ hiện nếu người dùng đã đăng nhập và không phải admin -->
-            <?php if (!empty($filterAll['userId']) && $filterAll['userId'] != 1): ?>
+            <?php if (!empty($filterAll['userId'])): ?>
                 <?php if (!empty($filterAll['billId'])): ?>
                     <form action="?module=reviews&action=review" method="POST" class="mb-6 space-y-2">
                         <input type="hidden" name="productId" value="<?php echo $productId; ?>">
@@ -234,20 +234,26 @@ if (!empty($filterAll['userId'])) {
                 $categoryId = $product['id_category'];
                 $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId AND id <> $productId");
                 foreach ($listProduct as $productItem):
-                    $productId = $productItem['id'];
+                    $categorieId = $productItem['id_category'];
+                    $category = selectOne("SELECT is_deleted FROM categories WHERE id = $categorieId");
+                    $isDelete = $category['is_deleted'];
+                    if ($productItem['is_deleted'] != 1  && $isDelete != 1):
+                        $productId = $productItem['id'];
                 ?>
-                    <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo $userId; ?>&count=<?php echo $count; ?>"
-                        class="bg-white p-4 rounded-lg shadow hover:shadow-md transition block">
-                        <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
-                            alt="<?php echo $productItem['thumbnail']; ?>"
-                            class="rounded-md h-40 w-full object-cover mb-3">
-                        <h3 class="text-sm font-medium text-gray-900 line-clamp-2"><?php echo $productItem['name_product']; ?></h3>
-                        <p class="text-red-600 font-semibold mt-1">
-                            <?php echo number_format($productItem['price'], 0, ',', '.'); ?> đ
-                        </p>
-                        <p class="text-gray-600 text-sm"> Còn lại: <?php echo $detail['amount']; ?> sản phẩm </p>
-                    </a>
-                <?php endforeach; ?>
+                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo $userId; ?>&count=<?php echo $count; ?>"
+                            class="bg-white p-4 rounded-lg shadow hover:shadow-md transition block">
+                            <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
+                                alt="<?php echo $productItem['thumbnail']; ?>"
+                                class="rounded-md h-40 w-full object-cover mb-3">
+                            <h3 class="text-sm font-medium text-gray-900 line-clamp-2"><?php echo $productItem['name_product']; ?></h3>
+                            <p class="text-red-600 font-semibold mt-1">
+                                <?php echo number_format($productItem['price'], 0, ',', '.'); ?> đ
+                            </p>
+                            <p class="text-gray-600 text-sm"> Còn lại: <?php echo $detail['amount']; ?> sản phẩm </p>
+                        </a>
+                <?php
+                    endif;
+                endforeach; ?>
             </div>
         </div>
     </div>

@@ -49,7 +49,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </button>
-                <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&userId=<?php echo $data['userId'] ?? 0; ?>" class="flex items-center">
+                <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&userId=1 " class="flex items-center">
                     <img class="h-9 sm:h-11 w-auto rounded-md" src="https://th.bing.com/th/id/OIP.cdh5Bm1mwTTH7Q2GFTg1xwHaHq?rs=1&pid=ImgDetMain" alt="Logo">
                 </a>
             </div>

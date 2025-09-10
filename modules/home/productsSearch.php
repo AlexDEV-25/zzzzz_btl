@@ -58,15 +58,18 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                     <?php
                     $listCategory = selectAll("SELECT * FROM categories");
                     foreach ($listCategory as $category):
-                        $categoryId = $category['id'];
+                        if ($category['is_deleted'] != 1):
+                            $categoryId = $category['id'];
                     ?>
-                        <li>
-                            <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>"
-                                class="block text-gray-700 hover:text-rose-700 font-medium">
-                                <?php echo $category['name_category']; ?>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                            <li>
+                                <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>"
+                                    class="block text-gray-700 hover:text-rose-700 font-medium">
+                                    <?php echo $category['name_category']; ?>
+                                </a>
+                            </li>
+                    <?php
+                        endif;
+                    endforeach; ?>
                 </ul>
             </div>
         </aside>
@@ -80,20 +83,26 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                 <?php
                 $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
                 foreach ($listProduct as $product):
-                    $productId = $product['id'];
-                    $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
+                    $categorieId = $product['id_category'];
+                    $category = selectOne("SELECT is_deleted FROM categories WHERE id = $categorieId");
+                    $isDelete = $category['is_deleted'];
+                    if ($product['is_deleted'] != 1 && $isDelete != 1):
+                        $productId = $product['id'];
+                        $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                 ?>
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
-                            <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>" alt="<?php echo $product['name_product']; ?>" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-900"><?php echo $product['name_product']; ?></h3>
-                                <p class="text-rose-700 font-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</p>
-                                <p class="text-gray-600 text-sm">Còn lại: <?php echo $productDetail['amount']; ?> sản phẩm</p>
-                            </div>
-                        </a>
-                    </div>
-                <?php endforeach; ?>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                            <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
+                                <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>" alt="<?php echo $product['name_product']; ?>" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold text-gray-900"><?php echo $product['name_product']; ?></h3>
+                                    <p class="text-rose-700 font-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</p>
+                                    <p class="text-gray-600 text-sm">Còn lại: <?php echo $productDetail['amount']; ?> sản phẩm</p>
+                                </div>
+                            </a>
+                        </div>
+                <?php
+                    endif;
+                endforeach; ?>
             </div>
         </main>
 

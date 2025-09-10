@@ -11,9 +11,9 @@ $data = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách người dùng'; ?></title>
-    <link rel="icon" href="/Project-One-FPT/asset/images/favicon.ico" type="image/x-icon" />
+    <!-- <link rel="icon" href="/Project-One-FPT/asset/images/favicon.ico" type="image/x-icon" /> -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css">
+    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 
@@ -67,8 +67,22 @@ $data = [
         </header>
         <main>
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                <div class="flex mb-4">
-                    <a href="?module=users&action=add" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Thêm người dùng <i class="fa-solid fa-plus"></i></a>
+                <div class="flex mb-4 gap-2">
+                    <!-- Nút thêm -->
+                    <a href="?module=users&action=add"
+                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+              hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 
+              font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Thêm người dùng <i class="fa-solid fa-plus"></i>
+                    </a>
+
+                    <!-- Nút thùng rác -->
+                    <a href="?module=users&action=binUsers"
+                        class="text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 
+              hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 
+              font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Thùng rác <i class="fa-solid fa-trash"></i>
+                    </a>
                 </div>
                 <?php if (!empty($smg)) {
                     echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
@@ -91,18 +105,20 @@ $data = [
                             if (!empty($listUsers)):
                                 $count = 0;
                                 foreach ($listUsers as $item):
-                                    $count++;
+                                    if ($item['is_deleted'] != 1):
+                                        $count++;
                             ?>
-                                    <tr class="bg-white hover:bg-gray-50">
-                                        <td class="px-6 py-4"><?php echo $count; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['fullname']; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['email']; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['phone']; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['status'] == 1 ? '<span class="inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã kích hoạt</span>' : '<span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Chưa kích hoạt</span>'; ?></td>
-                                        <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                                        <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
-                                    </tr>
+                                        <tr class="bg-white hover:bg-gray-50">
+                                            <td class="px-6 py-4"><?php echo $count; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['fullname']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['email']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['phone']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['status'] == 1 ? '<span class="inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã kích hoạt</span>' : '<span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Chưa kích hoạt</span>'; ?></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
+                                        </tr>
                                 <?php
+                                    endif;
                                 endforeach;
                             else:
                                 ?>

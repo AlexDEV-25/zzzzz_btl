@@ -22,8 +22,8 @@ if (isPost()) {
         $password = $filterAll['password'];
 
         // câu lệnh truy vấn
-        $userQuery = selectOne("SELECT password, id, role FROM users WHERE email = '$email'");
-        if (!empty($userQuery)) {
+        $userQuery = selectOne("SELECT password, id, role, is_deleted FROM users WHERE email = '$email'");
+        if (!empty($userQuery) && $userQuery["is_deleted"] != 1) {
             $passwordHash = $userQuery['password'];
             $userId = $userQuery['id'];
             $role = $userQuery['role'];
@@ -71,7 +71,7 @@ if (isPost()) {
                 redirect('?module=auth&action=login');
             }
         } else {
-            setFlashData('msg', 'email khong ton tai');
+            setFlashData('msg', 'email khong ton tai, hoac tai khoan da bi khoa');
             setFlashData('msg_type', 'danger');
             redirect('?module=auth&action=login');
         }

@@ -60,26 +60,11 @@ if (isPost()) {
             'created_at' => date('Y-m-d H:i:s'),
             'thumbnail' => $thumbnail,
         ];
+        // Lưu dữ liệu vào session thay vì insert
+        setSession('previewProduct', $dataInsert);
 
-        $insertStatus = insert('products', $dataInsert);
-        if ($insertStatus) {
-            // setFlashData('smg', 'Thêm sản phẩm mới thành công!!');
-            // setFlashData('smg_type', 'success');
-
-            $name_product = $filterAll['name_product'];
-            $nameQuery = selectOne("SELECT id FROM products WHERE name_product = '$name_product'");
-            if (!empty($nameQuery)) {
-                $productId = $nameQuery['id'];
-                setSession('productId', $productId);
-                redirect('?module=products&action=detail&id=' . $productId);
-            } else {
-                redirect('?module=products&action=list');
-            }
-        } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
-            setFlashData('smg_type', 'danger');
-            redirect('?module=products&action=add');
-        }
+        // Chuyển sang trang detail để hiển thị
+        redirect('?module=products&action=detail');
     } else {
         setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');

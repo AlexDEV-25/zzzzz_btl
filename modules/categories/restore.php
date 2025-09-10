@@ -13,12 +13,12 @@ if (!empty($filterAll['id'])) {
     $rowCategory = getCountRows("SELECT * FROM categories WHERE id =$categoryId");
     if ($rowCategory > 0) {
         $dataUpdate = [
-            'is_deleted' => 1
+            'is_deleted' => 0
         ];
         $condition = "id = $categoryId";
         $UpdateStatus = update('categories', $dataUpdate, $condition);
         if ($UpdateStatus) {
-            setFlashData('smg', 'Ẩn danh mục thành công');
+            setFlashData('smg', 'Khôi phục danh mục thành công');
             setFlashData('smg_type', 'success');
         } else {
             setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');

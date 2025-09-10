@@ -160,7 +160,7 @@ if (isPost()) {
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Optional custom styles -->
-    <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css">
+    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
     <style>
         /* Small extras to match feel */
         .product-card img {
@@ -184,14 +184,19 @@ if (isPost()) {
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <?php if (!empty($category['image'])): ?>
             <div class="bg-cover bg-center h-[420px] rounded-xl mt-4 overflow-hidden shadow-md"
-                style="background-image: url('/Project-One-FPT/asset/images/<?php echo $category['image']; ?>')">
+                style="background-image: url('/zzzzzz_btl/zzzzz_btl/templates/image/categories/<?php echo $category['image']; ?>')">
                 <div class="bg-black bg-opacity-25 h-full w-full flex items-center justify-center">
                     <div class="px-6 sm:px-12 text-center">
-                        <h1 class="text-3xl sm:text-4xl font-bold text-white drop-shadow"><?php echo $category['name_category']; ?></h1>
-                        <p class="mt-2 text-white/90 text-center">Danh mục <?php echo $category['name_category']; ?> — các mẫu nổi bật, chất lượng.</p>
+                        <h1 class="text-3xl sm:text-4xl font-bold text-white drop-shadow">
+                            <?php echo $category['name_category']; ?>
+                        </h1>
+                        <p class="mt-2 text-white/90 text-center">
+                            Danh mục <?php echo $category['name_category']; ?> — các mẫu nổi bật, chất lượng.
+                        </p>
                     </div>
                 </div>
             </div>
+
 
         <?php else: ?>
             <!-- Fallback promo banner -->
@@ -274,23 +279,33 @@ if (isPost()) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     <?php if (!empty($listProduct)): ?>
                         <?php foreach ($listProduct as $product):
-                            $productId = $product['id'];
-                            $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
-                            $thumb = !empty($product['thumbnail']) ? _IMGP_ . $product['thumbnail'] : '/Project-One-FPT/asset/images/placeholder.png';
+                            $categorieId = $product['id_category'];
+                            $category = selectOne("SELECT is_deleted FROM categories WHERE id = $categorieId");
+                            $isDelete = $category['is_deleted'];
+                            if ($product['is_deleted'] != 1 && $isDelete != 1):
+                                $productId = $product['id'];
+                                $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
+                                // $thumb = !empty($product['thumbnail']) ? _IMGP_ . $product['thumbnail'] : '/Project-One-FPT/asset/images/placeholder.png';
+                                $thumb = !empty($product['thumbnail'])
+                                    ? '/zzzzzz_btl/zzzzz_btl/templates/image/products/' . $product['thumbnail']
+                                    : '/zzzzzz_btl/zzzzz_btl/templates/image/products/placeholder.png';
+
                         ?>
-                            <article class="bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden">
-                                <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
-                                    <div class="h-56 bg-gray-100 overflow-hidden">
-                                        <img src="<?php echo $thumb; ?>" alt="<?php echo htmlspecialchars($product['name_product']); ?>" class="w-full h-full object-cover">
-                                    </div>
-                                    <div class="p-4">
-                                        <h3 class="text-base font-medium text-gray-900 mb-2"><?php echo htmlspecialchars($product['name_product']); ?></h3>
-                                        <p class="text-indigo-600 font-semibold"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</p>
-                                        <p class="text-gray-600 text-sm"> Còn lại: <?php echo $productDetail['amount']; ?> sản phẩm </p>
-                                    </div>
-                                </a>
-                            </article>
-                        <?php endforeach; ?>
+                                <article class="bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden">
+                                    <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
+                                        <div class="h-56 bg-gray-100 overflow-hidden">
+                                            <img src="<?php echo $thumb; ?>" alt="<?php echo htmlspecialchars($product['name_product']); ?>" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="p-4">
+                                            <h3 class="text-base font-medium text-gray-900 mb-2"><?php echo htmlspecialchars($product['name_product']); ?></h3>
+                                            <p class="text-indigo-600 font-semibold"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</p>
+                                            <p class="text-gray-600 text-sm"> Còn lại: <?php echo $productDetail['amount']; ?> sản phẩm </p>
+                                        </div>
+                                    </a>
+                                </article>
+                        <?php
+                            endif;
+                        endforeach; ?>
                     <?php else: ?>
                         <div class="col-span-full text-center py-12">
                             <p class="text-gray-500">Không có sản phẩm nào.</p>
@@ -373,12 +388,16 @@ if (isPost()) {
                 <div>
                     <h4 class="text-sm font-medium text-gray-900 mb-2">Vật liệu</h4>
                     <div class="space-y-2">
-                        <?php foreach ($listProductFull as $productM): ?>
-                            <label class="flex items-center gap-2 text-sm">
-                                <input type="checkbox" name="material[]" value="<?php echo htmlspecialchars($productM['material']); ?>" class="h-4 w-4 rounded border-gray-300 text-indigo-600">
-                                <span class="text-gray-700"><?php echo htmlspecialchars($productM['material']); ?></span>
-                            </label>
-                        <?php endforeach; ?>
+                        <?php foreach ($listProductFull as $productM):
+                            if ($productM['is_deleted'] != 1): ?>
+
+                                <label class="flex items-center gap-2 text-sm">
+                                    <input type="checkbox" name="material[]" value="<?php echo htmlspecialchars($productM['material']); ?>" class="h-4 w-4 rounded border-gray-300 text-indigo-600">
+                                    <span class="text-gray-700"><?php echo htmlspecialchars($productM['material']); ?></span>
+                                </label>
+                        <?php
+                            endif;
+                        endforeach; ?>
                     </div>
                 </div>
 

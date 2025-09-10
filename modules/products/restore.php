@@ -9,16 +9,16 @@ if (!defined('_CODE')) {
 
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
-    $categoryId = $filterAll['id'];
-    $rowCategory = getCountRows("SELECT * FROM categories WHERE id =$categoryId");
-    if ($rowCategory > 0) {
+    $productId = $filterAll['id'];
+    $rowProduct = getCountRows("SELECT * FROM products WHERE id =$productId");
+    if ($rowProduct > 0) {
         $dataUpdate = [
-            'is_deleted' => 1
+            'is_deleted' => 0
         ];
-        $condition = "id = $categoryId";
-        $UpdateStatus = update('categories', $dataUpdate, $condition);
+        $condition = "id = $productId";
+        $UpdateStatus = update('products', $dataUpdate, $condition);
         if ($UpdateStatus) {
-            setFlashData('smg', 'Ẩn danh mục thành công');
+            setFlashData('smg', 'Khôi phục sản phẩm thành công');
             setFlashData('smg_type', 'success');
         } else {
             setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
@@ -33,4 +33,4 @@ if (!empty($filterAll['id'])) {
     setFlashData('smg_type', 'danger');
 }
 
-redirect('?module=categories&action=list');
+redirect('?module=products&action=list');

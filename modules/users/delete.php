@@ -11,31 +11,21 @@ $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $userId = $filterAll['id'];
     $rowUser = getCountRows("SELECT * FROM users WHERE id =$userId");
-
     if ($rowUser > 0) {
-        $listCart = selectAll("SELECT * FROM cart WHERE id_user = $userId ");
-        foreach ($listCart as $item):
-            $cartId = $item['id'];
-            $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_cart =$cartId");
-            $rowCart = getCountRows("SELECT * FROM cart WHERE id =$cartId");
-            if ($rowProductCart + $rowCart > 0) {
-                // Thực hiện xoá
-                $deleteProductCart = delete('products_cart', "id_cart =$cartId");
-                $deleteCart = delete('cart', "id=$cartId");
-                if ($deleteCart) {
-                    setFlashData('smg', 'Xoá giỏ thành công.');
-                    setFlashData('smg_type', 'success');
-                } else {
-                    setFlashData('smg', 'Lỗi hệ thống.');
-                    setFlashData('smg_type', 'danger');
-                }
-            } else {
-                setFlashData('smg', 'giỏ không tồn tại trong hệ thống.');
-                setFlashData('smg_type', 'danger');
-            }
-        endforeach;
+        $dataUpdate = [
+            'is_deleted' => 1
+        ];
+        $condition = "id = $userId";
+        $UpdateStatus = update('users', $dataUpdate, $condition);
+        if ($UpdateStatus) {
+            setFlashData('smg', 'Ẩn người dùng thành công');
+            setFlashData('smg_type', 'success');
+        } else {
+            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
+            setFlashData('smg_type', 'danger');
+        }
     } else {
-        setFlashData('smg', 'Danh mục không tồn tại trong hệ thống.');
+        setFlashData('smg', 'Người dùng không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');
     }
 
@@ -43,18 +33,6 @@ if (!empty($filterAll['id'])) {
     if ($userDetail > 0) {
         // Thực hiện xoá
         $deleteToken = delete('tokenlogin', "user_Id = $userId");
-
-        if ($deleteToken) {
-            // Xoá user
-            $deleteUser = delete('users', "id=$userId");
-            if ($deleteUser) {
-                setFlashData('smg', 'Xoá người dùng thành công.');
-                setFlashData('smg_type', 'success');
-            } else {
-                setFlashData('smg', 'Lỗi hệ thống.');
-                setFlashData('smg_type', 'danger');
-            }
-        }
     } else {
         setFlashData('smg', 'Người dùng không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');

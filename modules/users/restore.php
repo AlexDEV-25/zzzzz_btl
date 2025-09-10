@@ -9,16 +9,16 @@ if (!defined('_CODE')) {
 
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
-    $categoryId = $filterAll['id'];
-    $rowCategory = getCountRows("SELECT * FROM categories WHERE id =$categoryId");
-    if ($rowCategory > 0) {
+    $userId = $filterAll['id'];
+    $rowUser = getCountRows("SELECT * FROM users WHERE id =$userId");
+    if ($rowUser > 0) {
         $dataUpdate = [
-            'is_deleted' => 1
+            'is_deleted' => 0
         ];
-        $condition = "id = $categoryId";
-        $UpdateStatus = update('categories', $dataUpdate, $condition);
+        $condition = "id = $userId";
+        $UpdateStatus = update('users', $dataUpdate, $condition);
         if ($UpdateStatus) {
-            setFlashData('smg', 'Ẩn danh mục thành công');
+            setFlashData('smg', 'Khôi phục người dùng thành công');
             setFlashData('smg_type', 'success');
         } else {
             setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
@@ -33,4 +33,4 @@ if (!empty($filterAll['id'])) {
     setFlashData('smg_type', 'danger');
 }
 
-redirect('?module=categories&action=list');
+redirect('?module=users&action=list');

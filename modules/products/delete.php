@@ -10,21 +10,22 @@ if (!defined('_CODE')) {
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $productId = $filterAll['id'];
-    $rowDetail = getCountRows("SELECT * FROM products_detail WHERE id_product =$productId");
     $rowProduct = getCountRows("SELECT * FROM products WHERE id =$productId");
-    if ($rowDetail + $rowProduct > 0) {
-        // Thực hiện xoá
-        $deleteDetail = delete('products_detail', "id_product =$productId");
-        $deleteProduct = delete('products', "id=$productId");
-        if ($deleteProduct) {
-            setFlashData('smg', 'Xoá sản phẩm thành công.');
+    if ($rowProduct > 0) {
+        $dataUpdate = [
+            'is_deleted' => 1
+        ];
+        $condition = "id = $productId";
+        $UpdateStatus = update('products', $dataUpdate, $condition);
+        if ($UpdateStatus) {
+            setFlashData('smg', 'Ẩn sản phẩm thành công');
             setFlashData('smg_type', 'success');
         } else {
-            setFlashData('smg', 'Lỗi hệ thống.');
+            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'Sản phẩm không tồn tại trong hệ thống.');
+        setFlashData('smg', 'Sản Phẩm không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');
     }
 } else {
