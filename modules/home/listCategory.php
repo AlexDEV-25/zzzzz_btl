@@ -7,7 +7,7 @@ if (!defined('_CODE')) {
 }
 $filterAll = filter();
 $data = [
-    'pageTitle' => 'trang chủ',
+    'pageTitle' => 'Trang danh mục',
     'userId' => $filterAll['userId']
 ];
 
@@ -26,7 +26,7 @@ if (!empty($filterAll['userId'])) {
             $categoryId = $filterAll['categoryId'];
         }
         $data = [
-            'pageTitle' => 'trang chủ',
+            'pageTitle' => 'Trang danh mục',
             'count' => $cartCount,
             'userId' => $userId,
             'categoryId' => $categoryId
@@ -35,20 +35,11 @@ if (!empty($filterAll['userId'])) {
     }
 } else {
     $userId = '';
-    if (!empty($filterAll['categoryId'])) {
-        $categoryId = $filterAll['categoryId'];
-        $data = [
-            'pageTitle' => 'trang chủ',
-            'categoryId' => $categoryId
-        ];
-        layout('header_dashboard', $data);
-    } else {
-        layout('header_dashboard', $data);
-    }
     if (!empty($filterAll['search'])) {
         $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId . '&count=' . $cartCount);
+        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
     }
+    layout('header_dashboard', $data);
 }
 
 
@@ -153,14 +144,6 @@ if (isPost()) {
 <html lang="vi">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><?php echo !empty($category['name_category']) ? $category['name_category'] . ' - Nhà Xinh' : 'Danh mục - Nhà Xinh'; ?></title>
-
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Optional custom styles -->
-    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
     <style>
         /* Small extras to match feel */
         .product-card img {
@@ -184,7 +167,7 @@ if (isPost()) {
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <?php if (!empty($category['image'])): ?>
             <div class="bg-cover bg-center h-[420px] rounded-xl mt-4 overflow-hidden shadow-md"
-                style="background-image: url('/zzzzzz_btl/zzzzz_btl/templates/image/categories/<?php echo $category['image']; ?>')">
+                style="background-image: url('<?php echo _IMGC_ . $category['image']; ?>')">
                 <div class="bg-black bg-opacity-25 h-full w-full flex items-center justify-center">
                     <div class="px-6 sm:px-12 text-center">
                         <h1 class="text-3xl sm:text-4xl font-bold text-white drop-shadow">
@@ -287,8 +270,8 @@ if (isPost()) {
                                 $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                                 // $thumb = !empty($product['thumbnail']) ? _IMGP_ . $product['thumbnail'] : '/Project-One-FPT/asset/images/placeholder.png';
                                 $thumb = !empty($product['thumbnail'])
-                                    ? '/zzzzzz_btl/zzzzz_btl/templates/image/products/' . $product['thumbnail']
-                                    : '/zzzzzz_btl/zzzzz_btl/templates/image/products/placeholder.png';
+                                    ? _IMGP_ . $product['thumbnail']
+                                    : _IMGP_ . 'placeholder.png';
 
                         ?>
                                 <article class="bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden">

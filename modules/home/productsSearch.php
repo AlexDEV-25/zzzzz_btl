@@ -30,17 +30,10 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
 <!DOCTYPE html>
 <html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $data['pageTitle']; ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
 <body class="bg-gray-100">
 
     <!-- Banner -->
-    <header class="relative bg-cover bg-bottom h-96 rounded-xl mx-auto max-w-7xl my-10" style="background-image: url('/zzzzz_btl/templates/image/banner/banner.jpg');">
+    <header class="relative bg-cover bg-bottom h-96 rounded-xl mx-auto max-w-7xl my-10" style="background-image: url('<?php echo _IMGB_; ?>/banner.jpg');">
         <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-center rounded-xl text-center px-6 lg:px-80">
             <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-tight">Giảm Giá Đến 45% - Sản Phẩm Chính Hãng</h1>
             <p class="mt-4 text-lg text-white">Mua sắm trực tuyến tại META.vn - Giá tốt, Uy tín</p>
@@ -62,7 +55,7 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                             $categoryId = $category['id'];
                     ?>
                             <li>
-                                <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>"
+                                <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>"
                                     class="block text-gray-700 hover:text-rose-700 font-medium">
                                     <?php echo $category['name_category']; ?>
                                 </a>
@@ -91,7 +84,7 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                         $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                 ?>
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                            <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
+                            <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>">
                                 <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>" alt="<?php echo $product['name_product']; ?>" class="w-full h-48 object-cover">
                                 <div class="p-4">
                                     <h3 class="text-lg font-semibold text-gray-900"><?php echo $product['name_product']; ?></h3>

@@ -28,7 +28,7 @@ if (!empty($filterAll['userId'])) {
     $cartCount = getCountCart($userId);
     if (!empty($filterAll['search'])) {
         $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId . '&count=' . $cartCount);
+        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
     }
     if ($filterAll['userId'] == 1) {
         layout('header_admin', $data);
@@ -41,9 +41,9 @@ if (!empty($filterAll['userId'])) {
                 $detailId = $filterAll['detailId'];
                 $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
                 if ($rowProductCart > 0) {
-                    $count = $cart['count'];
+                    $count = $cartCount;
                 } else {
-                    $count = $cart['count'] + 1;
+                    $count = $cartCount + 1;
                     $dataUpdate = [
                         'count' => $count,
                     ];
@@ -57,7 +57,7 @@ if (!empty($filterAll['userId'])) {
         $data = [
             'productId' => $productId,
             'pageTitle' => $product['name_product'],
-            'count' => $cartCount,
+            'count' => $count,
             'userId' => $userId
         ];
         layout('header_custom', $data);
@@ -84,12 +84,12 @@ if (!empty($filterAll['userId'])) {
         }
     }
 } else {
-    layout('header_dashboard', $data);
     $userId = '';
     if (!empty($filterAll['search'])) {
         $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId  . '&productId=' . $productId);
+        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
     }
+    layout('header_dashboard', $data);
 }
 
 
@@ -240,7 +240,7 @@ if (!empty($filterAll['userId'])) {
                     if ($productItem['is_deleted'] != 1  && $isDelete != 1):
                         $productId = $productItem['id'];
                 ?>
-                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo $userId; ?>&count=<?php echo $count; ?>"
+                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo $userId ?? ''; ?>"
                             class="bg-white p-4 rounded-lg shadow hover:shadow-md transition block">
                             <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
                                 alt="<?php echo $productItem['thumbnail']; ?>"

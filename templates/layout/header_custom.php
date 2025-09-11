@@ -27,7 +27,7 @@
                     </button>
                 </div>
                 <div class="space-y-6 border-t border-gray-200 px-4 py-6">
-                    <a href="?module=home&action=dashboard&userId=<?php echo $data['userId'] ?? ''; ?>&count=<?php echo $data['count'] ?? ''; ?>" class="block p-2 font-medium text-gray-900">Home</a>
+                    <a href="?module=home&action=dashboard&userId=<?php echo $data['userId'] ?? ''; ?>" class="block p-2 font-medium text-gray-900">Home</a>
                     <a href="?module=cart&action=customCart&userId=<?php echo $data['userId'] ?? ''; ?>" class="block p-2 font-medium text-gray-900">Thông tin đơn</a>
                 </div>
                 <div class="space-y-6 border-t border-gray-200 px-4 py-6">

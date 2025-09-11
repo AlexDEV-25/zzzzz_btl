@@ -9,7 +9,7 @@ require_once(_WEB_PATH . '\\includes\\session.php');
 require_once(_WEB_PATH . '\\includes\\functions.php');
 
 $errors = [];
-
+$filterAll = filter();
 // Lấy dữ liệu checkout từ session
 $checkoutData = getSession('checkout_data');
 
@@ -63,7 +63,7 @@ foreach ($productCartIds as $productCartId) {
 $discountValue = 0;
 $voucherCode = '';
 
-$filterAll = filter();
+
 if (!empty($filterAll['voucher'])) {
     $voucherCode = trim($filterAll['voucher']);
     $today = date('Y-m-d');
@@ -161,6 +161,10 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
             'id_voucher' => $voucher['id'] ?? null,
             'payment_method' => $paymentMethod
         ];
+        $voucher = [
+            'voucher' => $voucherCode ?? null
+        ];
+        setSession('voucher', $voucher);
         setSession('vnpay', $dataInsertBill);
         confirm_vnpay();
     }

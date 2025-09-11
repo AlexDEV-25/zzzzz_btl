@@ -13,33 +13,6 @@
 
 <body class="bg-gray-100">
     <?php if (!defined('_CODE')) die('Access denied...'); ?>
-
-    <!-- Menu di động -->
-    <div class="relative z-40 lg:hidden hidden menu" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 z-40 flex">
-            <div class="relative flex w-full max-w-xs flex-col overflow-y-auto bg-white pb-12 shadow-xl">
-                <div class="flex px-4 pb-2 pt-5">
-                    <button class="inline-flex items-center justify-center p-2 text-gray-400 rounded-md close-menu">
-                        <span class="sr-only">Đóng menu</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="space-y-6 border-t border-gray-200 px-4 py-6">
-                    <a href="<?php echo _WEB_HOST; ?>?module=home&action=admin" class="block p-2 font-medium text-gray-900">Trang chủ</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=categories&action=list" class="block p-2 font-medium text-gray-900">Danh mục</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=products&action=list" class="block p-2 font-medium text-gray-900">Sản phẩm</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=users&action=list" class="block p-2 font-medium text-gray-900">Tài khoản</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=list" class="block p-2 font-medium text-gray-900">Voucher</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=bills&action=list" class="block p-2 font-medium text-gray-900">Đơn hàng</a>
-
-                </div>
-            </div>
-            <div class="flex-1 bg-black bg-opacity-25 overlay"></div>
-        </div>
-    </div>
-
     <!-- Header -->
     <header class="z-20 bg-white border-b border-gray-200 sticky top-0">
         <nav class="bg-white relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">

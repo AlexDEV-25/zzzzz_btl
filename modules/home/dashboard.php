@@ -62,7 +62,7 @@ $data = ['pageTitle' => 'Trang chủ',];
     ?>
 
     <!-- Banner -->
-    <div class="my-10 max-w-7xl mx-auto relative isolate bg-cover bg-bottom bg-[url('/zzzzzz_btl/zzzzz_btl/templates/image/banner/banner.jpg')] h-[400px] rounded-xl">
+    <div class="my-10 max-w-7xl mx-auto relative isolate bg-cover bg-bottom bg-[url('<?php echo _IMGB_; ?>banner.jpg')] h-[400px] rounded-xl">
 
         <div class="bg-black/30 absolute inset-0 flex flex-col items-center justify-center w-full px-10 lg:px-80 rounded-xl">
             <div class="text-center">
@@ -125,7 +125,7 @@ $data = ['pageTitle' => 'Trang chủ',];
                             $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                     ?>
                             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                                <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
+                                <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>">
                                     <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>"
                                         alt="<?php echo $product['name_product']; ?>"
                                         class="w-full h-48 object-cover" />
@@ -165,7 +165,7 @@ $data = ['pageTitle' => 'Trang chủ',];
     <!-- Hộp quà -->
     <?php if (!empty($userId) && $userId != 1): ?>
         <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>" class="gift-icon">
-            <img src="/zzzzzz_btl/zzzzz_btl/templates/image/gift/git.png"
+            <img src="<?php echo _IMGG_; ?>git.png"
                 alt="Gift"
                 style="width:60px; height:60px;">
         </a>
