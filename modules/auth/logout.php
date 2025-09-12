@@ -7,5 +7,5 @@ if (isLogin()) {
     $token = getSession('tokenLogin');
     delete('tokenlogin', "token='$token'");
     removeSession('tokenLogin');
-    redirect('?module=home&action=dashboard');
+    redirect('?module=home&action=dashboard&role=-1&userId=-1');
 }
