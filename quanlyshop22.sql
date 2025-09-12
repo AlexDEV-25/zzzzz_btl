@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2025 at 05:11 PM
+-- Generation Time: Sep 12, 2025 at 09:19 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,13 +44,7 @@ CREATE TABLE `bills` (
 --
 
 INSERT INTO `bills` (`id`, `date`, `end_date`, `status`, `payment_method`, `transfer_method`, `total`, `id_user`, `id_voucher`) VALUES
-(12, '2025-09-10 13:25:02', '2025-09-10 17:02:24', 2, NULL, NULL, 99834000, 2, 1),
-(13, '2025-09-10 13:27:00', '2025-09-10 17:02:27', 2, NULL, NULL, 4550000, 2, 1),
-(16, '2025-09-10 13:40:02', NULL, 1, NULL, NULL, 9100000, 2, 1),
-(17, '2025-09-10 13:48:04', '2025-09-10 14:22:19', 1, NULL, NULL, 2980000, 2, 2),
-(20, '2025-09-10 16:35:11', '2025-09-10 17:04:50', 2, 1, NULL, 25400000, 2, NULL),
-(23, '2025-09-10 16:50:12', NULL, 0, 1, NULL, 3000000, 2, NULL),
-(24, '2025-09-10 17:01:43', NULL, 0, 0, NULL, 51360000, 2, 3);
+(30, '2025-09-12 06:18:03', '2025-09-12 06:19:37', 2, 1, NULL, 50780000, 8, 2);
 
 -- --------------------------------------------------------
 
@@ -69,7 +63,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `count`, `id_user`) VALUES
-(7, 0, 2);
+(11, 3, 8);
 
 -- --------------------------------------------------------
 
@@ -140,10 +134,10 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `name_product`, `description`, `price`, `origin_price`, `thumbnail`, `material`, `sold`, `created_at`, `id_category`, `is_deleted`) VALUES
 (1, 'Sofa Bolero 3 chỗ', 'Sofa Bolero 3 chỗ và Đôn vải xanh 18 sở hữu phần chân kim loại được sơn đen và phần nệm được bọc vải cao cấp màu xanh dương. Kiểu dáng thiết kế của sofa Bolero tuy đơn giản nhưng lại mang đến sự tinh tế cho không gian phòng khách còn là sản phẩm sofa đáng sở hữu bởi thiết kế và trải nghiệm sử dụng.', 6500000, 10969000, 'SOFA-JADORA-25-CHO-VAI-VACT8594-VACT3120-768x511.jpg', 'Kim loại, Vải', 24, '2025-09-09 09:44:54', 1, 0),
-(2, 'Sofa Miami 3 chỗ + 1 armchair', 'Sofa Miami 3 chỗ và 1 armchair đặc trưng của phong cách Scandinavian đơn giản. Kiểu dáng hướng đến sự phù hợp với nhiều đối tượng sử dụng khác nhau. Thiết kế dạng 3.1 chỗ cho phép chủ nhân có thêm nhiều lựa chọn trong việc sắp đặt để có không gian phòng khách ưng ý. Lưng sofa bọc cách điệu tạo điểm nhấn cho cả không gian phòng khách nhà bạn. Tại Nhà Xinh có đa dạng các mẫu sofa đẹp hiện đại với kiểu dáng phong phú, phù hợp với nhiều thiết kế phòng khách.', 25400000, 27900000, '500-nhaxinh-phong-khach-sofa-bridge.jpg', 'Gỗ', 17, '2025-09-09 09:10:07', 1, 0),
-(3, 'Bàn nước Elegance', 'Bàn nước Elegance với thiết kế tối giản nhưng vẫn toát lên nét sang trọng và tinh tế. Nhờ kết cấu độc đáo nên sản phẩm có trọng lượng nhẹ nhàng nhưng vô cùng chắc chắn. Sản phẩm phù hợp với không gian nội thất hiện đại và đặc biệt là phong cách Scandinavian.', 25430000, 26470000, '1000-ban-nuoc-cognac-768x511.jpg', 'Gỗ Ash', 9, '2025-09-09 09:12:13', 2, 0),
+(2, 'Sofa Miami 3 chỗ + 1 armchair', 'Sofa Miami 3 chỗ và 1 armchair đặc trưng của phong cách Scandinavian đơn giản. Kiểu dáng hướng đến sự phù hợp với nhiều đối tượng sử dụng khác nhau. Thiết kế dạng 3.1 chỗ cho phép chủ nhân có thêm nhiều lựa chọn trong việc sắp đặt để có không gian phòng khách ưng ý. Lưng sofa bọc cách điệu tạo điểm nhấn cho cả không gian phòng khách nhà bạn. Tại Nhà Xinh có đa dạng các mẫu sofa đẹp hiện đại với kiểu dáng phong phú, phù hợp với nhiều thiết kế phòng khách.', 25400000, 27900000, '500-nhaxinh-phong-khach-sofa-bridge.jpg', 'Gỗ', 21, '2025-09-09 09:10:07', 1, 0),
+(3, 'Bàn nước Elegance', 'Bàn nước Elegance với thiết kế tối giản nhưng vẫn toát lên nét sang trọng và tinh tế. Nhờ kết cấu độc đáo nên sản phẩm có trọng lượng nhẹ nhàng nhưng vô cùng chắc chắn. Sản phẩm phù hợp với không gian nội thất hiện đại và đặc biệt là phong cách Scandinavian.', 25430000, 26470000, '1000-ban-nuoc-cognac-768x511.jpg', 'Gỗ Ash', 10, '2025-09-09 09:12:13', 2, 0),
 (4, 'Giường Coastal 1m8', 'Giường ngủ Coastal mang đến cảm giác như đang nằm trên bãi biển dài bình yên, với đường cong êm ái ở đầu giường, các cạnh cùng phần vạt hở duyên dáng hình chữ V, gợi nhớ đến hình ảnh chim hải âu bay trên biển. BST Coastal ban đầu được thiết kế cho căn hộ nghỉ dưỡng ở vùng duyên hải. Nhưng với sự sáng tạo và phá cách, Coastal trở nên năng động và phù hợp với nhiều không gian sống, mang thiên nhiên vào mọi không gian.', 3000000, 5800000, 'BST-Coastal-4-768x512.jpg', 'Gỗ Ash', 5, '2025-09-09 09:13:15', 3, 0),
-(10, 'Sofa Miami 2 chỗ', 'Sofa Miami khoác lên mình một màu xám tinh tế, tối giản, mang đến không gian phòng khách hiện đại, trang nhã. Sofa Miami 2 chỗ vải xám sử dụng khung gỗ bọc vải kết hợp cùng với phần nệm ngồi có thể tháo rời, dễ dàng vệ sinh hiệu quả.', 3943200, 5894000, 'phong-khach-miami-vang-2-cho-768x511.jpg', 'Gỗ', 4, '2025-09-09 09:14:24', 1, 0),
+(10, 'Sofa Miami 2 chỗ', 'Sofa Miami khoác lên mình một màu xám tinh tế, tối giản, mang đến không gian phòng khách hiện đại, trang nhã. Sofa Miami 2 chỗ vải xám sử dụng khung gỗ bọc vải kết hợp cùng với phần nệm ngồi có thể tháo rời, dễ dàng vệ sinh hiệu quả.', 3943200, 5894000, 'phong-khach-miami-vang-2-cho-768x511.jpg', 'Gỗ', 7, '2025-09-09 09:14:24', 1, 0),
 (11, 'Sofa 3 chỗ Elegance', 'Sofa 3 chỗ trong bộ sưu tập mới Elegance, bộ sưu tập được lấy cảm hứng từ nội thất tinh xảo, nhẹ nhàng, nền nã nhưng đơn giản Elegance là sự kết hợp tuyệt hảo giữa sự bền chắc và trọng lượng tối giản. Sofa 3 chỗ da xanh có phần khung bằng gỗ tần bì đặc, tự nhiên được nhập khẩu từ Mỹ, phần nệm được bọc da bò S4 nhập khẩu Italy.', 7987000, 12903000, 'ban-3.jpg', 'Gỗ Ash, da bò', 1, '2025-09-09 09:15:46', 1, 0),
 (12, 'Sofa ONA HER 3 chỗ', 'Sofa 3 chỗ ONA HER với bề mặt lớp da phủ cao cấp, mang đến trải nghiệm tinh tế mỗi khi chạm nhẹ lên bề mặt sản phẩm. Chân gỗ oak cùng đường nét bo tròn và thu nhỏ dần xuống phía dưới, tạo nên một thiết kế tinh xảo mà đầy vững chắc. Một tỉ lệ hoàn hảo cùng các đường may tỉ mỉ, sofa ONA HER giúp không gian căn hộ toát lên nét sang trọng và đẳng cấp.', 8900000, 10930000, 'ona-him-da-xanh-nau-768x511.jpg', 'Gỗ Oak, da bò', 3, '2025-09-09 09:17:18', 1, 0),
 (13, 'Sofa Jadora 2.5 chỗ vải VACT8594/VACT3120', 'Sofa Jadora là sản phẩm được thiết kế và sản xuất bởi Nhà Xinh. Với kiểu dáng rộng rãi cùng phần đệm ngồi êm ái, Jadora hứa hẹn sẽ mang đến cho người dùng trải nghiệm thư thái nhất. Trong phiên bản mới, Jadora khoác lên mình màu sắc trang nhã, hiện đại với sự kết hợp của các tông màu mới mẻ sẽ là điểm nhấn tuyệt vời cho tổ ấm của bạn. Thiết kế tựa như một chiếc giường ngủ, sofa Jadora rất phù hợp để bạn ngồi đọc sách hoặc ngả lưng thư giãn. Sản phẩm dễ dàng phối hợp được với nhiều thiết kế khác như bàn nước hoặc bàn bên để tạo nên không gian sống độc đáo.', 8790900, 13789000, 'sofa_vai_poppy_mau_hong_12_goc_trai-768x511.jpeg', 'Khung gỗ - Nệm bọc vải 2 màu - 5 gối', 1, '2025-09-09 09:22:56', 1, 0),
@@ -163,8 +157,8 @@ INSERT INTO `products` (`id`, `name_product`, `description`, `price`, `origin_pr
 (27, 'Tủ áo hiện đại siêu mới', 'Mẫu tủ áo hiện đại của Nhà Xinh với thiết kế giản đơn, tối đa tiện ích bằng nhiều ngăn kéo và khoảng trống để cất trữ quần áo và đồ đạc.', 5670000, 6700000, 'tu-ao-hien-dai-500.jpg', 'MFC', 0, '2025-09-09 09:42:08', 4, 0),
 (28, 'Tủ 3 buồng', 'Mẫu tủ áo hiện đại của Nhà Xinh với thiết kế giản đơn, tối đa tiện ích bằng nhiều ngăn kéo và khoảng trống để cất trữ quần áo và đồ đạc.', 4509000, 567000, '3_91000_1-768x513.jpg', 'MFC', 0, '2025-09-09 09:43:35', 4, 0),
 (29, 'Tủ áo Maxine', 'Tủ áo Maxine chứa đựng đầy đủ công năng tối ưu cho việc cất trữ quần áo bằng việc bố trí sắp xếp hợp lý các ngăn tủ. Những chi tiết về phụ kiện cao cấp giúp cho việc thao tác nhẹ nhàng. Bề ngoài, tủ được thiết kế duyên dáng và thu hút với sắc nâu trầm và kim loại đồng. Maxine – Nét nâu trầm sang trọng Maxine, mang thiết kế vượt thời gian, gửi gắm và gói gọn lại những nét đẹp của thiên nhiên và con người nhưng vẫn đầy tính ứng dụng cao trong suốt hành trình phiêu lưu của nhà thiết kế người Pháp Dominique Moal. Bộ sưu tập nổi bật với màu sắc nâu trầm sang trọng, là sự kết hợp giữa gỗ, da bò và kim loại vàng bóng. Đặc biệt trên mỗi sản phẩm, những nét bo viên, chi tiết kết nối được sử dụng kéo léo tạo ra điểm nhất rất riêng cho bộ sưu tập. Maxine thể hiện nét trầm tư, thư giãn để tận hưởng không gian sống trong nhịp sống hiện đại. Sản phẩm thuộc BST Maxine được sản xuất tại Việt Nam.', 4560000, 5300000, '3-99496-1-768x511.jpg', 'Gỗ Okumi', 0, '2025-09-09 09:46:00', 4, 0),
-(34, 'ZZZZZZZZZZZZ', 'Tủ áo Maxine chứa đựng đầy đủ công năng tối ưu cho việc cất trữ quần áo bằng việc bố trí sắp xếp hợp lý các ngăn tủ. Những chi tiết về phụ kiện cao cấp giúp cho việc thao tác nhẹ nhàng. Bề ngoài, tủ được thiết kế duyên dáng và thu hút với sắc nâu trầm và kim loại đồng. Maxine – Nét nâu trầm sang trọng Maxine, mang thiết kế vượt thời gian, gửi gắm và gói gọn lại những nét đẹp của thiên nhiên và con người nhưng vẫn đầy tính ứng dụng cao trong suốt hành trình phiêu lưu của nhà thiết kế người Pháp Dominique Moal. Bộ sưu tập nổi bật với màu sắc nâu trầm sang trọng, là sự kết hợp giữa gỗ, da bò và kim loại vàng bóng. Đặc biệt trên mỗi sản phẩm, những nét bo viên, chi tiết kết nối được sử dụng kéo léo tạo ra điểm nhất rất riêng cho bộ sưu tập. Maxine thể hiện nét trầm tư, thư giãn để tận hưởng không gian sống trong nhịp sống hiện đại. Sản phẩm thuộc BST Maxine được sản xuất tại Việt Nam.', 4560000, 5300000, '3.png', 'Gỗ Okumi', 0, '2025-09-10 05:56:29', 1, 0),
-(36, 'ZZZZZZZZ', 'Tủ áo Maxine chứa đựng đầy đủ công năng tối ưu cho việc cất trữ quần áo bằng việc bố trí sắp xếp hợp lý các ngăn tủ. Những chi tiết về phụ kiện cao cấp giúp cho việc thao tác nhẹ nhàng. Bề ngoài, tủ được thiết kế duyên dáng và thu hút với sắc nâu trầm và kim loại đồng. Maxine – Nét nâu trầm sang trọng Maxine, mang thiết kế vượt thời gian, gửi gắm và gói gọn lại những nét đẹp của thiên nhiên và con người nhưng vẫn đầy tính ứng dụng cao trong suốt hành trình phiêu lưu của nhà thiết kế người Pháp Dominique Moal. Bộ sưu tập nổi bật với màu sắc nâu trầm sang trọng, là sự kết hợp giữa gỗ, da bò và kim loại vàng bóng. Đặc biệt trên mỗi sản phẩm, những nét bo viên, chi tiết kết nối được sử dụng kéo léo tạo ra điểm nhất rất riêng cho bộ sưu tập. Maxine thể hiện nét trầm tư, thư giãn để tận hưởng không gian sống trong nhịp sống hiện đại. Sản phẩm thuộc BST Maxine được sản xuất tại Việt Nam.', 4560000, 5300000, '3.png', 'Gỗ Okumi', 0, '2025-09-10 06:04:05', 1, 1);
+(34, 'ZZZZZZZZZZZZ', 'Tủ áo Maxine chứa đựng đầy đủ công năng tối ưu cho việc cất trữ quần áo bằng việc bố trí sắp xếp hợp lý các ngăn tủ. Những chi tiết về phụ kiện cao cấp giúp cho việc thao tác nhẹ nhàng. Bề ngoài, tủ được thiết kế duyên dáng và thu hút với sắc nâu trầm và kim loại đồng. Maxine – Nét nâu trầm sang trọng Maxine, mang thiết kế vượt thời gian, gửi gắm và gói gọn lại những nét đẹp của thiên nhiên và con người nhưng vẫn đầy tính ứng dụng cao trong suốt hành trình phiêu lưu của nhà thiết kế người Pháp Dominique Moal. Bộ sưu tập nổi bật với màu sắc nâu trầm sang trọng, là sự kết hợp giữa gỗ, da bò và kim loại vàng bóng. Đặc biệt trên mỗi sản phẩm, những nét bo viên, chi tiết kết nối được sử dụng kéo léo tạo ra điểm nhất rất riêng cho bộ sưu tập. Maxine thể hiện nét trầm tư, thư giãn để tận hưởng không gian sống trong nhịp sống hiện đại. Sản phẩm thuộc BST Maxine được sản xuất tại Việt Nam.', 4560000, 5300000, '3.png', 'Gỗ Okumi', 1, '2025-09-10 05:56:29', 1, 0),
+(36, 'ZZZZZZZZ', 'Tủ áo Maxine chứa đựng đầy đủ công năng tối ưu cho việc cất trữ quần áo bằng việc bố trí sắp xếp hợp lý các ngăn tủ. Những chi tiết về phụ kiện cao cấp giúp cho việc thao tác nhẹ nhàng. Bề ngoài, tủ được thiết kế duyên dáng và thu hút với sắc nâu trầm và kim loại đồng. Maxine – Nét nâu trầm sang trọng Maxine, mang thiết kế vượt thời gian, gửi gắm và gói gọn lại những nét đẹp của thiên nhiên và con người nhưng vẫn đầy tính ứng dụng cao trong suốt hành trình phiêu lưu của nhà thiết kế người Pháp Dominique Moal. Bộ sưu tập nổi bật với màu sắc nâu trầm sang trọng, là sự kết hợp giữa gỗ, da bò và kim loại vàng bóng. Đặc biệt trên mỗi sản phẩm, những nét bo viên, chi tiết kết nối được sử dụng kéo léo tạo ra điểm nhất rất riêng cho bộ sưu tập. Maxine thể hiện nét trầm tư, thư giãn để tận hưởng không gian sống trong nhịp sống hiện đại. Sản phẩm thuộc BST Maxine được sản xuất tại Việt Nam.', 4560000, 32323, 'Screenshot (3).png', 'Gỗ Okumi', 0, '2025-09-12 04:07:32', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -184,17 +178,7 @@ CREATE TABLE `products_bill` (
 --
 
 INSERT INTO `products_bill` (`id`, `amount_buy`, `id_product_detail`, `id_bill`) VALUES
-(16, 1, 1, 12),
-(17, 4, 4, 12),
-(18, 1, 3, 12),
-(19, 3, 8, 12),
-(20, 1, 1, 13),
-(23, 2, 1, 16),
-(24, 1, 8, 17),
-(27, 1, 3, 20),
-(28, 1, 8, 23),
-(29, 3, 11, 24),
-(30, 5, 13, 24);
+(37, 2, 3, 30);
 
 -- --------------------------------------------------------
 
@@ -208,6 +192,15 @@ CREATE TABLE `products_cart` (
   `id_product_detail` int(10) NOT NULL,
   `id_cart` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `products_cart`
+--
+
+INSERT INTO `products_cart` (`id`, `amount_buy`, `id_product_detail`, `id_cart`) VALUES
+(52, 1, 8, 11),
+(53, 1, 13, 11),
+(54, 1, 20, 11);
 
 -- --------------------------------------------------------
 
@@ -230,13 +223,13 @@ CREATE TABLE `products_detail` (
 --
 
 INSERT INTO `products_detail` (`id`, `amount`, `code_color`, `color`, `image`, `size`, `id_product`) VALUES
-(1, 17, '#a24e4e', 'Màu nâu', 'SOFA-JADORA-25-CHO-VAI-VACT8594-VACT3120-1-768x511.jpg', 'D2250 - R900 - C790/Đôn D720-R720-C420', 1),
+(1, 15, '#a24e4e', 'Màu nâu', 'SOFA-JADORA-25-CHO-VAI-VACT8594-VACT3120-1-768x511.jpg', 'D2250 - R900 - C790/Đôn D720-R720-C420', 1),
 (2, 32, '#a24e4e', 'Màu nâu', 'SOFA-JADORA-25-CHO-VAI-VACT8594-VACT3120-1-768x511.jpg', 'D2250 - R900 - C790/Đôn D720-R720-C420', 1),
-(3, 35, '#000000', 'xanh đen', '500-73906-nha-xinh-phong-khach-sofa3cho-bridge2.jpg', 'D1965 - R835 - C805', 2),
-(4, 19, '#a69126', 'gỗ', '500-71317-nha-xinh-phong-khach-ban-nuoc2.jpg', 'D1200 - R600 - C400 mm', 3),
+(3, 32, '#000000', 'xanh đen', '500-73906-nha-xinh-phong-khach-sofa3cho-bridge2.jpg', 'D1965 - R835 - C805', 2),
+(4, 22, '#a69126', 'gỗ', '500-71317-nha-xinh-phong-khach-ban-nuoc2.jpg', 'D1200 - R600 - C400 mm', 3),
 (5, 25, '#a69126', 'gỗ', '500-71317-nha-xinh-phong-khach-ban-nuoc2.jpg', 'D1200 - R600 - C400 mm', 3),
 (6, 25, '#a69126', 'gỗ', '500-71317-nha-xinh-phong-khach-ban-nuoc2.jpg', 'D1200 - R600 - C400 mm', 3),
-(8, 26, '#000000', 'xanh', 'Giuong-Coastal-1m8-xanh-1-768x511.jpg', 'D2000 - R1800 - C1080 mm', 4),
+(8, 29, '#000000', 'xanh', 'Giuong-Coastal-1m8-xanh-1-768x511.jpg', 'D2000 - R1800 - C1080 mm', 4),
 (10, 31, '#43604c', 'xanh đậm', '102421-sofa-elegance-3-cho-mau-tu-nhien-da-xanh-768x511.jpg', 'aqe12312', 11),
 (11, 20, '#334837', 'Xanh lá', 'sofa-ona-her-3-cho-da-xanh-s4-1-768x511.jpg', 'D1950-R900-C850', 12),
 (12, 43, '#c95b2c', 'Màu cam - Góc trái', 'sofa_vai_poppy_mau_hong-768x511.jpg', 'D2400/1350 - R830 - C700 mm', 13),
@@ -247,7 +240,7 @@ INSERT INTO `products_detail` (`id`, `amount`, `code_color`, `color`, `image`, `
 (17, 4, '#c6752a', 'Màu cam nâu', 'BAN-BEN-RETIRO-GOLD-L-40X10-16713485L-2-3-768x511.jpg', 'D2200 - R1200 - C650/850 mm', 18),
 (18, 7, '#d9a73a', 'Màu gỗ', 'ban_ben_dubai_1-768x511.jpg', 'D1200 - R360 - C600 mm', 19),
 (19, 25, '#fbf9f9', 'Màu trắng', '103444-giuong-softly-1m8-vai-s8w-light-768x511.jpg', '323x234', 20),
-(20, 18, '#e1c537', 'Vàng', 'sofa-miami-2-cho-boc-vai-vang-2-768x511.jpg', 'D2300 - R800 - C760 mm', 10),
+(20, 15, '#e1c537', 'Vàng', 'sofa-miami-2-cho-boc-vai-vang-2-768x511.jpg', 'D2300 - R800 - C760 mm', 10),
 (23, 34, '#e1c537', 'Vàng', 'sofa-miami-2-cho-boc-vai-vang-2-768x511.jpg', 'D2300 - R800 - C760 mm', 10),
 (26, 43, '#c95b2c', 'Màu cam - Góc trái', 'sofa_vai_poppy_mau_hong-768x511.jpg', 'D2400/1350 - R830 - C700 mm', 13),
 (29, 36, '#f41010', 'Màu đỏ', 'Ghe-69-cao-cap-tai-Noi-That-Xuyen-A.jpg', 'D1700 - R850 - C770 mm', 15),
@@ -267,8 +260,8 @@ INSERT INTO `products_detail` (`id`, `amount`, `code_color`, `color`, `image`, `
 (47, 6, '#7c5555', 'Màu gỗ', 'store-1.jpg', '1m8', 1),
 (49, 6, '#b59797', 'Màu gỗ', 'store-1.jpg', '1m8', 1),
 (50, 6, '#a96a6a', 'Màu gỗ', 'store-1.jpg', '1m8', 1),
-(51, 6, '#cd8484', 'Màu gỗ', 'store-1.jpg', '1m8', 34),
-(52, 20, '#624646', 'Màu gỗ', 'store-1.jpg', '1m8', 36);
+(51, 300433, '#cd8484', 'Màu gỗ', 'store-1.jpg', '1m8', 34),
+(52, 2000, '#624646', 'Màu gỗ', 'store-1.jpg', '1m8', 36);
 
 -- --------------------------------------------------------
 
@@ -290,7 +283,7 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `content`, `stars`, `created_at`, `id_product`, `id_user`) VALUES
-(4, 'ghế êm lắm tuyệt vời', 5, '', 2, 2);
+(7, 'ghế êm lắm', 5, '', 2, 8);
 
 -- --------------------------------------------------------
 
@@ -304,13 +297,6 @@ CREATE TABLE `tokenlogin` (
   `token` varchar(100) NOT NULL,
   `create_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tokenlogin`
---
-
-INSERT INTO `tokenlogin` (`id`, `user_id`, `token`, `create_at`) VALUES
-(67, 1, 'eed4136a7c23c7ca4b4c4b6f4b71cb8d78654150', '2025-09-10 17:02:17');
 
 -- --------------------------------------------------------
 
@@ -342,8 +328,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `phone`, `fullname`, `password`, `forgotToken`, `activeToken`, `status`, `address`, `birthday`, `role`, `avatar`, `create_at`, `update_at`, `is_deleted`) VALUES
 (1, 'hoangvanduc2504@gmail.com', '0327386554', 'Đức Hoàng', '$2y$10$vZxwkcVzBmjc3KK7iETGp.ly7LbUN80w8rUz65QU.pI5.2BOKNpAG', '', '', 1, NULL, NULL, 1, NULL, '2025-02-28 14:08:47', NULL, 0),
-(2, '22111061953@hunre.edu.vn', '0987654321', 'hoangduc', '$2y$10$AIXyXhEqRJFum9nsNkOQdOrOsG7XZus224gnm5oH36pPnOmNuSK.K', '', '', 1, 'hà nội', NULL, 0, '5.png', '2025-02-28 14:01:56', '2025-09-09 09:57:05', 0),
-(4, 'hoangvanduc2544@gmail.com', '0327386554', 'Đức Hoàng', '$2y$10$qAmBaPH/MNeHMFZ7dM0GuO3ozQ5P7PIpKCTiUYkZEzUTEwGv6o/9a', '', '', 1, NULL, NULL, 0, NULL, '2025-09-08 05:04:33', NULL, 1);
+(4, 'hoangvanduc2544@gmail.com', '0327386554', 'Đức Hoàng', '$2y$10$qAmBaPH/MNeHMFZ7dM0GuO3ozQ5P7PIpKCTiUYkZEzUTEwGv6o/9a', '', '', 1, NULL, NULL, 2, NULL, '2025-09-08 05:04:33', NULL, 0),
+(8, '22111061953@hunre.edu.vn', '0327386554', 'duc moi moi', '$2y$10$mq1mMAFKv0wRwllsb.xQjecLOn8slczGxkJS9s7p7opeJxX03UlVu', '', '', 1, 'hà nội', NULL, 0, '5.png', '2025-09-12 05:14:44', '2025-09-12 08:02:11', 0);
 
 -- --------------------------------------------------------
 
@@ -466,13 +452,13 @@ ALTER TABLE `vouchers`
 -- AUTO_INCREMENT for table `bills`
 --
 ALTER TABLE `bills`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -484,43 +470,43 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `products_bill`
 --
 ALTER TABLE `products_bill`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `products_cart`
 --
 ALTER TABLE `products_cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `products_detail`
 --
 ALTER TABLE `products_detail`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tokenlogin`
 --
 ALTER TABLE `tokenlogin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `vouchers`
