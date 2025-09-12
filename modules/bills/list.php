@@ -22,60 +22,63 @@ if (isset($filterAll['role'])) {
 if (isPost()) {
     if (!empty($filterAll['billId'])) {
         $billIdCondition = $filterAll['billId'];
+        $bill = selectOne("SELECT status FROM bills WHERE id = $billIdCondition ");
+        $billStatus = $bill['status'];
         if (!empty($filterAll['status'])) {
+            if ($billStatus != $filterAll['status']) {
+                if ($filterAll['status'] == 1) {
+                    // ✅ Khi xác nhận đơn thì trừ số lượng sản phẩm
+                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
 
-            if ($filterAll['status'] == 1) {
-                // ✅ Khi xác nhận đơn thì trừ số lượng sản phẩm
-                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
+                    foreach ($listBillDetail as $item):
+                        $productDetailId = $item['id_product_detail'];
+                        $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
 
-                foreach ($listBillDetail as $item):
-                    $productDetailId = $item['id_product_detail'];
-                    $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
+                        // Trừ số lượng
+                        $newAmount = $productDetail['amount'] - $item['amount_buy'];
+                        if ($newAmount < 0) {
+                            $newAmount = 0; // tránh âm số
+                        }
 
-                    // Trừ số lượng
-                    $newAmount = $productDetail['amount'] - $item['amount_buy'];
-                    if ($newAmount < 0) {
-                        $newAmount = 0; // tránh âm số
-                    }
+                        // Cập nhật lại số lượng
+                        $dataUpdateAmount = [
+                            'amount' => $newAmount,
+                        ];
+                        $conditionProductDetail = "id = $productDetailId";
+                        $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
 
-                    // Cập nhật lại số lượng
-                    $dataUpdateAmount = [
-                        'amount' => $newAmount,
+                        // Nếu về 0 thì báo hết hàng
+                        if ($newAmount == 0) {
+                            setFlashData('smg', 'Sản phẩm trong kho đã hết');
+                            setFlashData('smg_type', 'danger');
+                        }
+                    endforeach;
+
+                    $dataUpdate = [
+                        'status' => $filterAll['status']
                     ];
-                    $conditionProductDetail = "id = $productDetailId";
-                    $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
-
-                    // Nếu về 0 thì báo hết hàng
-                    if ($newAmount == 0) {
-                        setFlashData('smg', 'Sản phẩm trong kho đã hết');
-                        setFlashData('smg_type', 'danger');
-                    }
-                endforeach;
-
-                $dataUpdate = [
-                    'status' => $filterAll['status']
-                ];
-            } elseif ($filterAll['status'] == 2) {
-                $dataUpdate = [
-                    'end_date' => date('Y-m-d H:i:s'),
-                    'status' => $filterAll['status']
-                ];
-            } elseif ($filterAll['status'] == -1) {
-                $dataUpdate = [
-                    'end_date' => date('Y-m-d H:i:s'),
-                    'status' => $filterAll['status']
-                ];
-                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
-
-                foreach ($listBillDetail as $item):
-                    $productDetailId = $item['id_product_detail'];
-                    $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
-                    $dataUpdateAmount = [
-                        'amount' => $productDetail['amount'] + $item['amount_buy'],
+                } elseif ($filterAll['status'] == 2) {
+                    $dataUpdate = [
+                        'end_date' => date('Y-m-d H:i:s'),
+                        'status' => $filterAll['status']
                     ];
-                    $conditionProductDetail = "id = $productDetailId";
-                    $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
-                endforeach;
+                } elseif ($filterAll['status'] == -1) {
+                    $dataUpdate = [
+                        'end_date' => date('Y-m-d H:i:s'),
+                        'status' => $filterAll['status']
+                    ];
+                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
+
+                    foreach ($listBillDetail as $item):
+                        $productDetailId = $item['id_product_detail'];
+                        $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
+                        $dataUpdateAmount = [
+                            'amount' => $productDetail['amount'] + $item['amount_buy'],
+                        ];
+                        $conditionProductDetail = "id = $productDetailId";
+                        $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
+                    endforeach;
+                }
             } else {
                 $dataUpdate = [
                     'status' => $filterAll['status']

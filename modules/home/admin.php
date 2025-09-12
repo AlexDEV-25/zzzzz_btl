@@ -13,15 +13,46 @@ if (!isLogin()) {
     redirect('?module=auth&action=login');
 }
 
+// Thống kê cơ bản
 $amount_user = getCountRows("SELECT * FROM users ");
 $amount_bill = getCountRows("SELECT * FROM bills ");
 $amount_product = getCountRows("SELECT * FROM products ");
 $statistical = 0;
-$listBills = selectAll("SELECT * FROM bills  WHERE status = 2 ");
+$listBills = selectAll("SELECT * FROM bills WHERE status = 2 ");
 
-foreach ($listBills as $item):
+foreach ($listBills as $item) {
     $statistical += $item['total'];
-endforeach;
+}
+
+// Dữ liệu cho biểu đồ doanh thu theo ngày
+$revenueData = selectAll("SELECT DATE(date) as sale_date, SUM(total) as total_revenue 
+                         FROM bills 
+                         WHERE status = 2 
+                         GROUP BY DATE(date) 
+                         ORDER BY sale_date ASC");
+$revenueDates = [];
+$revenueValues = [];
+foreach ($revenueData as $row) {
+    $revenueDates[] = $row['sale_date'];
+    $revenueValues[] = (float)$row['total_revenue'];
+}
+
+// Dữ liệu cho biểu đồ sản phẩm bán chạy (chỉ tính hóa đơn status = 2)
+$topProducts = selectAll("SELECT p.name_product, SUM(pb.amount_buy) as total_sold 
+                         FROM products_bill pb 
+                         JOIN products_detail pd ON pb.id_product_detail = pd.id 
+                         JOIN products p ON pd.id_product = p.id 
+                         JOIN bills b ON pb.id_bill = b.id 
+                         WHERE b.status = 2 
+                         GROUP BY p.id, p.name_product 
+                         ORDER BY total_sold DESC 
+                         LIMIT 5");
+$productNames = [];
+$productSold = [];
+foreach ($topProducts as $row) {
+    $productNames[] = $row['name_product'];
+    $productSold[] = (int)$row['total_sold'];
+}
 ?>
 
 <body>
@@ -33,6 +64,7 @@ endforeach;
         </header>
         <main>
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+                <!-- Thống kê cơ bản -->
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
                     <div class="rounded-xl border-2 bg-red-50 p-6 text-red-600 border-red-600">
                         <h4 class="capitalize font-medium">Tổng đơn hàng</h4>
@@ -88,9 +120,94 @@ endforeach;
                         </div>
                     </div>
                 </div>
+
+                <!-- Biểu đồ -->
+                <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <!-- Biểu đồ đường doanh thu theo ngày -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="text-xl font-semibold mb-4">Doanh thu theo ngày</h4>
+                        <canvas id="revenueChart" height="100"></canvas>
+                    </div>
+                    <!-- Biểu đồ cột sản phẩm bán chạy -->
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="text-xl font-semibold mb-4">Top sản phẩm bán chạy</h4>
+                        <canvas id="productChart" height="100"></canvas>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
+
+    <!-- Thêm Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Biểu đồ đường doanh thu theo ngày
+        const revenueChart = new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($revenueDates); ?>,
+                datasets: [{
+                    label: 'Doanh thu (VND)',
+                    data: <?php echo json_encode($revenueValues); ?>,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Doanh thu (VND)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Ngày'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ cột sản phẩm bán chạy
+        const productChart = new Chart(document.getElementById('productChart'), {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($productNames); ?>,
+                datasets: [{
+                    label: 'Số lượng bán',
+                    data: <?php echo json_encode($productSold); ?>,
+                    backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Số lượng'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Sản phẩm'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
     <?php layout('footer_admin'); ?>
 </body>
