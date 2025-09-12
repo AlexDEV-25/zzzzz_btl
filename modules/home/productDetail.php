@@ -122,7 +122,7 @@ if (isPost()) {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Breadcrumb -->
         <nav class="text-sm text-gray-500 mb-6">
-            <a href="?module=home" class="hover:text-gray-700">Trang chủ</a> ›
+            <a href="?module=home&action=dashboard&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>" class="hover:text-gray-700">Trang chủ</a> ›
             <span><?php echo $product['name_product']; ?></span>
         </nav>
 
