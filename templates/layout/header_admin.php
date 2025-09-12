@@ -14,18 +14,7 @@
     <!-- Header -->
     <header class="z-20 bg-white border-b border-gray-200 sticky top-0">
         <nav class="bg-white relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between">
-            <!-- Logo + menu di động -->
-            <div class="flex items-center gap-2">
-                <button class="p-2 text-gray-400 rounded-md lg:hidden open-menu">
-                    <span class="sr-only">Mở menu</span>
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                </button>
-                <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=1 " class="flex items-center">
-                    <img class="h-9 sm:h-11 w-auto rounded-md" src="https://th.bing.com/th/id/OIP.cdh5Bm1mwTTH7Q2GFTg1xwHaHq?rs=1&pid=ImgDetMain" alt="Logo">
-                </a>
-            </div>
+
 
             <!-- Menu desktop + tìm kiếm + tài khoản -->
             <div class="flex-1 flex items-center justify-center lg:justify-start gap-6">
