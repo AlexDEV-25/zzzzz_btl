@@ -14,12 +14,6 @@ if (!empty($filterAll['id'])) {
 
     $categoryOld = selectOne("SELECT * FROM categories WHERE id = $categoryId");
     if (!empty($categoryOld)) {
-        // Tồn tại 
-
-        // echo '<pre>';
-        // print_r($categoryOld);
-        // echo '</pre>';
-        // die();
         setFlashData('categoryOld', $categoryOld);
     } else {
         redirect('?module=categoies&action=list');

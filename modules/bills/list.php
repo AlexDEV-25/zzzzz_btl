@@ -2,9 +2,24 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
+$filterAll = filter();
+$role = '';
+$data = [
+    'pageTitle' => 'Danh sách đơn hàng',
+];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    }
+}
 
 if (isPost()) {
-    $filterAll = filter();
     if (!empty($filterAll['billId'])) {
         $billIdCondition = $filterAll['billId'];
         if (!empty($filterAll['status'])) {
@@ -82,13 +97,6 @@ if (isPost()) {
     }
 }
 
-
-$data = [
-    'pageTitle' => 'Danh sách đơn hàng',
-    'userId' => 1
-];
-layout('header_admin', $data);
-
 // kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -110,6 +118,7 @@ if (!isLogin()) {
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+
 ?>
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
@@ -178,12 +187,13 @@ $smg_type = getFlashData('smg_type');
                                         <option value="-1">Hủy đơn</option>
                                         <option value="2">Đã hoàn thành</option>
                                     </select>
+                                    <input type="hidden" name="role" value="<?php echo $role ?>">
                                     <input type="hidden" name="userId" value="<?php echo $userId ?>">
                                     <input type="hidden" name="billId" value="<?php echo $billId ?>">
                                     <button type="submit"
                                         class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm">Xác nhận</button>
                                 </form>
-                                <a href="<?php echo _WEB_HOST; ?>?module=bills&action=billDetail&userId=<?php echo $item['id_user']; ?>&billId=<?php echo $item['id']; ?>"
+                                <a href="<?php echo _WEB_HOST; ?>?module=bills&action=billDetail&role=<?php echo $role; ?>&userId=<?php echo $item['id_user']; ?>&billId=<?php echo $item['id']; ?>"
                                     class="block mt-2 text-sky-600 font-semibold">Chi tiết</a>
                             </td>
                         </tr>
@@ -199,5 +209,15 @@ $smg_type = getFlashData('smg_type');
 </div>
 
 <?php
-layout('footer_admin');
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('footer_admin', $data);
+    } elseif ($role == 2) {
+        layout('footer_manager', $data);
+    }
+}
 ?>

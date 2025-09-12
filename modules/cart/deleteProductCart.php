@@ -2,11 +2,6 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
-
-//  Kiểm tra id trong datase -> tồn tại -> tiến hành xoá
-// Xoá dữ liệu bảng tokenlogin -> Xoá dữ liệu bảng users
-
 $filterAll = filter();
 if (!empty($filterAll['productCartId']) && !empty($filterAll['userId'])) {
     $productCartId = $filterAll['productCartId'];
@@ -47,4 +42,4 @@ if (!empty($filterAll['productCartId']) && !empty($filterAll['userId'])) {
     setFlashData('smg', 'Liên kết không tồn tại.');
     setFlashData('smg_type', 'danger');
 }
-redirect("?module=cart&action=cart&userId=$userId");
+redirect("?module=cart&action=cart&role=0&userId=$userId");

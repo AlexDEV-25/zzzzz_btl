@@ -1,57 +1,46 @@
-<!DOCTYPE html>
-<html lang="vi">
+<?php
+if (!defined('_CODE')) {
+    die('Access denied...');
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Voucher khuyến mãi'; ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+$filterAll = filter();
+$data = [
+    'pageTitle' => 'Voucher khuyến mãi'
+];
+// header tuỳ theo user
+if (!empty($filterAll['userId'])) {
+    $userId = $filterAll['userId'];
+    $cartCount = getCountCart($userId);
+    $data = [
+        'role' => 0,
+        'count' => $cartCount,
+        'userId' => $userId
+    ];
+    layout('header_custom', $data);
+} else {
+    layout('header_dashboard', $data);
+}
+
+// lấy dữ liệu voucher
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
+    if ($amount > 0) {
+        $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
+    } else {
+        setFlashData('smg', 'Voucher không tồn tại');
+        setFlashData('smg_type', 'danger');
+    }
+} else {
+    $today = date("Y-m-d");
+    $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' AND end >= '$today' ORDER BY id DESC");
+}
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
+?>
 
 <body class="bg-gradient-to-r from-indigo-100 via-white to-pink-100 min-h-screen flex flex-col">
-
-    <?php
-    if (!defined('_CODE')) {
-        die('Access denied...');
-    }
-
-    $filterAll = filter();
-    $data = [
-        'pageTitle' => 'Voucher khuyến mãi'
-    ];
-
-    // header tuỳ theo user
-    if (!empty($filterAll['userId'])) {
-        $userId = $filterAll['userId'];
-        $cartCount = getCountCart($userId);
-        $data = [
-            'pageTitle' => 'Voucher khuyến mãi',
-            'count' => $cartCount,
-            'userId' => $userId
-        ];
-        layout('header_custom', $data);
-    } else {
-        layout('header_dashboard', $data);
-    }
-
-    // lấy dữ liệu voucher
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-        if ($amount > 0) {
-            $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-        } else {
-            setFlashData('smg', 'Voucher không tồn tại');
-            setFlashData('smg_type', 'danger');
-        }
-    } else {
-        $today = date("Y-m-d");
-        $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' AND end >= '$today' ORDER BY id DESC");
-    }
-
-    $smg = getFlashData('smg');
-    $smg_type = getFlashData('smg_type');
-    ?>
 
     <main class="flex-1">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -61,7 +50,7 @@
             <p class="text-center text-lg text-gray-600 italic mb-10">Giảm deal chống deal 🔥</p>
 
             <?php if (!empty($smg)) {
-                echo '<div class="mb-6 p-4 rounded-md text-center ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
+                echo '<div class="mb-6 p-4 rounded-md text-center ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
             } ?>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -104,5 +93,17 @@
         }
     </script>
 </body>
-
-</html>
+<?php
+if (!empty($filterAll['userId'])) {
+    $userId = $filterAll['userId'];
+    $cartCount = getCountCart($userId);
+    $data = [
+        'role' => 0,
+        'count' => $cartCount,
+        'userId' => $userId
+    ];
+    layout('footer_custom', $data);
+} else {
+    layout('footer_dashboard', $data);
+}
+?>

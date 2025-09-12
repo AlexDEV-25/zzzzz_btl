@@ -1,48 +1,37 @@
-<!DOCTYPE html>
-<html lang="vi">
+<?php
+if (!defined('_CODE')) {
+    die('Access denied...');
+}
+$data = [
+    'pageTitle' => 'Danh sách voucher',
+    'role' => 1
+];
+layout('header_admin', $data);
+$filterAll = filter();
+// Kiểm tra trạng thái đăng nhập
+if (!isLogin()) {
+    redirect('?module=auth&action=login');
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách voucher'; ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</head>
+// Kiểm tra có search hay không
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
+    if ($amount > 0) {
+        $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
+    } else {
+        setFlashData('smg', 'Voucher không tồn tại');
+        setFlashData('smg_type', 'danger');
+    }
+} else {
+    $listVouchers = selectAll("SELECT * FROM vouchers ORDER BY id DESC");
+}
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
+?>
 
 <body>
-    <?php
-    if (!defined('_CODE')) {
-        die('Access denied...');
-    }
-    $filterAll = filter();
-    $data = [
-        'pageTitle' => 'Danh sách voucher',
-        'userId' => 1
-    ];
-    layout('header_admin', $data);
-
-    // Kiểm tra trạng thái đăng nhập
-    if (!isLogin()) {
-        redirect('?module=auth&action=login');
-    }
-
-    // Kiểm tra có search hay không
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-        if ($amount > 0) {
-            $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-        } else {
-            setFlashData('smg', 'Voucher không tồn tại');
-            setFlashData('smg_type', 'danger');
-        }
-    } else {
-        $listVouchers = selectAll("SELECT * FROM vouchers ORDER BY id DESC");
-    }
-
-    $smg = getFlashData('smg');
-    $smg_type = getFlashData('smg_type');
-    ?>
 
     <div class="min-h-full">
         <header class="bg-white shadow">
@@ -53,9 +42,7 @@
                         <div class="flex">
                             <input type="hidden" name='act' value="vouchers" class="hidden">
                             <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Voucher">
-                            <?php if (!empty($data['userId'])): ?>
-                                <input type="hidden" class="form-control" name="userId" value="<?php echo $data['userId']; ?>">
-                            <?php endif; ?>
+                            <input type="hidden" class="form-control" name="role" value="<?php echo 1; ?>">
                             <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
                     </form>
@@ -82,7 +69,7 @@
                     </a>
                 </div>
                 <?php if (!empty($smg)) {
-                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
+                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
                 } ?>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">

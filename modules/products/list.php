@@ -1,53 +1,48 @@
-<!DOCTYPE html>
-<html lang="vi">
 <?php
+if (!defined('_CODE')) {
+    die('Access denied...');
+}
+$filterAll = filter();
+
 $data = [
     'pageTitle' => 'Danh sách sản phẩm',
-    'userId' => 1
 ];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } else if ($role == 2) {
+        layout('header_manager', $data);
+    }
+} else {
+    die();
+}
+// Kiểm tra trạng thái đăng nhập
+if (!isLogin()) {
+    redirect('?module=auth&action=login');
+}
+// Kiểm tra có search hay không
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $amount = getCountRows("SELECT * FROM products WHERE id LIKE '%$value%'");
+    if ($amount > 0) {
+        $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
+    } else {
+        setFlashData('smg', 'danh mục không tồn tại');
+        setFlashData('smg_type', 'danger');
+    }
+} else {
+    $listProducts = selectAll("SELECT * FROM products ORDER BY created_at");
+}
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách sản phẩm'; ?></title>
-    <!-- <link rel="icon" href="/Project-One-FPT/asset/images/favicon.ico" type="image/x-icon" /> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</head>
-
 <body>
-    <?php
-    if (!defined('_CODE')) {
-        die('Access denied...');
-    }
-    layout('header_admin', $data);
-
-    // Kiểm tra trạng thái đăng nhập
-    if (!isLogin()) {
-        redirect('?module=auth&action=login');
-    }
-
-    $filterAll = filter();
-    // Kiểm tra có search hay không
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $amount = getCountRows("SELECT * FROM products WHERE id LIKE '%$value%'");
-        if ($amount > 0) {
-            $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
-        } else {
-            setFlashData('smg', 'danh mục không tồn tại');
-            setFlashData('smg_type', 'danger');
-        }
-    } else {
-        $listProducts = selectAll("SELECT * FROM products ORDER BY created_at");
-    }
-
-    $smg = getFlashData('smg');
-    $smg_type = getFlashData('smg_type');
-    ?>
-
     <div class="min-h-full">
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -57,9 +52,6 @@ $data = [
                         <div class="flex">
                             <input type="hidden" name='act' value="products" class="hidden">
                             <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Sản Phẩm">
-                            <?php if (!empty($data['userId'])): ?>
-                                <input type="hidden" class="form-control" name="userId" value="<?php echo $data['userId']; ?>">
-                            <?php endif; ?>
                             <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
                     </form>
@@ -70,7 +62,7 @@ $data = [
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
                 <div class="flex mb-4 gap-2">
                     <!-- Nút thêm -->
-                    <a href="?module=products&action=add"
+                    <a href="?module=products&action=add&role=<?php echo $role; ?>"
                         class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
               hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 
               font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -78,7 +70,7 @@ $data = [
                     </a>
 
                     <!-- Nút thùng rác -->
-                    <a href="?module=products&action=binProducts"
+                    <a href="?module=products&action=binProducts&role=<?php echo $role; ?>"
                         class="text-white bg-gradient-to-r from-red-500 via-red-600 to-red-700 
               hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 
               font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -86,7 +78,7 @@ $data = [
                     </a>
                 </div>
                 <?php if (!empty($smg)) {
-                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
+                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
                 } ?>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -121,8 +113,8 @@ $data = [
                                             <td class="px-6 py-4"><?php echo $item['origin_price']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['sold']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['created_at']; ?></td>
-                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=products&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=products&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=products&action=edit&id=<?php echo $item['id']; ?>&role=<?php echo $role; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=products&action=delete&id=<?php echo $item['id']; ?>&role=<?php echo $role; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
                                         </tr>
                                 <?php
                                     endif;
@@ -142,7 +134,20 @@ $data = [
         </main>
     </div>
 
-    <?php layout('footer_admin'); ?>
-</body>
 
-</html>
+</body>
+<?php
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('footer_admin', $data);
+    } else if ($role == 2) {
+        layout('footer_manager', $data);
+    }
+} else {
+    die();
+}
+?>

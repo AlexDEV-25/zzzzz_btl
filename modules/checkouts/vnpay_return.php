@@ -21,7 +21,7 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
     $cartId = intval($checkoutData['cartId']);
 
     // Nếu là admin thì redirect sang admin
-    if ($userId === 1) {
+    if ($userId == 1) {
         redirect('?module=home&action=admin');
     }
 
@@ -126,7 +126,7 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
             removeSession('checkout_data');
             setFlashData('smg', 'Đặt hàng thành công!');
             setFlashData('smg_type', 'success');
-            redirect('?module=checkouts&action=checkout_success&userId=' . $userId);
+            redirect('?module=checkouts&action=checkout_success&role=0&userId=' . $userId);
         } else {
             setFlashData('smg', 'Đặt hàng thất bại. Vui lòng thử lại!');
             setFlashData('smg_type', 'danger');
@@ -137,5 +137,5 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
     }
 } else {
     $userId = $data['id_user'];
-    redirect('?module=checkouts&action=checkout&userId=' . $userId);
+    redirect('?module=checkouts&action=checkout&role=0&userId=' . $userId);
 }

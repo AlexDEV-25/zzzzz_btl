@@ -2,35 +2,18 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
 $filterAll = filter();
-
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-
-    // Kiểm tra xem userId nó tồn tại trong database không?
-    // Nếu tồn tại => Lấy ra thông tin người dùng
-    // Nếu không tồn tại => Chuyển hướng về trang list
-
-    $userDetail = selectOne("SELECT * FROM users WHERE id = $userId");
-    // echo '<pre>';
-    // print_r($userDetail);
-    // echo '</pre>';
-    // die();
-    if (!empty($userDetail)) {
-        // Tồn tại 
-        setFlashData('user-detail', $userDetail);
-    } else {
-        redirect('?module=home&action=dashboard');
-    }
+$role = $filterAll['role'];
+$userId = $filterAll['userId'];
+$userDetail = selectOne("SELECT * FROM users WHERE id = $userId");
+if (!empty($userDetail)) {
+    // Tồn tại 
+    setFlashData('user-detail', $userDetail);
+} else {
+    redirect('?module=home&action=dashboard');
 }
 
 if (isPost()) {
-    // $filterAll = filter();
-    // echo '<pre>';
-    // print_r($filterAll);
-    // echo '</pre>';
-    // die();
     $errors = []; // Mảng chữa các lỗi
 
     // Validate fullname: bắt buộc phải nhập, min 5 ký tự
@@ -115,7 +98,7 @@ if (isPost()) {
         setFlashData('old', $filterAll);
     }
 
-    redirect('?module=users&action=customEdit&userId=' . $userId);
+    redirect('?module=users&action=customEdit&role=0&userId=' . $userId);
 }
 $data = [
     'pageTitle' => "thông tin người dùng",
@@ -225,10 +208,9 @@ if (!empty($userDetailll)) {
                 </div>
             </div>
             <input type="hidden" name="userId" value="<?php echo $userId ?>">
-
-
+            <input type="hidden" name="role" value="<?php echo $role ?>">
             <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update thông tin</button>
-            <a href="?module=home&action=dashboard&userId=<?php echo $userId; ?> " class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            <a href="?module=home&action=dashboard&role=0&userId=<?php echo $userId; ?> " class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
 
             <hr>
         </form>

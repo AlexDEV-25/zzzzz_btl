@@ -2,9 +2,9 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
+$filterAll = filter();
+$role = $filterAll['role'];
 if (isPost()) {
-    $filterAll = filter();
     $errors = []; // Mảng chữa các lỗi
 
     // validate name
@@ -64,13 +64,13 @@ if (isPost()) {
         setSession('previewProduct', $dataInsert);
 
         // Chuyển sang trang detail để hiển thị
-        redirect('?module=products&action=detail');
+        redirect('?module=products&action=detail&role=' . $role);
     } else {
         setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
-        redirect('?module=products&action=add');
+        redirect('?module=products&action=add&role=' . $role);
     }
 }
 $title = [
@@ -100,6 +100,7 @@ $oldData = getFlashData('oldData');
 
         ?>
         <form action="" method="post" enctype="multipart/form-data">
+            <input name="role" type="hidden" value="<?php echo $role; ?>">
             <div class="row">
                 <div class="col">
                     <div class="form-group mg-form">
@@ -206,7 +207,7 @@ $oldData = getFlashData('oldData');
             </div>
 
             <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Tiếp tục</button>
-            <a href="?module=products&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
         </form>
         <hr style="margin-top: 25px;">
     </div>

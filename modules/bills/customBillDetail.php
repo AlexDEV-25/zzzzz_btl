@@ -131,6 +131,7 @@ if (!empty($bill['id_voucher'])) {
                                 <td class="px-6 py-4">
                                     <!-- Form đánh giá -->
                                     <form action="?module=home&action=productDetail" method="POST">
+                                        <input type="hidden" name="role" value="0">
                                         <input type="hidden" name="userId" value="<?php echo $userId; ?>">
                                         <input type="hidden" name="productId" value="<?php echo $productId; ?>">
                                         <input type="hidden" name="billId" value="<?php echo $billId; ?>">

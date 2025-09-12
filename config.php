@@ -9,8 +9,6 @@ const _CODE = true;
 define('_WEB_HOST', 'http://' . $_SERVER['HTTP_HOST'] . '/zzzzzz_btl/zzzzz_btl');
 define('_WEB_HOST_TEMPLATES', _WEB_HOST . '/templates');
 
-
-
 // thiết lập path
 define('_WEB_PATH', __DIR__);
 define('_WEB_PATH_TEMPLATES', _WEB_PATH . '\\templates');

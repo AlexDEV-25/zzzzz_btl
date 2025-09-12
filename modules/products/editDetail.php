@@ -4,6 +4,7 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
+$role = $filterAll['role'];
 $productId = $filterAll['id'] ?? 0;
 
 if (!empty($productId)) {
@@ -15,7 +16,6 @@ if (!empty($productId)) {
 
 if (isPost()) {
     $errors = [];
-
     if (empty($filterAll['amount'])) {
         $errors['amount']['required'] = 'lỗi không nhập';
     } elseif ($filterAll['amount'] < 0) {
@@ -71,8 +71,7 @@ if (isPost()) {
         setFlashData('errors', $errors);
         setFlashData('old', $filterAll);
     }
-
-    redirect('?module=products&action=editDetail&id=' . $productId);
+    redirect('?module=products&action=editDetail&id=' . $productId . '&role=' . $role);
 }
 
 layout('header');
@@ -93,6 +92,7 @@ if (!empty($detailOld)) {
         <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
 
         <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="role" value="<?php echo $role ?>">
             <div class="row">
                 <div class="col">
                     <div class="form-group mg-form">
@@ -150,11 +150,10 @@ if (!empty($detailOld)) {
                     </div>
                 </div>
             </div>
-
             <input type="hidden" name="id" value="<?php echo $productId ?>">
 
             <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
-            <a href="?module=products&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
             <hr>
         </form>
     </div>

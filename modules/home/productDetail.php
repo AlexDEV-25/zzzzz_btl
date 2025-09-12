@@ -2,67 +2,99 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
-
 $filterAll = filter();
 $errors = [];
 
-
 $productId = $filterAll['productId'];
-
 $product = selectOne("SELECT * FROM products WHERE id = $productId");
 $detail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
-
-if (!empty($detail['id'])) {
-    $detailId = $detail['id'];
-}
-
-
+$detailId = $detail['id'];
 
 $data = [
-    'productId' => $productId,
-    'pageTitle' => $product['name_product']
+    'pageTitle' => $product['name_product'],
 ];
-
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-    $cartCount = getCountCart($userId);
+$role = -1;
+$userId = -1;
+$cartCount = -1;
+$cartId = -1;
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'productId' => $productId,
+        'pageTitle' => $product['name_product'],
+    ];
+    if ($role == -1) {
+        $value = '';
+        if (!empty($filterAll['search'])) {
+            $value = $filterAll['search'];
+            redirect('?module=home&action=productsSearch&search=' . $value);
+        }
+        layout('header_dashboard', $data);
+    } else if ($role == 1) {
+        $value = '';
+        if (!empty($filterAll['search'])) {
+            $value = $filterAll['search'];
+            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
+        }
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        $value = '';
+        if (!empty($filterAll['search'])) {
+            $value = $filterAll['search'];
+            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
+        }
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        $value = '';
+        if (!empty($filterAll['search'])) {
+            $value = $filterAll['search'];
+            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
+        }
+        layout('header_employee', $data);
+    } else {
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            $cartId = selectOne("SELECT * FROM cart WHERE id_user =$userId")['id'];
+            $data = [
+                'productId' => $productId,
+                'pageTitle' => $product['name_product'],
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            $value = '';
+            if (!empty($filterAll['search'])) {
+                $value = $filterAll['search'];
+                redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role . '&userId=' . $userId);
+            }
+            layout('header_custom', $data);
+        }
+    }
+} else {
+    $value = '';
     if (!empty($filterAll['search'])) {
         $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
+        redirect('?module=home&action=productsSearch&search=' . $value);
     }
-    if ($filterAll['userId'] == 1) {
-        layout('header_admin', $data);
-    } else {
-        $cart = selectOne("SELECT * FROM cart WHERE id_user = $userId");
-        $cartId = $cart['id'];
+    layout('header_dashboard', $data);
+}
 
-        if (isPost()) {
-            if (!empty($filterAll['detailId'])) {
-                $detailId = $filterAll['detailId'];
-                $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
-                if ($rowProductCart > 0) {
-                    $count = $cartCount;
-                } else {
-                    $count = $cartCount + 1;
-                    $dataUpdate = [
-                        'count' => $count,
-                    ];
-                    $condition = "id_user = $userId";
-                    update('cart', $dataUpdate, $condition);
-                }
-            }
-        } else {
+// thêm vào giỏ
+if (isPost()) {
+    if (!empty($filterAll['detailId'])) {
+        $detailId = $filterAll['detailId'];
+        $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
+        if ($rowProductCart > 0) {
             $count = $cartCount;
+        } else {
+            $count = $cartCount + 1;
+            $dataUpdate = [
+                'count' => $count,
+            ];
+            $condition = "id_user = $userId";
+            update('cart', $dataUpdate, $condition);
         }
-        $data = [
-            'productId' => $productId,
-            'pageTitle' => $product['name_product'],
-            'count' => $count,
-            'userId' => $userId
-        ];
-        layout('header_custom', $data);
-
-        if (!empty($filterAll['detailId']) && !empty($filterAll['amount_buy'])) {
+        if (!empty($filterAll['amount_buy'])) {
             $detailId = $filterAll['detailId'];
             $amount = $filterAll['amount_buy'];
             $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
@@ -83,20 +115,8 @@ if (!empty($filterAll['userId'])) {
             }
         }
     }
-} else {
-    $userId = '';
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
-    }
-    layout('header_dashboard', $data);
 }
-
-
 ?>
-
-<!DOCTYPE html>
-<html lang="vi">
 
 <body class="bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -146,10 +166,10 @@ if (!empty($filterAll['userId'])) {
 
                     <input type="hidden" value="<?php echo $detailId; ?>" name="detailId">
                     <input type="hidden" value="<?php echo $userId; ?>" name="userId">
-                    <input type="hidden" value="1" name="count">
+                    <input type="hidden" value="<?php echo $role; ?>" name="role">
                     <input type="hidden" value="<?php echo $productId; ?>" name="productId">
 
-                    <?php if (!empty($filterAll['userId']) && $filterAll['userId'] != 1): ?>
+                    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
                         <button type="submit"
                             class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition">
                             Thêm vào giỏ hàng
@@ -170,11 +190,12 @@ if (!empty($filterAll['userId'])) {
             <h2 class="text-lg font-semibold text-gray-900 mb-4">Đánh giá sản phẩm</h2>
 
             <!-- Form đánh giá: chỉ hiện nếu người dùng đã đăng nhập và không phải admin -->
-            <?php if (!empty($filterAll['userId'])): ?>
+            <?php if (!empty($userId)): ?>
                 <?php if (!empty($filterAll['billId'])): ?>
                     <form action="?module=reviews&action=review" method="POST" class="mb-6 space-y-2">
                         <input type="hidden" name="productId" value="<?php echo $productId; ?>">
                         <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                        <input type="hidden" name="role" value="<?php echo $role; ?>">
 
                         <label for="content" class="block text-sm font-medium text-gray-700">Viết đánh giá:</label>
                         <textarea id="content" name="content" rows="4"
@@ -240,7 +261,7 @@ if (!empty($filterAll['userId'])) {
                     if ($productItem['is_deleted'] != 1  && $isDelete != 1):
                         $productId = $productItem['id'];
                 ?>
-                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo $userId ?? ''; ?>"
+                        <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
                             class="bg-white p-4 rounded-lg shadow hover:shadow-md transition block">
                             <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
                                 alt="<?php echo $productItem['thumbnail']; ?>"
@@ -259,12 +280,14 @@ if (!empty($filterAll['userId'])) {
     </div>
 </body>
 
-</html>
-
 <?php
-if (!empty($filterAll['userId'])) {
-    if ($filterAll['userId'] == 1) {
+if (isset($role)) {
+    if ($role == 1) {
         layout('footer_admin', $data);
+    } else if ($role == 2) {
+        layout('footer_manager', $data);
+    } else if ($role == 3) {
+        layout('footer_employee', $data);
     } else {
         layout('footer_custom', $data);
     }

@@ -8,6 +8,7 @@ if (!defined('_CODE')) {
 // Xoá dữ liệu bảng products_detail -> Xoá dữ liệu bảng products
 
 $filterAll = filter();
+$role = $filterAll['role'];
 if (!empty($filterAll['id'])) {
     $productId = $filterAll['id'];
     $rowProduct = getCountRows("SELECT * FROM products WHERE id =$productId");
@@ -33,4 +34,4 @@ if (!empty($filterAll['id'])) {
     setFlashData('smg_type', 'danger');
 }
 
-redirect('?module=products&action=list');
+redirect('?module=products&action=list&role=' . $role);

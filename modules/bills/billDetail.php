@@ -4,7 +4,6 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-$userId = $filterAll['userId'];
 $billId = $filterAll['billId'];
 
 $bill = selectOne("SELECT * FROM bills WHERE id = $billId ");
@@ -12,9 +11,18 @@ $billDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId ");
 
 $data = [
     'pageTitle' => 'Chi tiết đơn hàng',
-    'userId' => $userId
 ];
-layout('header_admin', $data);
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    }
+}
 
 if (!isLogin()) {
     redirect('?module=auth&action=login');
@@ -159,5 +167,15 @@ if (!empty($bill['id_voucher'])) {
 </div>
 
 <?php
-layout('footer_admin');
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('footer_admin', $data);
+    } elseif ($role == 2) {
+        layout('footer_manager', $data);
+    }
+}
 ?>

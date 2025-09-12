@@ -59,6 +59,11 @@ if (isPost()) {
             $errors['re_password']['match'] = 'mật khẩu nhập lại  không đúng ';
         }
     }
+    // validate role
+
+    if (!isset($filterAll['role']) || !in_array($filterAll['role'], [0, 2, 3])) {
+        $errors['role']['invalid'] = 'Role không hợp lệ';
+    }
 
 
     if (empty($errors)) {
@@ -69,8 +74,10 @@ if (isPost()) {
             'phone' => $filterAll['phone'],
             'password' => password_hash($filterAll['password'], PASSWORD_DEFAULT),
             'status' => $filterAll['status'],
+            'role' => $filterAll['role'], // thêm dòng này
             'create_at' => date('Y-m-d H:i:s')
         ];
+
 
         $insertStatus = insert('users', $dataInsert);
         if ($insertStatus) {
@@ -174,6 +181,15 @@ $oldData = getFlashData('oldData');
                             <option value="1" <?php echo (oldData($oldData, 'status') == 1) ? 'selected' : false; ?>>Đã kích hoạt</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="">Phân quyền</label>
+                        <select name="role" class="form-control">
+                            <option value="0" <?php echo (oldData($oldData, 'role') == 0) ? 'selected' : false; ?>>Khách hàng</option>
+                            <option value="2" <?php echo (oldData($oldData, 'role') == 2) ? 'selected' : false; ?>>Manager</option>
+                            <option value="3" <?php echo (oldData($oldData, 'role') == 3) ? 'selected' : false; ?>>Employee</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
 

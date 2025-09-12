@@ -19,5 +19,5 @@ if (!empty($filterAll['userId']) && !empty($filterAll['productId'])) {
         'id_user' => $userId
     ];
     insert('reviews', $dataInsertReview);
-    redirect('?module=home&action=productDetail&productId=' . $productId . '&userId=' . $userId);
+    redirect('?module=home&action=productDetail&productId=' . $productId . '&userId=' . $userId . '&role=0');
 }

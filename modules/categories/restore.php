@@ -2,11 +2,6 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
-
-//  Kiểm tra id trong datase -> tồn tại -> tiến hành xoá
-// Xoá dữ liệu bảng products_detail -> Xoá dữ liệu bảng products
-
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $categoryId = $filterAll['id'];

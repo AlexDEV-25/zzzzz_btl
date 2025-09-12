@@ -1,52 +1,36 @@
-<!DOCTYPE html>
-<html lang="vi">
 <?php
+if (!defined('_CODE')) {
+    die('Access denied...');
+}
 $data = [
     'pageTitle' => 'Danh sách người dùng',
-    'userId' => 1
+    'role' => 1
 ];
+layout('header_admin', $data);
+$filterAll = filter();
+// Kiểm tra trạng thái đăng nhập
+if (!isLogin()) {
+    redirect('?module=auth&action=login');
+}
+// Kiểm tra có search hay không
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $amount = getCountRows("SELECT * FROM users WHERE fullname LIKE '%$value%'");
+    if ($amount > 0) {
+        $listUsers = selectAll("SELECT * FROM users WHERE fullname LIKE '%$value%'");
+    } else {
+        setFlashData('smg', 'danh mục không tồn tại');
+        setFlashData('smg_type', 'danger');
+    }
+} else {
+    $listUsers = selectAll("SELECT * FROM users ORDER BY update_at");
+}
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Danh sách người dùng'; ?></title>
-    <!-- <link rel="icon" href="/Project-One-FPT/asset/images/favicon.ico" type="image/x-icon" /> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="/Project-One-FPT/asset/css/style.css"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</head>
-
 <body>
-    <?php
-    if (!defined('_CODE')) {
-        die('Access denied...');
-    }
-    layout('header_admin', $data);
-
-    // Kiểm tra trạng thái đăng nhập
-    if (!isLogin()) {
-        redirect('?module=auth&action=login');
-    }
-    $filterAll = filter();
-    // Kiểm tra có search hay không
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $amount = getCountRows("SELECT * FROM users WHERE fullname LIKE '%$value%'");
-        if ($amount > 0) {
-            $listUsers = selectAll("SELECT * FROM users WHERE fullname LIKE '%$value%'");
-        } else {
-            setFlashData('smg', 'danh mục không tồn tại');
-            setFlashData('smg_type', 'danger');
-        }
-    } else {
-        $listUsers = selectAll("SELECT * FROM users ORDER BY update_at");
-    }
-
-    $smg = getFlashData('smg');
-    $smg_type = getFlashData('smg_type');
-    ?>
-
     <div class="min-h-full">
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -56,9 +40,7 @@ $data = [
                         <div class="flex">
                             <input type="hidden" name='act' value="users" class="hidden">
                             <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Tên Khách Hàng">
-                            <?php if (!empty($data['userId'])): ?>
-                                <input type="hidden" class="form-control" name="userId" value="<?php echo $data['userId']; ?>">
-                            <?php endif; ?>
+                            <input type="hidden" class="form-control" name="role" value="<?php echo 1; ?>">
                             <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
                     </form>
@@ -85,7 +67,7 @@ $data = [
                     </a>
                 </div>
                 <?php if (!empty($smg)) {
-                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type === 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
+                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
                 } ?>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">

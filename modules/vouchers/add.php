@@ -104,8 +104,8 @@ $oldData = getFlashData('oldData');
                 <label for="">Đơn vị</label>
                 <select name="unit" class="form-control">
                     <option value="">-- Chọn đơn vị --</option>
-                    <option value="0" <?php echo oldData($oldData, 'unit') === '0' ? 'selected' : ''; ?>>%</option>
-                    <option value="1" <?php echo oldData($oldData, 'unit') === '1' ? 'selected' : ''; ?>>VNĐ</option>
+                    <option value="0" <?php echo oldData($oldData, 'unit') == '0' ? 'selected' : ''; ?>>%</option>
+                    <option value="1" <?php echo oldData($oldData, 'unit') == '1' ? 'selected' : ''; ?>>VNĐ</option>
                 </select>
                 <?php echo form_error($errors, 'unit', '<span class="error">', '</span>'); ?>
             </div>

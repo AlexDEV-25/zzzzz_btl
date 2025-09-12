@@ -25,7 +25,7 @@ $amount_buy = $checkoutData['amount_buy'];
 $cartId = intval($checkoutData['cartId']);
 
 // Nếu là admin thì redirect sang admin
-if ($userId === 1) {
+if ($userId == 1) {
     redirect('?module=home&action=admin');
 }
 
@@ -143,7 +143,7 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
                 removeSession('checkout_data');
                 setFlashData('smg', 'Đặt hàng thành công!');
                 setFlashData('smg_type', 'success');
-                redirect('?module=checkouts&action=checkout_success&userId=' . $userId);
+                redirect('?module=checkouts&action=checkout_success&role=0&userId=' . $userId);
             } else {
                 setFlashData('smg', 'Đặt hàng thất bại. Vui lòng thử lại!');
                 setFlashData('smg_type', 'danger');
@@ -173,6 +173,7 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
 $data = [
     'pageTitle' => "Thanh Toán",
     'count' => $cartCount,
+    'role' => 0,
     'userId' => $userId
 ];
 layout('header_custom', $data);
@@ -181,22 +182,12 @@ $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 ?>
 
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh Toán</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Thanh Toán</h1>
 
         <?php if (!empty($smg)): ?>
-            <div class="mb-4 p-4 rounded-lg <?php echo $smg_type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
+            <div class="mb-4 p-4 rounded-lg <?php echo $smg_type == 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
                 <?php echo $smg; ?>
             </div>
         <?php endif; ?>

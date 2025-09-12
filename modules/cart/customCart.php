@@ -17,6 +17,7 @@ if (!empty($filterAll['userId'])) {
         $data = [
             'pageTitle' => "Lịch sử đơn hàng",
             'count' => $cartCount,
+            'role' => 0,
             'userId' => $userId
         ];
         layout('header_custom', $data);
@@ -26,9 +27,6 @@ if (!empty($filterAll['userId'])) {
     redirect('?module=auth&action=register');
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="vi">
 
 <body class="bg-gray-100">
     <div class="max-w-5xl mx-auto p-6">
@@ -80,7 +78,7 @@ if (!empty($filterAll['userId'])) {
                     <p class="text-lg font-bold text-gray-900">
                         Tổng tiền: <?php echo number_format($item['total'], 0, ',', '.'); ?> đ
                     </p>
-                    <a href="?module=bills&action=customBillDetail&userId=<?php echo $userId; ?>&billId=<?php echo $item['id']; ?>"
+                    <a href="?module=bills&action=customBillDetail&role=0&billId=<?php echo $item['id']; ?>&userId=<?php echo $userId; ?>&billId=<?php echo $item['id']; ?>"
                         class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
                         Chi tiết đơn hàng
                     </a>
@@ -90,16 +88,6 @@ if (!empty($filterAll['userId'])) {
     </div>
 </body>
 
-</html>
-
 <?php
-if (!empty($filterAll['userId'])) {
-    if ($filterAll['userId'] == 1) {
-        layout('footer_admin', $data);
-    } else {
-        layout('footer_custom', $data);
-    }
-} else {
-    layout('footer_login', $data);
-}
+layout('footer_custom', $data);
 ?>

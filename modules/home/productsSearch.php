@@ -4,34 +4,50 @@ if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 $filterAll = filter();
-$data = [
-    'pageTitle' => 'Trang chủ',
-];
-// kiểm tra user/admin
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-    $cartCount = getCountCart($userId);
+$data = ['pageTitle' => 'Trang chủ',];
+$value = '';
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+}
+$role = -1;
+$userId = -1;
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
     $data = [
-        'pageTitle' => 'Trang chủ',
-        'count' => $cartCount,
-        'userId' => $userId
+        'pageTitle' => 'Tìm kiểm',
     ];
-    if ($filterAll['userId'] == 1) {
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } elseif ($role == 1) {
         layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_empoloyee', $data);
     } else {
-        layout('header_custom', $data);
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            if (!empty($filterAll['count'])) {
+                $count = $filterAll['count'];
+            } else {
+                $count = 0;
+            }
+            $data = [
+                'pageTitle' => 'Tìm kiếm',
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            layout('header_custom', $data);
+        }
     }
 } else {
     layout('header_dashboard', $data);
 }
 
-$value = !empty($filterAll['search']) ? $filterAll['search'] : '';
 ?>
-<!DOCTYPE html>
-<html lang="vi">
 
 <body class="bg-gray-100">
-
     <!-- Banner -->
     <header class="relative bg-cover bg-bottom h-96 rounded-xl mx-auto max-w-7xl my-10" style="background-image: url('<?php echo _IMGB_; ?>/banner.jpg');">
         <div class="absolute inset-0 bg-black/30 flex flex-col items-center justify-center rounded-xl text-center px-6 lg:px-80">
@@ -55,7 +71,7 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                             $categoryId = $category['id'];
                     ?>
                             <li>
-                                <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>"
+                                <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
                                     class="block text-gray-700 hover:text-rose-700 font-medium">
                                     <?php echo $category['name_category']; ?>
                                 </a>
@@ -84,7 +100,7 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
                         $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                 ?>
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                            <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>">
+                            <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>">
                                 <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>" alt="<?php echo $product['name_product']; ?>" class="w-full h-48 object-cover">
                                 <div class="p-4">
                                     <h3 class="text-lg font-semibold text-gray-900"><?php echo $product['name_product']; ?></h3>
@@ -108,12 +124,12 @@ $value = !empty($filterAll['search']) ? $filterAll['search'] : '';
 
 </body>
 
-</html>
-
 <?php
-if (!empty($filterAll['userId'])) {
-    if ($filterAll['userId'] == 1) {
+if (isset($filterAll['role'])) {
+    if ($filterAll['role'] == 1) {
         layout('footer_admin', $data);
+    } else if ($filterAll['role'] == 2) {
+        layout('footer_manager', $data);
     } else {
         layout('footer_custom', $data);
     }

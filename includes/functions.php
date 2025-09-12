@@ -241,6 +241,13 @@ function getCountCart($userId)
     }
     return $cartCount;
 }
+function checkDie($data)
+{
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    die();
+}
 function confirm_vnpay()
 {
     date_default_timezone_set('Asia/Ho_Chi_Minh');

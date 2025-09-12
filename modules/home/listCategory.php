@@ -1,91 +1,87 @@
 <?php
-// --------------------
-// PHP logic (giữ nguyên của bạn)
-// --------------------
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 $filterAll = filter();
-$data = [
-    'pageTitle' => 'Trang danh mục',
-    'userId' => $filterAll['userId']
-];
-
-// kiểm tra xem là khách vãng lại hay khách
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-    $cartCount = getCountCart($userId);
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId . '&count=' . $cartCount);
-    }
-    if ($filterAll['userId'] == 1) {
+$categoryId = $filterAll['categoryId'];
+$category = selectOne("SELECT * FROM categories WHERE id = $categoryId ");
+$data = ['pageTitle' => 'Trang danh mục',];
+$role = -1;
+$userId = -1;
+$cartCount = -1;
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'categoryId' => $filterAll['categoryId'],
+        'pageTitle' => 'Trang danh mục',
+    ];
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } elseif ($role == 1) {
         layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
     } else {
-        if (!empty($filterAll['categoryId'])) {
-            $categoryId = $filterAll['categoryId'];
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            if (!empty($filterAll['count'])) {
+                $count = $filterAll['count'];
+            } else {
+                $count = 0;
+            }
+            $data = [
+                'categoryId' => $categoryId,
+                'pageTitle' => 'Trang danh mục',
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            layout('header_custom', $data);
         }
-        $data = [
-            'pageTitle' => 'Trang danh mục',
-            'count' => $cartCount,
-            'userId' => $userId,
-            'categoryId' => $categoryId
-        ];
-        layout('header_custom', $data);
     }
 } else {
-    $userId = '';
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value . '&userId=' . $userId);
-    }
     layout('header_dashboard', $data);
 }
-
-
-if (!empty($filterAll['categoryId'])) {
-    $categoryId = $filterAll['categoryId'];
-    $category = selectOne("SELECT * FROM categories WHERE id = $categoryId ");
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $title = 'Sản phẩm bạn muốn tìm';
-        if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-            $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-        } else {
-            $title = 'Sản phẩm bạn muốn tìm';
-            setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
-            setFlashData('smg_type', "danger");
-            $smg = getFlashData('smg');
-            $smg_type = getFlashData('smg_type');
-            $listProduct = selectAll("SELECT * FROM products");
-        }
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $title = 'Sản phẩm bạn muốn tìm';
+    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
+        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
     } else {
-        $title = 'Sản phẩm nổi bật';
+        $title = 'Sản phẩm bạn muốn tìm';
+        setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
+        setFlashData('smg_type', "danger");
+        $smg = getFlashData('smg');
+        $smg_type = getFlashData('smg_type');
         $listProduct = selectAll("SELECT * FROM products");
     }
-    if (isGet()) {
-        if (!empty($filterAll['type'])) {
-            if ($filterAll['type'] == 'new') {
-                $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY created_at DESC LIMIT 10");
-            } else if ($filterAll['type'] == 'hot') {
-                $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId  ORDER BY sold DESC LIMIT 10");
-            }
-            if ($filterAll['type'] == 'lowhight') {
-                $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY price ASC");
-            }
-            if ($filterAll['type'] == 'hightlow') {
-                $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY price DESC");
-            }
-        } else {
-            $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId");
+} else {
+    $title = 'Sản phẩm nổi bật';
+    $listProduct = selectAll("SELECT * FROM products");
+}
+if (isGet()) {
+    if (!empty($filterAll['type'])) {
+        if ($filterAll['type'] == 'new') {
+            $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY created_at DESC LIMIT 10");
+        } else if ($filterAll['type'] == 'hot') {
+            $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId  ORDER BY sold DESC LIMIT 10");
         }
+        if ($filterAll['type'] == 'lowhight') {
+            $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY price ASC");
+        }
+        if ($filterAll['type'] == 'hightlow') {
+            $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId ORDER BY price DESC");
+        }
+    } else {
+        $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId");
     }
 }
+
 $errors = [];
 if (isPost()) {
-
     $categoryId = $filterAll['categoryId'];
-
     // validate
     if (!empty($filterAll['start']) && !empty($filterAll['end'])) {
         if ($filterAll['end'] < $filterAll['start']) {
@@ -140,8 +136,6 @@ if (isPost()) {
     $errors = getFlashData('errors');
 }
 ?>
-<!DOCTYPE html>
-<html lang="vi">
 
 <head>
     <style>
@@ -160,9 +154,6 @@ if (isPost()) {
 </head>
 
 <body class="bg-gray-100 text-gray-800">
-    <!-- NOTE: headers already output by layout(...) above in PHP. 
-         Now render banner + content with Tailwind layout. -->
-
     <!-- Banner / Hero (use category image if exists) -->
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <?php if (!empty($category['image'])): ?>
@@ -193,26 +184,20 @@ if (isPost()) {
     <!-- Content area -->
     <div class="mt-8 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
-            <!-- Mobile filter toggle (visible on small screens) -->
-            <div class="lg:hidden">
-                <button id="open-filter-mobile" class="w-full bg-white border rounded-md px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md">
-                    Bộ lọc &sort;
-                </button>
-            </div>
-
             <!-- Sidebar filters (desktop) -->
             <aside class="hidden lg:block">
                 <div class="bg-white rounded-lg shadow-sm p-6 sticky top-20">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Danh mục</h3>
                     <ul class="space-y-3 text-sm text-gray-700 mb-6">
-                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=new&userId=<?php echo $userId; ?>">Mới nhất</a></li>
-                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=hot&userId=<?php echo $userId; ?>">Bán chạy</a></li>
-                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=lowhight&userId=<?php echo $userId; ?>">Giá: thấp → cao</a></li>
-                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=hightlow&userId=<?php echo $userId; ?>">Giá: cao → thấp</a></li>
+                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=new&userId=<?php echo $userId; ?>&role=<?php echo $role; ?>">Mới nhất</a></li>
+                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=hot&userId=<?php echo $userId; ?>&role=<?php echo $role; ?>">Bán chạy</a></li>
+                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=lowhight&userId=<?php echo $userId; ?>&role=<?php echo $role; ?>">Giá: thấp → cao</a></li>
+                        <li><a class="hover:text-indigo-600" href="<?php echo _WEB_HOST; ?>?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&type=hightlow&userId=<?php echo $userId; ?>&role=<?php echo $role; ?>">Giá: cao → thấp</a></li>
                     </ul>
 
-                    <form id="filter" method="post" class="space-y-4">
+                    <form id="filter" method="POST" class="space-y-4">
                         <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                        <input type="hidden" name="role" value="<?php echo $role; ?>">
                         <input type="hidden" name="categoryId" value="<?php echo $categoryId; ?>">
 
                         <div>
@@ -268,14 +253,13 @@ if (isPost()) {
                             if ($product['is_deleted'] != 1 && $isDelete != 1):
                                 $productId = $product['id'];
                                 $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
-                                // $thumb = !empty($product['thumbnail']) ? _IMGP_ . $product['thumbnail'] : '/Project-One-FPT/asset/images/placeholder.png';
                                 $thumb = !empty($product['thumbnail'])
                                     ? _IMGP_ . $product['thumbnail']
                                     : _IMGP_ . 'placeholder.png';
 
                         ?>
                                 <article class="bg-white rounded-lg shadow-sm hover:shadow-md overflow-hidden">
-                                    <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>">
+                                    <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>">
                                         <div class="h-56 bg-gray-100 overflow-hidden">
                                             <img src="<?php echo $thumb; ?>" alt="<?php echo htmlspecialchars($product['name_product']); ?>" class="w-full h-full object-cover">
                                         </div>
@@ -340,57 +324,6 @@ if (isPost()) {
             </section>
         </div>
     </div>
-
-    <!-- Mobile filter drawer (hidden by default) -->
-    <div id="mobile-filter" class="fixed inset-0 hidden filter-overlay">
-        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div class="absolute right-0 top-0 h-full w-full max-w-xs bg-white shadow-lg p-4 overflow-y-auto">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold">Bộ lọc</h3>
-                <button id="close-filter-mobile" class="text-gray-500 hover:text-gray-700">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- replicate filter form for mobile -->
-            <form method="post" class="space-y-4">
-                <input type="hidden" name="userId" value="<?php echo $userId; ?>">
-                <input type="hidden" name="categoryId" value="<?php echo $categoryId; ?>">
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Từ</label>
-                    <input name="start" type="number" min="0" class="w-full bg-gray-50 border rounded-md px-3 py-2 text-sm" placeholder="Từ">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Đến</label>
-                    <input name="end" type="number" min="0" class="w-full bg-gray-50 border rounded-md px-3 py-2 text-sm" placeholder="Đến">
-                </div>
-
-                <div>
-                    <h4 class="text-sm font-medium text-gray-900 mb-2">Vật liệu</h4>
-                    <div class="space-y-2">
-                        <?php foreach ($listProductFull as $productM):
-                            if ($productM['is_deleted'] != 1): ?>
-
-                                <label class="flex items-center gap-2 text-sm">
-                                    <input type="checkbox" name="material[]" value="<?php echo htmlspecialchars($productM['material']); ?>" class="h-4 w-4 rounded border-gray-300 text-indigo-600">
-                                    <span class="text-gray-700"><?php echo htmlspecialchars($productM['material']); ?></span>
-                                </label>
-                        <?php
-                            endif;
-                        endforeach; ?>
-                    </div>
-                </div>
-
-                <div>
-                    <button type="submit" class="w-full inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Áp dụng</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Simple Footer (visible) -->
     <footer class="mt-12 bg-gray-900 text-white">
         <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm">
@@ -400,9 +333,13 @@ if (isPost()) {
 
     <!-- Footer layouts from your system (kept as in original) -->
     <?php
-    if (!empty($filterAll['userId'])) {
-        if ($filterAll['userId'] == 1) {
+    if (isset($filterAll['role'])) {
+        if ($filterAll['role'] == 1) {
             layout('footer_admin', $data);
+        } else if ($filterAll['role'] == 2) {
+            layout('footer_manager', $data);
+        } else if ($filterAll['role'] == 3) {
+            layout('footer_employee', $data);
         } else {
             layout('footer_custom', $data);
         }
@@ -426,4 +363,22 @@ if (isPost()) {
     </script>
 </body>
 
-</html>
+<?php
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
+    } elseif ($role == 0) {
+        layout('header_custom', $data);
+    } else {
+        layout('header_dashboard', $data);
+    }
+}
+?>

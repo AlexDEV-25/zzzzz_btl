@@ -44,13 +44,15 @@ if (isPost()) {
                     // lưu loginToken vào session
                     setSession('tokenLogin', $tokenLogin);
                     if ($role == 1) {
-                        // 
-                        redirect('?module=home&action=admin&userId=' . $userId);
+                        redirect('?module=home&action=admin&role=1');
+                    } else if ($role == 2) {
+                        redirect('?module=home&action=manager&role=2');
+                    } else if ($role == 3) {
+                        redirect('?module=home&action=employee&role=3');
                     } else {
-
                         $selectCart = "SELECT * FROM cart WHERE id_user = $userId";
                         // $insertProductCart = "SELECT * FROM products_cart WHERE id_user = $userId";
-                        if (getCountRows($selectCart) > 0 && $userId != 1) {
+                        if (getCountRows($selectCart) > 0 && $role != 1 && $role != 2 && $role != 3) {
                         } else {
                             // tạo giỏ số lượng
                             $dataInsertCart = [
@@ -58,7 +60,7 @@ if (isPost()) {
                             ];
                             insert('cart', $dataInsertCart);
                         }
-                        redirect('?module=home&action=dashboard&userId=' . $userId);
+                        redirect('?module=home&action=dashboard&role=' . $role . '&userId=' . $userId);
                     }
                 } else {
                     setFlashData('msg', 'khong the dang nhap vui long thu lai sau');

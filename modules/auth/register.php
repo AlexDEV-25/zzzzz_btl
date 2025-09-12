@@ -96,6 +96,18 @@ if (isPost()) {
         $insertStatus = insert('users', $dataInsert);
 
         if ($insertStatus) {
+            $email = $filterAll['email'];
+            $userId = selectOne("SELECT id FROM users WHERE email = '$email'")['id'];
+            $dataInsertCart = [
+                'id_user' => $userId,
+                'count' => 0
+            ];
+            $insertCartStatus = insert('cart', $dataInsertCart);
+            if ($insertCartStatus) {
+            } else {
+                setFlashData('smg', "tạo giỏ không thành công");
+                setFlashData('smg_type', "danger");
+            }
 
             $linkActive = _WEB_HOST . "?module=auth&action=active&token=$activeToken";
 
@@ -129,10 +141,6 @@ if (isPost()) {
     $smg_type = getFlashData('smg_type');
     $errors = getFlashData('errors');
     $oldData = getFlashData('oldData');
-
-    // echo '<pre>';
-    // print_r($oldData);
-    // echo '</pre>';
 }
 
 $title = [

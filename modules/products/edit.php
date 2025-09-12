@@ -4,25 +4,15 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-
+$role = $filterAll['role'];
+$productId = $filterAll['id'];
 if (!empty($filterAll['id'])) {
-    $productId = $filterAll['id'];
-
-    // Kiểm tra xem userId nó tồn tại trong database không?
-    // Nếu tồn tại => Lấy ra thông tin người dùng
-    // Nếu không tồn tại => Chuyển hướng về trang list
-
     $productOld = selectOne("SELECT * FROM products WHERE id = $productId");
     if (!empty($productOld)) {
         // Tồn tại 
-
-        // echo '<pre>';
-        // print_r($productOld);
-        // echo '</pre>';
-        // die();
         setFlashData('productOld', $productOld);
     } else {
-        redirect('?module=products&action=list');
+        redirect('?module=products&action=list&role' . $role);
     }
 }
 
@@ -67,14 +57,17 @@ if (isPost()) {
     }
 
     if (empty($errors)) {
-        $result = move_uploaded_file(
-            $_FILES['thumbnail']['tmp_name'], // đường đẫn gốc
-            _WEB_PATH . '\\templates\\image\\products\\' . // đường đẫn  mới nhớ thêm \\ ở cuối
-                $_FILES['thumbnail']['name']
-        ); // file  muốn chuyển
-        $anh_string = (string)$_FILES['thumbnail']['name'];
-        $thumbnail = $anh_string;
+        $thumbnail = $productOld['thumbnail']; // mặc định là ảnh cũ
 
+        if (!empty($_FILES['thumbnail']['name'])) {
+            $result = move_uploaded_file(
+                $_FILES['thumbnail']['tmp_name'],
+                _WEB_PATH . '\\templates\\image\\products\\' . $_FILES['thumbnail']['name']
+            );
+            if ($result) {
+                $thumbnail = $_FILES['thumbnail']['name']; // chỉ ghi đè khi có ảnh mới
+            }
+        }
         $dataUpdate = [
             'name_product' => $filterAll['name_product'],
             'price' => $filterAll['price'],
@@ -86,11 +79,13 @@ if (isPost()) {
             'thumbnail' => $thumbnail,
         ];
 
-        // Lưu dữ liệu vào session
-        setSession('previewEditProduct', $dataUpdate);
-
+        $sql = "SELECT id FROM products WHERE id = '$productId'";
+        if (getCountRows($sql) > 0) {
+            $condition = "id = $productId";
+            $UpdateStatus = update('products', $dataUpdate, $condition);
+        }
         // Chuyển sang editDetail
-        redirect('?module=products&action=editDetail&id=' . $productId);
+        redirect('?module=products&action=editDetail&id=' . $productId . '&role=' . $role);
     } else {
         setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
@@ -98,7 +93,7 @@ if (isPost()) {
         setFlashData('old', $filterAll);
     }
 
-    redirect('?module=products&action=edit&id=' . $productId);
+    redirect('?module=products&action=edit&id=' . $productId . '&role=' . $role);
 }
 
 
@@ -125,8 +120,8 @@ if (!empty($productOld)) {
         }
 
         ?>
-        <form action="" method="post" enctype="multipart/form-data">
-
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="role" value="<?php echo $role ?>">
             <div class="row">
                 <div class="col">
                     <div class="form-group mg-form">
@@ -245,7 +240,7 @@ if (!empty($productOld)) {
             <input type="hidden" name="id" value="<?php echo $productId ?>">
 
             <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
-            <a href="?module=products&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
 
             <hr>
 

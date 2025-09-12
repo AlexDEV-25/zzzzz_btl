@@ -22,7 +22,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </button>
-                <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=1 " class="flex items-center">
+                <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=2 " class="flex items-center">
                     <img class="h-9 sm:h-11 w-auto rounded-md" src="https://th.bing.com/th/id/OIP.cdh5Bm1mwTTH7Q2GFTg1xwHaHq?rs=1&pid=ImgDetMain" alt="Logo">
                 </a>
             </div>
@@ -31,12 +31,9 @@
             <div class="flex-1 flex items-center justify-center lg:justify-start gap-6">
                 <!-- Menu desktop -->
                 <div class="hidden lg:flex space-x-8">
-                    <a href="<?php echo _WEB_HOST; ?>?module=home&action=admin&role=1" class="font-medium text-gray-700 hover:text-gray-800">Trang chủ</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=categories&action=list&role=1" class="font-medium text-gray-700 hover:text-gray-800">Danh mục</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=products&action=list&role=1" class="font-medium text-gray-700 hover:text-gray-800">Sản phẩm</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=users&action=list&role=1" class="font-medium text-gray-700 hover:text-gray-800">Tài khoản</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=list&role=1" class="font-medium text-gray-700 hover:text-gray-800">Voucher</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=bills&action=list&role=1" class="font-medium text-gray-700 hover:text-gray-800">Đơn hàng</a>
+                    <a href="<?php echo _WEB_HOST; ?>?module=home&action=manager&role=2" class="font-medium text-gray-700 hover:text-gray-800">Trang chủ</a>
+                    <a href="<?php echo _WEB_HOST; ?>?module=products&action=list&role=2" class="font-medium text-gray-700 hover:text-gray-800">Sản phẩm</a>
+                    <a href="<?php echo _WEB_HOST; ?>?module=bills&action=list&role=2" class="font-medium text-gray-700 hover:text-gray-800">Đơn hàng</a>
 
                 </div>
 
@@ -44,7 +41,7 @@
                 <div class="flex-1 flex justify-center px-4">
                     <form autocomplete="off" method="POST" class="flex items-center w-full max-w-3xl gap-2">
                         <input type="text" name="search" placeholder="Nhập từ khóa..." class="flex-1 h-10 rounded-md pl-4 bg-gray-100">
-                        <input type="hidden" name="role" value="<?php echo 1; ?>">
+                        <input type="hidden" name="role" value="<?php echo 2; ?>">
                         <?php if (!empty($data['categoryId'])): ?><input type="hidden" name="categoryId" value="<?php echo $data['categoryId']; ?>"><?php endif; ?>
                         <?php if (!empty($data['productId'])): ?><input type="hidden" name="productId" value="<?php echo $data['productId']; ?>"><?php endif; ?>
                         <button type="submit" class="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-500">
@@ -61,8 +58,8 @@
                         </button>
                         <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cài đặt</a>
-                            <a href="<?php echo _WEB_HOST; ?>?module=home&action=admin&role=1" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Trang admin</a>
-                            <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=1" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Trang chủ</a>
+                            <a href="<?php echo _WEB_HOST; ?>?module=home&action=manager&role=2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Trang admin</a>
+                            <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Trang chủ</a>
                             <a href="?module=auth&action=logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
                         </div>
                     </div>

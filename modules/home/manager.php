@@ -3,10 +3,10 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $data = [
-    'pageTitle' => 'Trang admin',
-    'role' => 1
+    'pageTitle' => 'Trang manager',
+    'role' => 2
 ];
-layout('header_admin', $data);
+layout('header_manager', $data);
 
 // Kiểm tra trạng thái đăng nhập
 if (!isLogin()) {
@@ -46,35 +46,6 @@ endforeach;
                             </div>
                         </div>
                     </div>
-                    <div class="rounded-xl border-2 bg-indigo-50 p-6 text-indigo-600 border-indigo-600">
-                        <h4 class="capitalize font-medium">Doanh thu</h4>
-                        <div class="flex items-end justify-between">
-                            <p class="text-3xl font-semibold"><?php echo number_format($statistical, 0, '.', '.'); ?> đ</p>
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 2048 2048">
-                                    <path fill="currentColor"
-                                        d="m1344 2l704 352v785l-128-64V497l-512 256v258l-128 64V753L768 497v227l-128-64V354L1344 2zm0 640l177-89l-463-265l-211 106l497 248zm315-157l182-91l-497-249l-149 75l464 265zm-507 654l-128 64v-1l-384 192v455l384-193v144l-448 224L0 1735v-676l576-288l576 288v80zm-640 710v-455l-384-192v454l384 193zm64-566l369-184l-369-185l-369 185l369 184zm576-1l448-224l448 224v527l-448 224l-448-224v-527zm384 576v-305l-256-128v305l256 128zm384-128v-305l-256 128v305l256-128zm-320-288l241-121l-241-120l-241 120l241 121z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-xl border-2 bg-green-50 p-6 text-green-600 border-green-600">
-                        <h4 class="capitalize font-medium">Khách hàng</h4>
-                        <div class="flex items-end justify-between">
-                            <p class="text-3xl font-semibold"><?php echo $amount_user - 1; ?></p>
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-                                    <path fill="currentColor"
-                                        d="M18 17a7 7 0 1 0-7-7a7 7 0 0 0 7 7Zm0-12a5 5 0 1 1-5 5a5 5 0 0 1 5-5Z"
-                                        class="clr-i-outline clr-i-outline-path-1" />
-                                    <path fill="currentColor"
-                                        d="M30.47 24.37a17.16 17.16 0 0 0-24.93 0A2 2 0 0 0 5 25.74V31a2 2 0 0 0 2 2h22a2 2 0 0 0 2-2v-5.26a2 2 0 0 0-.53-1.37ZM29 31H7v-5.27a15.17 15.17 0 0 1 22 0Z"
-                                        class="clr-i-outline clr-i-outline-path-2" />
-                                    <path fill="none" d="M0 0h36v36H0z" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
                     <div class="rounded-xl border-2 bg-orange-50 p-6 text-orange-600 border-orange-600">
                         <h4 class="capitalize font-medium">Số lượng sản phẩm</h4>
                         <div class="flex items-end justify-between">
@@ -91,6 +62,8 @@ endforeach;
             </div>
         </main>
     </div>
-
-    <?php layout('footer_admin'); ?>
 </body>
+
+<?php
+layout('footer_manager', $data);
+?>

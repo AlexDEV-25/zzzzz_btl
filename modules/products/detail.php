@@ -1,14 +1,13 @@
 <?php
 $previewProduct = getSession('previewProduct');
-
+$filterAll = filter();
+$role = $filterAll['role'];
 if (empty($previewProduct)) {
-    redirect('?module=products&action=add');
+    redirect('?module=products&action=add&role' . $role);
 }
 
 if (isPost()) {
     $errors = [];
-    $filterAll = filter();
-
     // Validate
     if (empty($filterAll['amount'])) {
         $errors['amount']['required'] = 'lỗi không nhập';
@@ -58,23 +57,23 @@ if (isPost()) {
                 removeSession('previewProduct');
                 setFlashData('smg', 'Thêm sản phẩm mới thành công!!');
                 setFlashData('smg_type', 'success');
-                redirect('?module=products&action=list');
+                redirect('?module=products&action=list&role=' . $role);
             } else {
                 setFlashData('smg', 'Không thể lưu chi tiết sản phẩm.');
                 setFlashData('smg_type', 'danger');
-                redirect('?module=products&action=detail');
+                redirect('?module=products&action=detail&role=' . $role);
             }
         } else {
             setFlashData('smg', 'Không thể lưu sản phẩm.');
             setFlashData('smg_type', 'danger');
-            redirect('?module=products&action=detail');
+            redirect('?module=products&action=detail&role=' . $role);
         }
     } else {
         setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
-        redirect('?module=products&action=detail');
+        redirect('?module=products&action=detail&role=' . $role);
     }
 }
 
@@ -88,10 +87,11 @@ $oldData = getFlashData('oldData');
 ?>
 <div class="container">
     <div class="row" style="margin: 50px auto;">
-        <h2 class="text-center text-uppercase">Thêm sản phẩm</h2>
+        <h2 class="text-center text-uppercase">Thêm chi tiết sản phẩm</h2>
         <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
 
-        <form action="" method="post" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
+            <input name="role" type="hidden" value="<?php echo $role; ?>">
             <div class="row">
                 <div class="col">
                     <div class="form-group mg-form">
@@ -143,7 +143,7 @@ $oldData = getFlashData('oldData');
             </div>
 
             <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Lưu và thêm mới</button>
-            <a href="?module=products&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
         </form>
         <hr style="margin-top: 25px;">
     </div>

@@ -1,54 +1,28 @@
-<!DOCTYPE html>
-<html lang="vi">
 <?php
+if (!defined('_CODE')) {
+    die("truy cap that bai");
+}
+$filterAll = filter(); // từ log in[role+userID] or không gì cả
 $data = ['pageTitle' => 'Trang chủ',];
-?>
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'lỗi rồi'; ?></title>
-    <!-- <link rel="icon" href="/asset/images/favicon.ico" type="image/x-icon" /> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="/asset/css/style.css" /> -->
-</head>
-
-<body class="bg-gray-100">
-    <?php
-    if (!defined('_CODE')) {
-        die("truy cap that bai");
-    }
-    $filterAll = filter();
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        $title = 'Sản phẩm bạn muốn tìm';
-        if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-            $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-        } else {
-            $title = 'Sản phẩm bạn muốn tìm';
-            setFlashData('smg', "Sản phẩm bạn muốn tìm không có, đây là các sản phẩm khác");
-            setFlashData('smg_type', "danger");
-            $smg = getFlashData('smg');
-            $smg_type = getFlashData('smg_type');
-            $listProduct = selectAll("SELECT * FROM products");
-        }
+$role = -1;
+$userId = -1;
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'pageTitle' => 'Trang chủ',
+    ];
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } elseif ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
     } else {
-        $title = 'Sản phẩm nổi bật';
-        $listProduct = selectAll("SELECT * FROM products");
-    }
-
-    // Kiểm tra trạng thái người dùng
-    if (!empty($filterAll['userId'])) {
-        $userId = $filterAll['userId'];
-        $cartCount = getCountCart($userId);
-        if ($filterAll['userId'] == 1) {
-            layout('header_admin', $data);
-        } else {
-            if (!empty($filterAll['count'])) {
-                $count = $filterAll['count'];
-            } else {
-                $count = 0;
-            }
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
             $data = [
                 'pageTitle' => 'Trang chủ',
                 'count' => $cartCount,
@@ -56,11 +30,30 @@ $data = ['pageTitle' => 'Trang chủ',];
             ];
             layout('header_custom', $data);
         }
-    } else {
-        layout('header_dashboard', $data);
     }
-    ?>
+} else {
+    layout('header_dashboard', $data);
+}
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $title = 'Sản phẩm bạn muốn tìm';
+    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
+        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
+    } else {
+        $title = 'Sản phẩm bạn muốn tìm';
+        setFlashData('smg', "Sản phẩm bạn muốn tìm không có, đây là các sản phẩm khác");
+        setFlashData('smg_type', "danger");
+        $smg = getFlashData('smg');
+        $smg_type = getFlashData('smg_type');
+        $listProduct = selectAll("SELECT * FROM products");
+    }
+} else {
+    $title = 'Sản phẩm nổi bật';
+    $listProduct = selectAll("SELECT * FROM products");
+}
+?>
 
+<body class="bg-gray-100">
     <!-- Banner -->
     <div class="my-10 max-w-7xl mx-auto relative isolate bg-cover bg-bottom bg-[url('<?php echo _IMGB_; ?>banner.jpg')] h-[400px] rounded-xl">
 
@@ -91,7 +84,7 @@ $data = ['pageTitle' => 'Trang chủ',];
                                 $categoryId = $category['id'];
                         ?>
                                 <li>
-                                    <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&userId=<?php echo !empty($userId) ? $userId : 0; ?>"
+                                    <a href="?module=home&action=listCategory&categoryId=<?php echo $categoryId; ?>&role=<?php echo  $role; ?>&userId=<?php echo $userId; ?>"
                                         class="block text-gray-700 hover:text-rose-700 font-medium">
                                         <?php echo $category['name_category']; ?>
                                     </a>
@@ -108,7 +101,7 @@ $data = ['pageTitle' => 'Trang chủ',];
                 <h2 class="text-3xl font-bold text-gray-900 mb-6"><?php echo $title; ?></h2>
                 <?php
                 if (!empty($smg)) {
-                    $alertClass = ($smg_type === 'danger') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
+                    $alertClass = ($smg_type == 'danger') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
                 ?>
                     <div class="<?php echo $alertClass; ?> p-4 rounded-lg mb-6">
                         <?php echo $smg; ?>
@@ -125,7 +118,7 @@ $data = ['pageTitle' => 'Trang chủ',];
                             $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                     ?>
                             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                                <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&userId=<?php echo !empty($userId) ? $userId : ''; ?>">
+                                <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>">
                                     <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>"
                                         alt="<?php echo $product['name_product']; ?>"
                                         class="w-full h-48 object-cover" />
@@ -150,20 +143,8 @@ $data = ['pageTitle' => 'Trang chủ',];
             <p class="mb-0">© 2025 META.vn - Mua sắm online chính hãng</p>
         </div>
     </footer>
-
-    <?php
-    if (!empty($filterAll['userId'])) {
-        if ($filterAll['userId'] == 1) {
-            layout('footer_admin', $data);
-        } else {
-            layout('footer_custom', $data);
-        }
-    } else {
-        layout('footer_dashboard', $data);
-    }
-    ?>
     <!-- Hộp quà -->
-    <?php if (!empty($userId) && $userId != 1): ?>
+    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
         <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>" class="gift-icon">
             <img src="<?php echo _IMGG_; ?>git.png"
                 alt="Gift"
@@ -203,9 +184,22 @@ $data = ['pageTitle' => 'Trang chủ',];
         </style>
     <?php endif; ?>
 </body>
-
-</html>
-
-</body>
-
-</html>
+<?php
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
+    } elseif ($role == 0) {
+        layout('header_custom', $data);
+    } else {
+        layout('header_dashboard', $data);
+    }
+}
+?>

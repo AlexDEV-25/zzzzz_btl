@@ -53,11 +53,12 @@ if (isPost()) {
             'productCartIds' => $filterAll['productCartId'],
             'amount_buy' => $filterAll['amount_buy'],
             'userId' => $userId,
+            'role' => 0,
             'cartId' => $cartId
         ]);
 
         // Chuyển hướng đến trang checkout
-        redirect('?module=checkouts&action=checkout&userId=' . $userId);
+        redirect('?module=checkouts&action=checkout&role=0&userId=' . $userId);
     } else {
         setFlashData('smg', 'bạn phải chọn sản phẩm muốn mua!!');
         setFlashData('smg_type', 'danger');
@@ -86,6 +87,7 @@ if ($rowCart > 0) {
 $data = [
     'pageTitle' => "giỏ hàng",
     'count' => $cartCount,
+    'role' => 0,
     'userId' => $userId
 ];
 layout('header_custom', $data);
@@ -95,15 +97,12 @@ $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Giỏ Hàng</h1>
 
         <?php if (!empty($smg)): ?>
-            <div class="mb-4 p-4 rounded-lg <?php echo $smg_type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
+            <div class="mb-4 p-4 rounded-lg <?php echo $smg_type == 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
                 <?php echo $smg; ?>
             </div>
         <?php endif; ?>
@@ -146,7 +145,7 @@ $smg_type = getFlashData('smg_type');
                                     class="w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
                                 <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price']); ?> đ</span>
                                 <a
-                                    href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&productCartId=<?php echo $productCartId; ?>&userId=<?php echo $userId; ?>"
+                                    href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&productCartId=<?php echo $productCartId; ?>&userId=<?php echo $userId; ?>&role=0"
                                     onclick="return confirm('Bạn có chắc chắn muốn xoá?')"
                                     class="text-red-600 hover:text-red-800">
                                     <i class="fa-solid fa-trash"></i>
@@ -155,6 +154,7 @@ $smg_type = getFlashData('smg_type');
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+                <input type="hidden" value="0" name="role">
                 <input type="hidden" value="<?php echo $productDetailId; ?>" name="productDetailId">
                 <input type="hidden" value="<?php echo $productId; ?>" name="productId">
                 <input type="hidden" value="<?php echo $userId; ?>" name="userId">
@@ -169,16 +169,6 @@ $smg_type = getFlashData('smg_type');
     </div>
 </body>
 
-</html>
-
 <?php
-if (!empty($filterAll['userId'])) {
-    if ($filterAll['userId'] == 1) {
-        layout('footer_admin', $data);
-    } else {
-        layout('footer_custom', $data);
-    }
-} else {
-    layout('footer_login', $data);
-}
+layout('footer_custom', $data);
 ?>
