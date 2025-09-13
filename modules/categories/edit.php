@@ -68,7 +68,8 @@ $categoryOld = getFlashData('categoryOld');
 if (!empty($categoryOld)) {
     $oldData = $categoryOld;
 }
-layout('header');
+$data = ['pageTitle' => 'Sửa danh mục'];
+layout('header', $data);
 ?>
 
 <body>

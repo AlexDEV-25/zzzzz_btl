@@ -49,126 +49,125 @@ $data = [
 layout('header_custom', $data);
 ?>
 
-<div class="min-h-full bg-gray-100 py-10">
-    <div class="max-w-4xl mx-auto">
-        <!-- Tiêu đề -->
-        <header class="bg-white shadow mb-6">
-            <div class="px-6 py-4">
-                <h1 class="text-2xl font-bold tracking-tight text-gray-900">Chi tiết đơn hàng</h1>
-                <p class="text-sm text-gray-500">Mã đơn hàng #<?php echo $bill['id']; ?></p>
-            </div>
-        </header>
-
-        <!-- Thông tin đơn -->
-        <div class="bg-white p-6 shadow-md rounded-md mb-6">
-            <div class="flex justify-between">
-                <div>
-                    <p><span class="font-medium text-gray-600">Ngày đặt:</span> <?php echo $bill['date']; ?></p>
-                    <p class="mt-2"><span class="font-medium text-gray-600">Trạng thái:</span>
-                        <?php
-                        if ($bill['status'] == 1) {
-                            echo '<span class="ml-2 inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">Đã xác nhận</span>';
-                        } else if ($bill['status'] == 0) {
-                            echo '<span class="ml-2 inline-flex items-center rounded-md bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">Chưa xác nhận</span>';
-                        } else if ($bill['status'] == 2) {
-                            echo '<span class="ml-2 inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã hoàn thành</span>';
-                        } else {
-                            echo '<span class="ml-2 inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Đã hủy</span>';
-                        }
-                        ?>
-                    </p>
+<body>
+    <div class="min-h-full bg-gray-100 py-10">
+        <div class="max-w-4xl mx-auto">
+            <!-- Tiêu đề -->
+            <header class="bg-white shadow mb-6">
+                <div class="px-6 py-4">
+                    <h1 class="text-2xl font-bold tracking-tight text-gray-900">Chi tiết đơn hàng</h1>
+                    <p class="text-sm text-gray-500">Mã đơn hàng #<?php echo $bill['id']; ?></p>
                 </div>
-                <div>
-                    <p class="font-medium text-gray-600">Tổng tiền (sau giảm):</p>
-                    <p class="text-xl font-bold text-gray-900">
-                        <?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ
-                    </p>
-                </div>
-            </div>
-        </div>
+            </header>
 
-        <!-- Danh sách sản phẩm -->
-        <div class="bg-white shadow-md rounded-md overflow-hidden">
-            <table class="w-full text-sm text-left text-gray-600">
-                <thead class="bg-gray-50 border-b">
-                    <tr>
-                        <th class="px-6 py-3 font-semibold">Sản phẩm</th>
-                        <th class="px-6 py-3 font-semibold">Số lượng</th>
-                        <th class="px-6 py-3 font-semibold">Đơn giá</th>
-                        <th class="px-6 py-3 font-semibold">Thành tiền</th>
-
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    <?php foreach ($billDetail as $item):
-                        $productDetailId =  $item['id_product_detail'];
-                        $productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId ");
-                        $productId = $productDetail['id_product'];
-                        $product = selectOne("SELECT * FROM products WHERE id = $productId");
-                    ?>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 flex items-center gap-3">
-                                <img class="w-14 h-14 rounded-md object-cover border"
-                                    src="<?php echo _IMGP_ . $productDetail['image']; ?>"
-                                    alt="<?php echo $product['name_product']; ?>">
-                                <div>
-                                    <p class="font-medium text-gray-900"><?php echo $product['name_product'] ?></p>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4"><?php echo $item['amount_buy']; ?></td>
-                            <td class="px-6 py-4"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</td>
-                            <td class="px-6 py-4 font-semibold text-gray-900">
-                                <?php echo number_format($item['amount_buy'] * $product['price'], 0, ',', '.'); ?> đ
-                            </td>
-                            <?php if ($bill['status'] == 2): ?>
-                                <td class="px-6 py-4">
-                                    <!-- Form đánh giá -->
-                                    <form action="?module=home&action=productDetail" method="POST">
-                                        <input type="hidden" name="role" value="0">
-                                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
-                                        <input type="hidden" name="productId" value="<?php echo $productId; ?>">
-                                        <input type="hidden" name="billId" value="<?php echo $billId; ?>">
-                                        <button type="submit"
-                                            class="py-1 px-3 text-sm bg-blue-600 text-white rounded hover:bg-blue-500 transition">
-                                            Đánh giá
-                                        </button>
-                                    </form>
-                                </td>
-                            <?php endif; ?>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Tổng kết -->
-        <div class="bg-white mt-6 p-6 shadow-md rounded-md space-y-3">
-            <div class="flex justify-between text-gray-700">
-                <span>Tạm tính</span>
-                <span><?php echo number_format($beforeDiscount, 0, ',', '.'); ?> đ</span>
-            </div>
-
-            <?php if ($voucherInfo): ?>
-                <div class="flex justify-between text-gray-700">
-                    <span>Voucher đã áp dụng (<?php echo $voucherInfo['code']; ?>)</span>
-                    <span>
-                        -<?php
-                            echo ($voucherInfo['unit'] == 0)
-                                ? $voucherInfo['discount'] . '%'
-                                : number_format($voucherInfo['discount'], 0, ',', '.') . ' đ';
+            <!-- Thông tin đơn -->
+            <div class="bg-white p-6 shadow-md rounded-md mb-6">
+                <div class="flex justify-between">
+                    <div>
+                        <p><span class="font-medium text-gray-600">Ngày đặt:</span> <?php echo $bill['date']; ?></p>
+                        <p class="mt-2"><span class="font-medium text-gray-600">Trạng thái:</span>
+                            <?php
+                            if ($bill['status'] == 1) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">Đã xác nhận</span>';
+                            } else if ($bill['status'] == 0) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">Chưa xác nhận</span>';
+                            } else if ($bill['status'] == 2) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã hoàn thành</span>';
+                            } else {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Đã hủy</span>';
+                            }
                             ?>
-                    </span>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-600">Tổng tiền (sau giảm):</p>
+                        <p class="text-xl font-bold text-gray-900">
+                            <?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ
+                        </p>
+                    </div>
                 </div>
-            <?php endif; ?>
+            </div>
 
-            <div class="flex justify-between text-lg font-bold text-gray-900 border-t pt-3">
-                <span>Thành tiền</span>
-                <span><?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ</span>
+            <!-- Danh sách sản phẩm -->
+            <div class="bg-white shadow-md rounded-md overflow-hidden">
+                <table class="w-full text-sm text-left text-gray-600">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-6 py-3 font-semibold">Sản phẩm</th>
+                            <th class="px-6 py-3 font-semibold">Số lượng</th>
+                            <th class="px-6 py-3 font-semibold">Đơn giá</th>
+                            <th class="px-6 py-3 font-semibold">Thành tiền</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <?php foreach ($billDetail as $item):
+                            $productDetailId =  $item['id_product_detail'];
+                            $productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId ");
+                            $productId = $productDetail['id_product'];
+                            $product = selectOne("SELECT * FROM products WHERE id = $productId");
+                        ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <img class="w-14 h-14 rounded-md object-cover border"
+                                        src="<?php echo _IMGP_ . $productDetail['image']; ?>"
+                                        alt="<?php echo $product['name_product']; ?>">
+                                    <div>
+                                        <p class="font-medium text-gray-900"><?php echo $product['name_product'] ?></p>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"><?php echo $item['amount_buy']; ?></td>
+                                <td class="px-6 py-4"><?php echo number_format($product['price'], 0, ',', '.'); ?> đ</td>
+                                <td class="px-6 py-4 font-semibold text-gray-900">
+                                    <?php echo number_format($item['amount_buy'] * $product['price'], 0, ',', '.'); ?> đ
+                                </td>
+                                <?php if ($bill['status'] == 2): ?>
+                                    <td class="px-6 py-4">
+                                        <!-- Form đánh giá -->
+                                        <form action="?module=home&action=productDetail" method="POST">
+                                            <input type="hidden" name="role" value="0">
+                                            <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                                            <input type="hidden" name="productId" value="<?php echo $productId; ?>">
+                                            <input type="hidden" name="billId" value="<?php echo $billId; ?>">
+                                            <button type="submit"
+                                                class="py-1 px-3 text-sm bg-blue-600 text-white rounded hover:bg-blue-500 transition">
+                                                Đánh giá
+                                            </button>
+                                        </form>
+                                    </td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tổng kết -->
+            <div class="bg-white mt-6 p-6 shadow-md rounded-md space-y-3">
+                <div class="flex justify-between text-gray-700">
+                    <span>Tạm tính</span>
+                    <span><?php echo number_format($beforeDiscount, 0, ',', '.'); ?> đ</span>
+                </div>
+
+                <?php if ($voucherInfo): ?>
+                    <div class="flex justify-between text-gray-700">
+                        <span>Voucher đã áp dụng (<?php echo $voucherInfo['code']; ?>)</span>
+                        <span>
+                            -<?php
+                                echo ($voucherInfo['unit'] == 0)
+                                    ? $voucherInfo['discount'] . '%'
+                                    : number_format($voucherInfo['discount'], 0, ',', '.') . ' đ';
+                                ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
+
+                <div class="flex justify-between text-lg font-bold text-gray-900 border-t pt-3">
+                    <span>Thành tiền</span>
+                    <span><?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<?php
-layout('footer_custom');
-?>
+</body>
+<?php layout('footer'); ?>

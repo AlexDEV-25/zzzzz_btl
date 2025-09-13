@@ -273,9 +273,4 @@ layout('header_custom', $data);
         </form>
     </div>
 </body>
-
-</html>
-
-<?php
-layout('footer_custom', $data);
-?>
+<?php layout('footer'); ?>

@@ -69,9 +69,7 @@ if (isPost()) {
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 
-$data = [
-    'pageTitle' => 'Đăng nhập tài khoản'
-];
+$data = ['pageTitle' => 'Đăng nhập tài khoản'];
 layout('header_login', $data);
 ?>
 
@@ -103,4 +101,4 @@ layout('header_login', $data);
         </div>
     </div>
 </body>
-<?php layout('footer_login'); ?>
+<?php layout('footer'); ?>

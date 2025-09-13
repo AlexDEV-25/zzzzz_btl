@@ -5,6 +5,7 @@ if (!defined('_CODE')) {
 $filterAll = filter();
 $categoryId = $filterAll['categoryId'];
 $category = selectOne("SELECT * FROM categories WHERE id = $categoryId ");
+$listProduct = selectAll("SELECT * FROM products");
 $data = ['pageTitle' => 'Trang danh mục',];
 $role = -1;
 $userId = -1;
@@ -44,23 +45,7 @@ if (isset($filterAll['role'])) {
 } else {
     layout('header_dashboard', $data);
 }
-if (!empty($filterAll['search'])) {
-    $value = $filterAll['search'];
-    $title = 'Sản phẩm bạn muốn tìm';
-    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-    } else {
-        $title = 'Sản phẩm bạn muốn tìm';
-        setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
-        setFlashData('smg_type', "danger");
-        $smg = getFlashData('smg');
-        $smg_type = getFlashData('smg_type');
-        $listProduct = selectAll("SELECT * FROM products");
-    }
-} else {
-    $title = 'Sản phẩm nổi bật';
-    $listProduct = selectAll("SELECT * FROM products");
-}
+
 if (isGet()) {
     if (!empty($filterAll['type'])) {
         if ($filterAll['type'] == 'new') {
@@ -93,23 +78,7 @@ if (isPost()) {
     }
     if (empty($errors)) {
         if (empty($filterAll['material']) && empty($filterAll['start']) && empty($filterAll['end'])) {
-            if (!empty($filterAll['search'])) {
-                $value = $filterAll['search'];
-                $title = 'Sản phẩm bạn muốn tìm';
-                if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-                    $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-                } else {
-                    $title = 'Sản phẩm bạn muốn tìm';
-                    setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
-                    setFlashData('smg_type', "danger");
-                    $smg = getFlashData('smg');
-                    $smg_type = getFlashData('smg_type');
-                    $listProduct = selectAll("SELECT * FROM products");
-                }
-            } else {
-                $title = 'Sản phẩm nổi bật';
-                $listProduct = selectAll("SELECT * FROM products");
-            }
+            $listProduct = selectAll("SELECT * FROM products");
         } else {
             $sql = "SELECT * FROM products WHERE id_category = $categoryId ";
             if (!empty($filterAll['material'])) {
@@ -331,23 +300,6 @@ if (isPost()) {
         </div>
     </footer>
 
-    <!-- Footer layouts from your system (kept as in original) -->
-    <?php
-    if (isset($filterAll['role'])) {
-        if ($filterAll['role'] == 1) {
-            layout('footer_admin', $data);
-        } else if ($filterAll['role'] == 2) {
-            layout('footer_manager', $data);
-        } else if ($filterAll['role'] == 3) {
-            layout('footer_employee', $data);
-        } else {
-            layout('footer_custom', $data);
-        }
-    } else {
-        layout('footer_dashboard', $data);
-    }
-    ?>
-
     <!-- Small JS for mobile filter toggle -->
     <script>
         document.getElementById('open-filter-mobile')?.addEventListener('click', function() {
@@ -362,23 +314,4 @@ if (isPost()) {
         });
     </script>
 </body>
-
-<?php
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    } elseif ($role == 3) {
-        layout('header_employee', $data);
-    } elseif ($role == 0) {
-        layout('header_custom', $data);
-    } else {
-        layout('header_dashboard', $data);
-    }
-}
-?>
+<?php layout('footer'); ?>

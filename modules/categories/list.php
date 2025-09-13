@@ -112,5 +112,4 @@ layout('header_admin', $data);
         </main>
     </div>
 </body>
-
-<?php layout('footer_admin'); ?>
+<?php layout('footer'); ?>

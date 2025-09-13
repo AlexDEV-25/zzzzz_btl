@@ -10,7 +10,7 @@ if (!empty($filterAll['search'])) {
     if ($amount > 0) {
         $listUsers = selectAll("SELECT * FROM users WHERE fullname LIKE '%$value%'");
     } else {
-        setFlashData('smg', 'danh mục không tồn tại');
+        setFlashData('smg', 'khách hàng không tồn tại');
         setFlashData('smg_type', 'danger');
     }
 } else {
@@ -113,4 +113,4 @@ layout('header_admin', $data);
         </main>
     </div>
 </body>
-<?php layout('footer_admin'); ?>
+<?php layout('footer'); ?>

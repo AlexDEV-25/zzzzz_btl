@@ -60,14 +60,9 @@ if (!empty($token)) {
         $msg_type = getFlashData('msg_type');
         $errors = getFlashData('errors');
 
-        $data = [
-            'pageTitle' => 'Đặt lại mật khẩu'
-        ];
+        $data = ['pageTitle' => 'Đặt lại mật khẩu'];
         layout('header_login', $data);
-
-
 ?>
-        <!-- Form đặt lại mật khẩu -->
 
         <body>
             <div class="row">
@@ -77,7 +72,6 @@ if (!empty($token)) {
                     if (!empty($msg)) {
                         getSmg($msg, $msg_type);
                     }
-
                     ?>
                     <form action="" method="POST">
 

@@ -58,7 +58,4 @@ layout('header_manager', $data);
         </main>
     </div>
 </body>
-
-<?php
-layout('footer_manager', $data);
-?>
+<?php layout('footer'); ?>

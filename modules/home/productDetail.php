@@ -24,32 +24,12 @@ if (isset($filterAll['role'])) {
         'pageTitle' => $product['name_product'],
     ];
     if ($role == -1) {
-        $value = '';
-        if (!empty($filterAll['search'])) {
-            $value = $filterAll['search'];
-            redirect('?module=home&action=productsSearch&search=' . $value);
-        }
         layout('header_dashboard', $data);
     } else if ($role == 1) {
-        $value = '';
-        if (!empty($filterAll['search'])) {
-            $value = $filterAll['search'];
-            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
-        }
         layout('header_admin', $data);
     } elseif ($role == 2) {
-        $value = '';
-        if (!empty($filterAll['search'])) {
-            $value = $filterAll['search'];
-            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
-        }
         layout('header_manager', $data);
     } elseif ($role == 3) {
-        $value = '';
-        if (!empty($filterAll['search'])) {
-            $value = $filterAll['search'];
-            redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role);
-        }
         layout('header_employee', $data);
     } else {
         if (!empty($filterAll['userId'])) {
@@ -62,23 +42,12 @@ if (isset($filterAll['role'])) {
                 'count' => $cartCount,
                 'userId' => $userId
             ];
-            $value = '';
-            if (!empty($filterAll['search'])) {
-                $value = $filterAll['search'];
-                redirect('?module=home&action=productsSearch&search=' . $value . '&role=' . $role . '&userId=' . $userId);
-            }
             layout('header_custom', $data);
         }
     }
 } else {
-    $value = '';
-    if (!empty($filterAll['search'])) {
-        $value = $filterAll['search'];
-        redirect('?module=home&action=productsSearch&search=' . $value);
-    }
     layout('header_dashboard', $data);
 }
-
 // thêm vào giỏ
 if (isPost()) {
     if (!empty($filterAll['detailId'])) {
@@ -279,19 +248,4 @@ if (isPost()) {
         </div>
     </div>
 </body>
-
-<?php
-if (isset($role)) {
-    if ($role == 1) {
-        layout('footer_admin', $data);
-    } else if ($role == 2) {
-        layout('footer_manager', $data);
-    } else if ($role == 3) {
-        layout('footer_employee', $data);
-    } else {
-        layout('footer_custom', $data);
-    }
-} else {
-    layout('footer_dashboard', $data);
-}
-?>
+<?php layout('footer'); ?>

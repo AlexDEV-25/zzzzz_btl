@@ -39,4 +39,4 @@ layout('header_custom', $data);
         </div>
     </div>
 </body>
-<?php layout('footer_custom'); ?>
+<?php layout('footer'); ?>

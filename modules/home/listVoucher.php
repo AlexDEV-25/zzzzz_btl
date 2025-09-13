@@ -4,38 +4,22 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-$data = [
-    'pageTitle' => 'Voucher khuyến mãi'
-];
-// header tuỳ theo user
 if (!empty($filterAll['userId'])) {
     $userId = $filterAll['userId'];
     $cartCount = getCountCart($userId);
     $data = [
+        'pageTitle' => 'Voucher khuyến mãi',
         'role' => 0,
         'count' => $cartCount,
         'userId' => $userId
     ];
     layout('header_custom', $data);
-} else {
-    layout('header_dashboard', $data);
 }
 
 // lấy dữ liệu voucher
-if (!empty($filterAll['search'])) {
-    $value = $filterAll['search'];
-    $amount = getCountRows("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-    if ($amount > 0) {
-        $listVouchers = selectAll("SELECT * FROM vouchers WHERE code LIKE '%$value%'");
-    } else {
-        setFlashData('smg', 'Voucher không tồn tại');
-        setFlashData('smg_type', 'danger');
-    }
-} else {
-    $today = date("Y-m-d");
-    $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' 
+$today = date("Y-m-d");
+$listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' 
     AND end >= '$today' AND is_deleted = 0 ORDER BY id DESC");
-}
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
@@ -77,15 +61,6 @@ $smg_type = getFlashData('smg_type');
             </div>
         </div>
     </main>
-
-    <?php
-    if (!empty($filterAll['userId'])) {
-        layout('footer_custom', $data);
-    } else {
-        layout('footer_dashboard', $data);
-    }
-    ?>
-
     <script>
         function copyCode(code) {
             navigator.clipboard.writeText(code).then(() => {
@@ -94,17 +69,4 @@ $smg_type = getFlashData('smg_type');
         }
     </script>
 </body>
-<?php
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-    $cartCount = getCountCart($userId);
-    $data = [
-        'role' => 0,
-        'count' => $cartCount,
-        'userId' => $userId
-    ];
-    layout('footer_custom', $data);
-} else {
-    layout('footer_dashboard', $data);
-}
-?>
+<?php layout('footer'); ?>

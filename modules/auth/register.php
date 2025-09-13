@@ -114,9 +114,7 @@ if (isPost()) {
     $oldData = getFlashData('oldData');
 }
 
-$data = [
-    'pageTitle' => 'Đăng ký tài khoản'
-];
+$data = ['pageTitle' => 'Đăng ký tài khoản'];
 layout('header_login', $data);
 ?>
 
@@ -181,4 +179,4 @@ layout('header_login', $data);
         </div>
     </div>
 </body>
-<?php layout('footer_login');; ?>
+<?php layout('footer'); ?>

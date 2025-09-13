@@ -10,7 +10,7 @@ if (!empty($filterAll['search'])) {
     if ($amount > 0) {
         $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
     } else {
-        setFlashData('smg', 'danh mục không tồn tại');
+        setFlashData('smg', 'sản phẩm không tồn tại');
         setFlashData('smg_type', 'danger');
     }
 } else {
@@ -129,18 +129,4 @@ if (isset($filterAll['role'])) {
         </main>
     </div>
 </body>
-<?php
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('footer_admin', $data);
-    } else if ($role == 2) {
-        layout('footer_manager', $data);
-    }
-} else {
-    die();
-}
-?>
+<?php layout('footer'); ?>

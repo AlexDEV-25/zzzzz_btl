@@ -208,8 +208,4 @@ layout('header', $data);
         <hr style="margin-top: 25px;">
     </div>
 </div>
-
-
-<?php
-layout('footer');
-?>
+<?php layout('footer'); ?>

@@ -5,23 +5,17 @@ if (!defined('_CODE')) {
 
 $filterAll = filter();
 $errors = [];
-
-// kiểm tra người dùng
-if (!empty($filterAll['userId'])) {
-    $userId = $filterAll['userId'];
-    $cartCount = getCountCart($userId);
-    $rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
-    $data = [
-        'pageTitle' => "Lịch sử đơn hàng",
-        'count' => $cartCount,
-        'role' => 0,
-        'userId' => $userId
-    ];
-    layout('header_custom', $data);
-    $listBill = selectAll("SELECT * FROM bills WHERE id_user = $userId");
-} else {
-    redirect('?module=auth&action=register');
-}
+$userId = $filterAll['userId'];
+$listBill = selectAll("SELECT * FROM bills WHERE id_user = $userId");
+$cartCount = getCountCart($userId);
+$rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
+$data = [
+    'pageTitle' => "Lịch sử đơn hàng",
+    'count' => $cartCount,
+    'role' => 0,
+    'userId' => $userId
+];
+layout('header_custom', $data);
 ?>
 
 <body class="bg-gray-100">
@@ -83,7 +77,4 @@ if (!empty($filterAll['userId'])) {
         <?php endforeach; ?>
     </div>
 </body>
-
-<?php
-layout('footer_custom', $data);
-?>
+<?php layout('footer'); ?>

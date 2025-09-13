@@ -4,8 +4,6 @@ if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 $filterAll = filter();
-$data = ['pageTitle' => 'Trang chủ',];
-$value = '';
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
 }
@@ -13,9 +11,7 @@ $role = -1;
 $userId = -1;
 if (isset($filterAll['role'])) {
     $role = $filterAll['role'];
-    $data = [
-        'pageTitle' => 'Tìm kiểm',
-    ];
+    $data = ['pageTitle' => 'Tìm kiểm',];
     if ($role == -1) {
         layout('header_dashboard', $data);
     } elseif ($role == 1) {
@@ -42,6 +38,7 @@ if (isset($filterAll['role'])) {
         }
     }
 } else {
+    $data = ['pageTitle' => 'Tìm kiểm',];
     layout('header_dashboard', $data);
 }
 
@@ -90,7 +87,7 @@ if (isset($filterAll['role'])) {
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php
-                $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
+                $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%'");
                 foreach ($listProduct as $product):
                     $categorieId = $product['id_category'];
                     $category = selectOne("SELECT is_deleted FROM categories WHERE id = $categorieId");
@@ -123,17 +120,4 @@ if (isset($filterAll['role'])) {
     </footer>
 
 </body>
-
-<?php
-if (isset($filterAll['role'])) {
-    if ($filterAll['role'] == 1) {
-        layout('footer_admin', $data);
-    } else if ($filterAll['role'] == 2) {
-        layout('footer_manager', $data);
-    } else {
-        layout('footer_custom', $data);
-    }
-} else {
-    layout('footer_dashboard', $data);
-}
-?>
+<?php layout('footer'); ?>

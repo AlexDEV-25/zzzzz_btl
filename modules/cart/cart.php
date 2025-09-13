@@ -79,6 +79,7 @@ if ($rowCart > 0) {
 // Lấy thông báo flash
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+
 $data = [
     'pageTitle' => "giỏ hàng",
     'count' => $cartCount,
@@ -159,7 +160,4 @@ layout('header_custom', $data);
         </form>
     </div>
 </body>
-
-<?php
-layout('footer_custom', $data);
-?>
+<?php layout('footer'); ?>

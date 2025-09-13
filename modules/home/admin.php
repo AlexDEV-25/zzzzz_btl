@@ -202,6 +202,5 @@ layout('header_admin', $data);
             }
         });
     </script>
-
-    <?php layout('footer_admin'); ?>
 </body>
+<?php layout('footer'); ?>

@@ -46,9 +46,8 @@ $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
 $oldData = getFlashData('oldData');
-$data = [
-    'pageTitle' => 'Thêm danh mục'
-];
+
+$data = ['pageTitle' => 'Thêm danh mục'];
 layout('header', $data);
 ?>
 

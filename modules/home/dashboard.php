@@ -3,6 +3,7 @@ if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 $filterAll = filter(); // từ log in[role+userID] or không gì cả
+$listProduct = selectAll("SELECT * FROM products");
 $data = ['pageTitle' => 'Trang chủ',];
 $role = -1;
 $userId = -1;
@@ -33,23 +34,6 @@ if (isset($filterAll['role'])) {
     }
 } else {
     layout('header_dashboard', $data);
-}
-if (!empty($filterAll['search'])) {
-    $value = $filterAll['search'];
-    $title = 'Sản phẩm bạn muốn tìm';
-    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-    } else {
-        $title = 'Sản phẩm bạn muốn tìm';
-        setFlashData('smg', "Sản phẩm bạn muốn tìm không có, đây là các sản phẩm khác");
-        setFlashData('smg_type', "danger");
-        $smg = getFlashData('smg');
-        $smg_type = getFlashData('smg_type');
-        $listProduct = selectAll("SELECT * FROM products");
-    }
-} else {
-    $title = 'Sản phẩm nổi bật';
-    $listProduct = selectAll("SELECT * FROM products");
 }
 ?>
 
@@ -98,7 +82,6 @@ if (!empty($filterAll['search'])) {
 
             <!-- Phần sản phẩm -->
             <main class="lg:col-span-3">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6"><?php echo $title; ?></h2>
                 <?php
                 if (!empty($smg)) {
                     $alertClass = ($smg_type == 'danger') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
@@ -184,22 +167,4 @@ if (!empty($filterAll['search'])) {
         </style>
     <?php endif; ?>
 </body>
-<?php
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    } elseif ($role == 3) {
-        layout('header_employee', $data);
-    } elseif ($role == 0) {
-        layout('header_custom', $data);
-    } else {
-        layout('header_dashboard', $data);
-    }
-}
-?>
+<?php layout('footer'); ?>

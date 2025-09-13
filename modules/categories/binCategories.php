@@ -24,7 +24,6 @@ $data = [
     'role' => 1
 ];
 layout('header_admin', $data);
-
 ?>
 
 <body>
@@ -109,5 +108,4 @@ layout('header_admin', $data);
         </main>
     </div>
 </body>
-
-<?php layout('footer_admin'); ?>
+<?php layout('footer'); ?>

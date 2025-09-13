@@ -64,15 +64,11 @@ if (isPost()) {
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 
-$data = [
-    'pageTitle' => 'Quên mật khẩu'
-];
+$data = ['pageTitle' => 'Quên mật khẩu'];
 layout('header_login', $data);
 ?>
 
 <body>
-
-
     <div class="row">
         <div class="col-4" style="margin: 100px auto;">
 
@@ -96,6 +92,4 @@ layout('header_login', $data);
         </div>
     </div>
 </body>
-<?php
-layout('footer');;
-?>
+<?php layout('footer'); ?>
