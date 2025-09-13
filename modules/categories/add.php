@@ -26,16 +26,16 @@ if (isPost()) {
         ];
         $insertStatus = insert('categories', $dataInsert);
         if ($insertStatus) {
-            setFlashData('smg', 'Thêm danh mục mới thành công!!');
+            setFlashData('smg', '✅ Thêm danh mục mới thành công!!');
             setFlashData('smg_type', 'success');
             redirect('?module=categories&action=list');
         } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
+            setFlashData('smg', '❌ Hệ thống đang lỗi vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
             redirect('?module=categories&action=add');
         }
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
@@ -54,14 +54,8 @@ layout('header', $data);
 <body>
     <div class="container">
         <div class="row" style="margin: 50px auto;">
-
             <h2 class="text-center text-uppercase">Thêm danh mục</h2>
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-
-            ?>
+            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
             <form action="" method="post" enctype="multipart/form-data">
                 <div class=" row">
                     <div class="col">

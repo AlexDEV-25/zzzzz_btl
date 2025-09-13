@@ -55,21 +55,21 @@ if (isPost()) {
 
             if ($insertStatus) {
                 removeSession('previewProduct');
-                setFlashData('smg', 'Thêm sản phẩm mới thành công!!');
+                setFlashData('smg', '✅ Thêm sản phẩm mới thành công!!');
                 setFlashData('smg_type', 'success');
                 redirect('?module=products&action=list&role=' . $role);
             } else {
-                setFlashData('smg', 'Không thể lưu chi tiết sản phẩm.');
+                setFlashData('smg', '❌ Không thể lưu chi tiết sản phẩm.');
                 setFlashData('smg_type', 'danger');
                 redirect('?module=products&action=detail&role=' . $role);
             }
         } else {
-            setFlashData('smg', 'Không thể lưu sản phẩm.');
+            setFlashData('smg', '❌ Không thể lưu sản phẩm.');
             setFlashData('smg_type', 'danger');
             redirect('?module=products&action=detail&role=' . $role);
         }
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
@@ -90,7 +90,6 @@ layout('header', $data);
         <div class="row" style="margin: 50px auto;">
             <h2 class="text-center text-uppercase">Thêm chi tiết sản phẩm</h2>
             <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
-
             <form method="POST" enctype="multipart/form-data">
                 <input name="role" type="hidden" value="<?php echo $role; ?>">
                 <div class="row">

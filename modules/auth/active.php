@@ -1,12 +1,12 @@
 <?php
 
 if (!defined('_CODE')) {
-    die("truy cap that bai");
+    die("Truy cập thất bại!");
 }
 
-$token = filter()['token'];
+$token = filter()['token'] ?? null;
 if (!empty($token)) {
-    // truy vấn để kiểm tra token với database
+    // Truy vấn để kiểm tra token với database
     $tokenQuery = selectOne("SELECT id FROM users WHERE activeToken = '$token'");
     if (!empty($tokenQuery)) {
         $userId = $tokenQuery['id'];
@@ -16,16 +16,16 @@ if (!empty($token)) {
         ];
         $updateStatus = update('users', $dataUpdate, "id=$userId");
         if ($updateStatus) {
-            setFlashData('msg', "kich hoat thanh cong, ban co the dang nhap ngay bay gio");
-            setFlashData('msg_type', "success");
+            setFlashData('smg', "✅ Kích hoạt tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.");
+            setFlashData('smg_type', "success");
         } else {
-            setFlashData('msg', "kich hoat khong thanh cong, vui long lien he quan tri vien");
-            setFlashData('msg_type', "danger");
+            setFlashData('smg', "❌ Kích hoạt không thành công. Vui lòng liên hệ quản trị viên.");
+            setFlashData('smg_type', "danger");
         }
         redirect('?module=auth&action=login');
     } else {
-        getSmg('lien ket khong ton tai hoac da het han', 'danger');
+        getSmg("❌ Liên kết không tồn tại hoặc đã hết hạn.", "danger");
     }
 } else {
-    getSmg('ket noi khong ton tai hoac da het han', 'danger');
+    getSmg("❌ Kết nối không tồn tại hoặc đã hết hạn.", "danger");
 }

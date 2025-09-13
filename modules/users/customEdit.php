@@ -85,14 +85,14 @@ if (isPost()) {
         $condition = "id = $userId";
         $UpdateStatus = update('users', $dataUpdate, $condition);
         if ($UpdateStatus) {
-            setFlashData('smg', 'Sửa thông tin thành công!!');
+            setFlashData('smg', '✅ Sửa thông tin thành công!!');
             setFlashData('smg_type', 'success');
         } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
+            setFlashData('smg', '❌ Hệ thống đang lỗi vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('old', $filterAll);
@@ -119,14 +119,8 @@ layout('header', $data);
 <body>
     <div class="container">
         <div class="row" style="margin: 50px auto;">
-
             <h2 class="text-center text-uppercase">Update người dùng </h2>
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-
-            ?>
+            <?php if (!empty($smg))  getSmg($smg, $smg_type); ?>
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col">

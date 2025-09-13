@@ -82,14 +82,6 @@ if (isset($filterAll['role'])) {
 
             <!-- Phần sản phẩm -->
             <main class="lg:col-span-3">
-                <?php
-                if (!empty($smg)) {
-                    $alertClass = ($smg_type == 'danger') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700';
-                ?>
-                    <div class="<?php echo $alertClass; ?> p-4 rounded-lg mb-6">
-                        <?php echo $smg; ?>
-                    </div>
-                <?php } ?>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <?php
                     foreach ($listProduct as $product):

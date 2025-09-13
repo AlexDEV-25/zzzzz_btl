@@ -10,7 +10,7 @@ if (!empty($filterAll['search'])) {
     if ($amount > 0) {
         $listUsers = selectAll("SELECT * FROM users WHERE fullname LIKE '%$value%'");
     } else {
-        setFlashData('smg', 'khách hàng không tồn tại');
+        setFlashData('smg', '✅ Khách hàng không tồn tại');
         setFlashData('smg_type', 'danger');
     }
 } else {
@@ -31,6 +31,7 @@ layout('header_admin', $data);
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center justify-between">
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">Quản lý người dùng</h1>
+                <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
                 <div class="flex gap-4">
                     <form method="post" action="">
                         <div class="flex">
@@ -55,9 +56,6 @@ layout('header_admin', $data);
                     </a>
 
                 </div>
-                <?php if (!empty($smg)) {
-                    echo '<div class="mb-4 p-4 rounded-md ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
-                } ?>
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100">

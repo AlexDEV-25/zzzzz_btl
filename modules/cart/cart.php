@@ -53,7 +53,7 @@ if (isPost()) {
         // Chuyển hướng đến trang checkout
         redirect('?module=checkouts&action=checkout&role=0&userId=' . $userId);
     } else {
-        setFlashData('smg', 'bạn phải chọn sản phẩm muốn mua!!');
+        setFlashData('smg', '❌ Bạn phải chọn sản phẩm muốn mua!!');
         setFlashData('smg_type', 'danger');
     }
 }
@@ -92,13 +92,7 @@ layout('header_custom', $data);
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Giỏ Hàng</h1>
-
-        <?php if (!empty($smg)): ?>
-            <div class="mb-4 p-4 rounded-lg <?php echo $smg_type == 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
-                <?php echo $smg; ?>
-            </div>
-        <?php endif; ?>
-
+        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
         <form method="POST" class="space-y-4">
             <div id="cart" class="bg-white rounded-lg shadow-md p-6">
                 <?php

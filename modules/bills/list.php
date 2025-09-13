@@ -2,110 +2,108 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
+
 $filterAll = filter();
-if (isPost()) {
-    if (!empty($filterAll['billId'])) {
-        $billIdCondition = $filterAll['billId'];
-        $bill = selectOne("SELECT status FROM bills WHERE id = $billIdCondition ");
+
+if (isPost() && !empty($filterAll['billId'])) {
+    $billId = (int) $filterAll['billId'];
+
+    // Kiểm tra đơn hàng có tồn tại
+    $bill = selectOne("SELECT status FROM bills WHERE id = ?", [$billId]);
+    if ($bill) {
         $billStatus = $bill['status'];
-        if (!empty($filterAll['status'])) {
-            if ($billStatus != $filterAll['status']) {
-                if ($filterAll['status'] == 1) {
-                    // ✅ Khi xác nhận đơn thì trừ số lượng sản phẩm
-                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
+        $newStatus  = isset($filterAll['status']) ? (int) $filterAll['status'] : $billStatus;
 
-                    foreach ($listBillDetail as $item):
-                        $productDetailId = $item['id_product_detail'];
-                        $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
+        // Nếu trạng thái thay đổi
+        if ($billStatus != $newStatus) {
+            if ($newStatus === 1) {
+                // ✅ Xác nhận đơn → trừ số lượng sản phẩm
+                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = ?", [$billId]);
 
-                        // Trừ số lượng
-                        $newAmount = $productDetail['amount'] - $item['amount_buy'];
-                        if ($newAmount < 0) {
-                            $newAmount = 0; // tránh âm số
-                        }
+                foreach ($listBillDetail as $item) {
+                    $productDetailId = (int) $item['id_product_detail'];
+                    $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = ?", [$productDetailId]);
 
-                        // Cập nhật lại số lượng
-                        $dataUpdateAmount = [
-                            'amount' => $newAmount,
-                        ];
-                        $conditionProductDetail = "id = $productDetailId";
-                        $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
+                    if ($productDetail) {
+                        $newAmount = max(0, $productDetail['amount'] - $item['amount_buy']);
 
-                        // Nếu về 0 thì báo hết hàng
+                        update('products_detail', ['amount' => $newAmount], "id = ?", [$productDetailId]);
+
                         if ($newAmount == 0) {
-                            setFlashData('smg', 'Sản phẩm trong kho đã hết');
-                            setFlashData('smg_type', 'danger');
+                            setFlashData('smg', '⚠️ Một số sản phẩm đã hết hàng.');
+                            setFlashData('smg_type', 'warning');
                         }
-                    endforeach;
-
-                    $dataUpdate = [
-                        'status' => $filterAll['status']
-                    ];
-                } elseif ($filterAll['status'] == 2) {
-                    $dataUpdate = [
-                        'end_date' => date('Y-m-d H:i:s'),
-                        'status' => $filterAll['status']
-                    ];
-                } elseif ($filterAll['status'] == -1) {
-                    $dataUpdate = [
-                        'end_date' => date('Y-m-d H:i:s'),
-                        'status' => $filterAll['status']
-                    ];
-                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billIdCondition ");
-
-                    foreach ($listBillDetail as $item):
-                        $productDetailId = $item['id_product_detail'];
-                        $productDetail = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId ");
-                        $dataUpdateAmount = [
-                            'amount' => $productDetail['amount'] + $item['amount_buy'],
-                        ];
-                        $conditionProductDetail = "id = $productDetailId";
-                        $UpdateStatusAmount = update('products_detail', $dataUpdateAmount, $conditionProductDetail);
-                    endforeach;
+                    }
                 }
-            } else {
+
+                $dataUpdate = ['status' => $newStatus];
+            } elseif ($newStatus === 2 || $newStatus === -1) {
+                // ✅ Hoàn tất hoặc Hủy đơn
                 $dataUpdate = [
-                    'status' => $filterAll['status']
+                    'end_date' => date('Y-m-d H:i:s'),
+                    'status'   => $newStatus
                 ];
-            }
 
-            $condition = "id = $billIdCondition";
-            $UpdateStatus = update('bills', $dataUpdate, $condition);
-            if ($UpdateStatus) {
-                if (empty(getFlashData('smg'))) { // nếu chưa có thông báo hết hàng
-                    setFlashData('smg', 'Sửa trạng thái thành công!!');
-                    setFlashData('smg_type', 'success');
+                if ($newStatus === -1) {
+                    // ✅ Hủy đơn → cộng lại số lượng
+                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = ?", [$billId]);
+
+                    foreach ($listBillDetail as $item) {
+                        $productDetailId = (int) $item['id_product_detail'];
+                        $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = ?", [$productDetailId]);
+
+                        if ($productDetail) {
+                            $newAmount = $productDetail['amount'] + $item['amount_buy'];
+                            update('products_detail', ['amount' => $newAmount], "id = ?", [$productDetailId]);
+                        }
+                    }
                 }
-            } else {
-                setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
-                setFlashData('smg_type', 'danger');
             }
+        } else {
+            $dataUpdate = ['status' => $newStatus];
         }
+
+        // Cập nhật trạng thái đơn
+        $updateOk = update('bills', $dataUpdate, "id = ?", [$billId]);
+        if ($updateOk) {
+            if (empty(getFlashData('smg'))) {
+                setFlashData('smg', '✅ Cập nhật trạng thái thành công!');
+                setFlashData('smg_type', 'success');
+            }
+        } else {
+            setFlashData('smg', '❌ Hệ thống đang lỗi, vui lòng thử lại sau.');
+            setFlashData('smg_type', 'danger');
+        }
+    } else {
+        setFlashData('smg', '❌ Đơn hàng không tồn tại.');
+        setFlashData('smg_type', 'danger');
     }
 }
 
-// kiểm tra có search hay không
+
+// Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
     $amount = getCountRows("SELECT * FROM bills WHERE id LIKE '%$value%'");
     if ($amount > 0) {
         $listBills = selectAll("SELECT * FROM bills WHERE id LIKE '%$value%'");
     } else {
-        setFlashData('smg', 'Đơn hàng không tồn tại');
+        setFlashData('smg', '❌ Đơn không tồn tại');
         setFlashData('smg_type', 'danger');
     }
 } else {
-    $listBills = selectAll("SELECT * FROM bills ORDER BY date");
+    $listBills = selectAll("SELECT * FROM bills ORDER BY id");
 }
+
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 
-$data = ['pageTitle' => 'Danh sách đơn hàng',];
+// Layout
+$data = ['pageTitle' => 'Danh sách đơn hàng'];
 if (isset($filterAll['role'])) {
     $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
+    $data['role'] = $role;
+
     if ($role == 1) {
         layout('header_admin', $data);
     } elseif ($role == 2) {
@@ -118,20 +116,17 @@ if (isset($filterAll['role'])) {
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-6">Quản lý đơn hàng</h1>
 
-        <!-- Form tìm kiếm -->
-        <div class="flex justify-end mb-6">
-            <form method="post" action="" class="flex gap-2">
-                <input type="search" name="search" placeholder="Nhập Mã Đơn"
-                    class="bg-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                <button type="submit"
-                    class="text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-lg text-sm px-5 py-2.5">Tìm kiếm</button>
-            </form>
-        </div>
+        <!-- Hiển thị thông báo -->
+        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
 
-        <!-- Thông báo -->
-        <?php if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        } ?>
+        <!-- Form tìm kiếm (giống categories) -->
+        <form method="post" action="" class="mb-6">
+            <div class="flex items-center gap-2">
+                <input type="search" name="search" placeholder="Nhập mã đơn cần tìm..." class="flex-1 bg-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="hidden" class="form-control" name="role" value="<?php echo 1; ?>">
+                <button type="submit" class="text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-lg text-sm px-5 py-2.5">Tìm kiếm</button>
+            </div>
+        </form>
 
         <!-- Bảng danh sách -->
         <div class="relative overflow-x-auto shadow sm:rounded-lg max-h-[500px]">
@@ -164,16 +159,16 @@ if (isset($filterAll['role'])) {
                                 <td class="px-6 py-4"><?php echo number_format($item['total'], 0, '.', '.'); ?> &#8363;</td>
                                 <td class="px-6 py-4">
                                     <?php if ($item['status'] == 1): ?>
-                                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800">Đã xác nhận</span>
+                                        <span class="badge bg-blue-100 text-blue-800">Đã xác nhận</span>
                                     <?php elseif ($item['status'] == 0): ?>
-                                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800">Chưa xác nhận</span>
+                                        <span class="badge bg-yellow-100 text-yellow-800">Chưa xác nhận</span>
                                     <?php elseif ($item['status'] == 2): ?>
-                                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-green-100 text-green-800">Đã hoàn thành</span>
+                                        <span class="badge bg-green-100 text-green-800">Đã hoàn thành</span>
                                     <?php else: ?>
-                                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium bg-red-100 text-red-800">Đã hủy đơn</span>
+                                        <span class="badge bg-red-100 text-red-800">Đã hủy đơn</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 flex gap-2 items-center">
                                     <form action="" method="POST" class="flex gap-2 items-center">
                                         <select name="status"
                                             class="border-gray-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500">
@@ -185,10 +180,12 @@ if (isset($filterAll['role'])) {
                                         <input type="hidden" name="userId" value="<?php echo $userId ?>">
                                         <input type="hidden" name="billId" value="<?php echo $billId ?>">
                                         <button type="submit"
-                                            class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm">Xác nhận</button>
+                                            class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm">
+                                            Cập nhật
+                                        </button>
                                     </form>
                                     <a href="<?php echo _WEB_HOST; ?>?module=bills&action=billDetail&role=<?php echo $role; ?>&userId=<?php echo $item['id_user']; ?>&billId=<?php echo $item['id']; ?>"
-                                        class="block mt-2 text-sky-600 font-semibold">Chi tiết</a>
+                                        class="text-sky-600 font-semibold hover:underline">Chi tiết</a>
                                 </td>
                             </tr>
                         <?php endforeach;

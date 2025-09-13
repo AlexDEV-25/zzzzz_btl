@@ -1,67 +1,70 @@
 <?php
 if (!defined('_CODE')) {
-    die("truy cap that bai");
+    die("Truy cập thất bại!");
 }
+
 $errors = [];
 $oldData = [];
+
 if (isPost()) {
     $filterAll = filter();
+
     // validate fullname
     if (empty($filterAll['fullname'])) {
-        $errors['fullname']['required'] = 'lỗi không nhập';
+        $errors['fullname']['required'] = '⚠️ Vui lòng nhập họ và tên.';
     } else {
         if (strlen($filterAll['fullname']) < 5) {
-            $errors['fullname']['min'] = 'lỗi tên quá ngắn';
+            $errors['fullname']['min'] = '⚠️ Họ và tên quá ngắn (tối thiểu 5 ký tự).';
         }
     }
 
     // validate email
     if (empty($filterAll['email'])) {
-        $errors['email']['required'] = 'lỗi không nhập';
+        $errors['email']['required'] = '⚠️ Vui lòng nhập email.';
     } else {
         if (!emailUnique($filterAll['email'])) {
-            $errors['email']['unique'] = 'email đã tồn tại';
+            $errors['email']['unique'] = '❌ Email này đã tồn tại trong hệ thống.';
         }
     }
 
     // validate phone
     if (empty($filterAll['phone'])) {
-        $errors['phone']['required'] = 'lỗi không nhập';
+        $errors['phone']['required'] = '⚠️ Vui lòng nhập số điện thoại.';
     } else {
         if (!isPhone($filterAll['phone'])) {
-            $errors['phone']['isPhone'] = 'số điện thoại không hợp lệ';
+            $errors['phone']['isPhone'] = '❌ Số điện thoại không hợp lệ.';
         }
     }
 
     // validate password
     if (empty($filterAll['password'])) {
-        $errors['password']['required'] = 'lỗi không nhập';
+        $errors['password']['required'] = '⚠️ Vui lòng nhập mật khẩu.';
     } else {
         if (strlen($filterAll['password']) < 8) {
-            $errors['password']['min'] = 'mật khẩu phải nhiều hơn 8 kí tự ';
+            $errors['password']['min'] = '⚠️ Mật khẩu phải có ít nhất 8 ký tự.';
         }
     }
 
     // validate re_password
     if (empty($filterAll['re_password'])) {
-        $errors['re_password']['required'] = 'lỗi không nhập';
+        $errors['re_password']['required'] = '⚠️ Vui lòng nhập lại mật khẩu.';
     } else {
         if ($filterAll['re_password'] != $filterAll['password']) {
-            $errors['re_password']['match'] = 'mật khẩu nhập lại  không đúng ';
+            $errors['re_password']['match'] = '❌ Mật khẩu nhập lại không khớp.';
         }
     }
 
     if (empty($errors)) {
         // xử lý insert
-        $activeToken = sha1(uniqid() . time()); // thời gian đăng ký (độc nhất cho mỗi lần đăng kí)
+        $activeToken = sha1(uniqid() . time()); // Token kích hoạt
 
         $dataInsert = [
-            'fullname' => $filterAll['fullname'],
-            'email' => $filterAll['email'],
-            'phone' => $filterAll['phone'],
-            'password' => password_hash($filterAll['password'], PASSWORD_DEFAULT),
+            'fullname'    => $filterAll['fullname'],
+            'email'       => $filterAll['email'],
+            'phone'       => $filterAll['phone'],
+            'password'    => password_hash($filterAll['password'], PASSWORD_DEFAULT),
             'activeToken' => $activeToken,
-            'create_at' => date('Y-m-d H:i:s')
+            'create_at'   => date('Y-m-d H:i:s')
         ];
 
         $insertStatus = insert('users', $dataInsert);
@@ -69,49 +72,50 @@ if (isPost()) {
         if ($insertStatus) {
             $email = $filterAll['email'];
             $userId = selectOne("SELECT id FROM users WHERE email = '$email'")['id'];
+
+            // Tạo giỏ hàng mặc định
             $dataInsertCart = [
                 'id_user' => $userId,
-                'count' => 0
+                'count'   => 0
             ];
             $insertCartStatus = insert('cart', $dataInsertCart);
-            if ($insertCartStatus) {
-            } else {
-                setFlashData('smg', "tạo giỏ không thành công");
+            if (!$insertCartStatus) {
+                setFlashData('smg', "⚠️ Tạo giỏ hàng mặc định không thành công.");
                 setFlashData('smg_type', "danger");
             }
 
+            // Link kích hoạt tài khoản
             $linkActive = _WEB_HOST . "?module=auth&action=active&token=$activeToken";
 
-            $subject = $filterAll['fullname'] . ' vui lòng kích hoạt tài khoản';
-            $content =
-                'Chào ' . $filterAll['fullname'] . '<br>' .
-                'Vui lòng click vào link dưới đây' . '<br>' .
-                $linkActive . '<br>' .
-                'Trân trọng cảm ơn' . '<br>';
+            $subject = $filterAll['fullname'] . ' - Vui lòng kích hoạt tài khoản';
+            $content  = 'Chào ' . $filterAll['fullname'] . ',<br>';
+            $content .= 'Vui lòng click vào link dưới đây để kích hoạt tài khoản:<br>';
+            $content .= '<a href="' . $linkActive . '">' . $linkActive . '</a><br>';
+            $content .= 'Trân trọng cảm ơn!<br>';
 
             $sendMail = sendMail($filterAll['email'], $subject, $content);
             if ($sendMail) {
-                setFlashData('smg', "Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản");
+                setFlashData('smg', "✅ Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.");
                 setFlashData('smg_type', "success");
             } else {
-                setFlashData('smg', "Hệ thống gặp sự cố, vui lòng thử lại sau");
+                setFlashData('smg', "❌ Hệ thống gặp sự cố, không thể gửi email. Vui lòng thử lại sau.");
                 setFlashData('smg_type', "danger");
             }
         } else {
-            setFlashData('smg', "Đăng ký không thành công");
+            setFlashData('smg', "❌ Đăng ký không thành công. Vui lòng thử lại sau.");
             setFlashData('smg_type', "danger");
         }
     } else {
-        setFlashData('smg', "Kiểm tra lại");
+        setFlashData('smg', "❌ Vui lòng kiểm tra lại thông tin.");
         setFlashData('smg_type', "danger");
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
     }
 
-    $smg = getFlashData('smg');
-    $smg_type = getFlashData('smg_type');
-    $errors = getFlashData('errors');
-    $oldData = getFlashData('oldData');
+    $smg       = getFlashData('smg');
+    $smg_type  = getFlashData('smg_type');
+    $errors    = getFlashData('errors');
+    $oldData   = getFlashData('oldData');
 }
 
 $data = ['pageTitle' => 'Đăng ký tài khoản'];
@@ -121,16 +125,9 @@ layout('header_login', $data);
 <body>
     <div class="row">
         <div class="col-4" style="margin: 100px auto;">
-            <h2 class="text-center text-uppercase">đăng ký tài khoản users</h2>
-
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-            ?>
-
+            <h2 class="text-center text-uppercase">Đăng ký</h2>
+            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
             <form action="?module=auth&action=register" method="post">
-
                 <div class="form-group mg-form">
                     <label for="fullname">Họ tên</label>
                     <input name="fullname" type="text" class="form-control" placeholder="Họ tên"

@@ -10,10 +10,10 @@ if (!empty($filterAll['productCartId']) && !empty($filterAll['userId'])) {
 
     if ($rowProductCart > 0) {
         $deleteCart = delete('products_cart', "id=$productCartId");
-        setFlashData('smg', 'sản phẩm không không tồn tại trong hệ thống.');
+        setFlashData('smg', '❌ Sản phẩm không không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');
     } else {
-        setFlashData('smg', 'sản phẩm không không tồn tại trong hệ thống.');
+        setFlashData('smg', '❌ Sản phẩm không không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');
     }
 
@@ -28,18 +28,18 @@ if (!empty($filterAll['productCartId']) && !empty($filterAll['userId'])) {
         $UpdateStatus = update('cart', $dataUpdate, $condition);
 
         if ($UpdateStatus) {
-            setFlashData('smg', 'Xoá sản phẩm thành công.');
+            setFlashData('smg', '✅ Xoá sản phẩm thành công.');
             setFlashData('smg_type', 'success');
         } else {
-            setFlashData('smg', 'Lỗi hệ thống.');
+            setFlashData('smg', '❌ Lỗi hệ thống.');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'sản phẩm không tồn tại trong hệ thống.');
+        setFlashData('smg', '❌ Sản phẩm không tồn tại trong hệ thống.');
         setFlashData('smg_type', 'danger');
     }
 } else {
-    setFlashData('smg', 'Liên kết không tồn tại.');
+    setFlashData('smg', '❌ Liên kết không tồn tại.');
     setFlashData('smg_type', 'danger');
 }
 redirect("?module=cart&action=cart&role=0&userId=$userId");

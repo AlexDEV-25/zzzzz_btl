@@ -26,8 +26,8 @@ layout('header_custom', $data);
                 </svg>
             </div>
             <h1 class="text-3xl font-bold text-gray-800 mb-4">Đặt hàng thành công!</h1>
-            <?php if (!empty($smg)): ?>
-                <p class="text-lg text-gray-600 mb-6"><?php echo $smg; ?></p>
+            <?php if (!empty($smg)):
+                getSmg($smg, $smg_type); ?>
             <?php else: ?>
                 <p class="text-lg text-gray-600 mb-6">Cảm ơn bạn đã mua sắm. Đơn hàng của bạn đang được xử lý.</p>
             <?php endif; ?>

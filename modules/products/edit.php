@@ -87,7 +87,7 @@ if (isPost()) {
         // Chuyển sang editDetail
         redirect('?module=products&action=editDetail&id=' . $productId . '&role=' . $role);
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('old', $filterAll);
@@ -110,14 +110,8 @@ layout('header');
 <body>
     <div class="container">
         <div class="row" style="margin: 50px auto;">
-
             <h2 class="text-center text-uppercase">Update sản phẩm </h2>
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-
-            ?>
+            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="role" value="<?php echo $role ?>">
                 <div class="row">

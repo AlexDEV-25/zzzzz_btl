@@ -48,16 +48,16 @@ if (isPost()) {
 
         $insertStatus = insert('vouchers', $dataInsert);
         if ($insertStatus) {
-            setFlashData('smg', 'Thêm voucher mới thành công!!');
+            setFlashData('smg', '✅ Thêm voucher mới thành công!!');
             setFlashData('smg_type', 'success');
             redirect('?module=vouchers&action=list');
         } else {
-            setFlashData('smg', 'Hệ thống đang lỗi vui lòng thử lại sau.');
+            setFlashData('smg', '❌ Hệ thống đang lỗi vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
             redirect('?module=vouchers&action=add');
         }
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
@@ -79,11 +79,7 @@ layout('header', $title);
     <div class="container">
         <div class="row" style="margin: 50px auto; max-width: 600px;">
             <h2 class="text-center text-uppercase">Thêm Voucher</h2>
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-            ?>
+            <?php if (!empty($smg))  getSmg($smg, $smg_type); ?>
             <form action="" method="post">
                 <div class="form-group mg-form">
                     <label for="">Mã voucher</label>

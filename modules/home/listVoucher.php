@@ -33,11 +33,7 @@ $smg_type = getFlashData('smg_type');
                 VOUCHER MÃI CHẤT
             </h1>
             <p class="text-center text-lg text-gray-600 italic mb-10">Giảm deal chống deal 🔥</p>
-
-            <?php if (!empty($smg)) {
-                echo '<div class="mb-6 p-4 rounded-md text-center ' . ($smg_type == 'danger' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700') . '">' . $smg . '</div>';
-            } ?>
-
+            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <?php if (!empty($listVouchers)): ?>
                     <?php foreach ($listVouchers as $item): ?>

@@ -66,7 +66,7 @@ if (isPost()) {
         // Chuyển sang trang detail để hiển thị
         redirect('?module=products&action=detail&role=' . $role);
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu!!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu!!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('oldData', $filterAll);
@@ -87,13 +87,8 @@ layout('header', $data);
 
 <div class="container">
     <div class="row" style="margin: 50px auto;">
-
         <h2 class="text-center text-uppercase">Thêm sản phẩm</h2>
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
-
+        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
         ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input name="role" type="hidden" value="<?php echo $role; ?>">

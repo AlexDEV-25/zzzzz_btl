@@ -70,10 +70,10 @@ if (isPost()) {
     // validate
     if (!empty($filterAll['start']) && !empty($filterAll['end'])) {
         if ($filterAll['end'] < $filterAll['start']) {
-            $errors['range']['input'] = 'nhập khoảng không đúng';
+            $errors['range']['input'] = 'Nhập khoảng không đúng';
         }
         if ($filterAll['end'] < 0 || $filterAll['start'] < 0) {
-            $errors['range']['lower'] = 'không được nhập sổ nhỏ hơn 0';
+            $errors['range']['lower'] = 'Không được nhập sổ nhỏ hơn 0';
         }
     }
     if (empty($errors)) {

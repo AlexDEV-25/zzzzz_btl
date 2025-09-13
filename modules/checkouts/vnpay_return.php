@@ -10,7 +10,7 @@ $data = getSession('vnpay');
 $voucher = getSession('voucher');
 if ($filterAll['vnp_TransactionNo'] != 0) {
     if (!$checkoutData || empty($checkoutData['userId']) || empty($checkoutData['productCartIds'])) {
-        setFlashData('smg', 'Không có sản phẩm để thanh toán!');
+        setFlashData('smg', '❌ Không có sản phẩm để thanh toán!');
         setFlashData('smg_type', 'danger');
         redirect('?module=cart&action=cart');
     }
@@ -70,7 +70,7 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
                 $discountValue = $voucher['discount'];
             }
         } else {
-            setFlashData('smg', 'Mã voucher không tồn tại hoặc đã hết hạn!');
+            setFlashData('smg', '❌ Mã voucher không tồn tại hoặc đã hết hạn!');
             setFlashData('smg_type', 'danger');
         }
     }
@@ -124,15 +124,15 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
 
         if ($success && $updateStatus) {
             removeSession('checkout_data');
-            setFlashData('smg', 'Đặt hàng thành công!');
+            setFlashData('smg', '✅ Đặt hàng thành công!');
             setFlashData('smg_type', 'success');
             redirect('?module=checkouts&action=checkout_success&role=0&userId=' . $userId);
         } else {
-            setFlashData('smg', 'Đặt hàng thất bại. Vui lòng thử lại!');
+            setFlashData('smg', '❌ Đặt hàng thất bại. Vui lòng thử lại!');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'Không thể tạo hóa đơn. Vui lòng thử lại!');
+        setFlashData('smg', '❌ Không thể tạo hóa đơn. Vui lòng thử lại!');
         setFlashData('smg_type', 'danger');
     }
 } else {

@@ -48,14 +48,14 @@ if (isPost()) {
         $UpdateStatus = update('vouchers', $dataUpdate, $condition);
 
         if ($UpdateStatus) {
-            setFlashData('smg', 'Cập nhật voucher thành công!');
+            setFlashData('smg', '✅ Cập nhật voucher thành công!');
             setFlashData('smg_type', 'success');
         } else {
-            setFlashData('smg', 'Hệ thống lỗi, vui lòng thử lại!');
+            setFlashData('smg', '❌ Hệ thống lỗi, vui lòng thử lại!');
             setFlashData('smg_type', 'danger');
         }
     } else {
-        setFlashData('smg', 'Vui lòng kiểm tra lại dữ liệu nhập!');
+        setFlashData('smg', '❌ Vui lòng kiểm tra lại dữ liệu nhập!');
         setFlashData('smg_type', 'danger');
         setFlashData('errors', $errors);
         setFlashData('old', $filterAll);
@@ -81,13 +81,7 @@ if (!empty($voucherOld)) {
     <div class="container">
         <div class="row" style="margin: 50px auto;">
             <h2 class="text-center text-uppercase">Update Voucher</h2>
-
-            <?php
-            if (!empty($smg)) {
-                getSmg($smg, $smg_type);
-            }
-            ?>
-
+            <?php if (!empty($smg))  getSmg($smg, $smg_type); ?>
             <form action="" method="post">
                 <div class="form-group">
                     <label for="code">Mã voucher</label>
