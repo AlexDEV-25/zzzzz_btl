@@ -33,7 +33,8 @@ if (!empty($filterAll['search'])) {
     }
 } else {
     $today = date("Y-m-d");
-    $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' AND end >= '$today' ORDER BY id DESC");
+    $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' 
+    AND end >= '$today' AND is_deleted = 0 ORDER BY id DESC");
 }
 
 $smg = getFlashData('smg');
