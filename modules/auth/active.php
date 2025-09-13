@@ -3,11 +3,6 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
-$title = [
-    'pageTitle' => 'active'
-];
-
-layout('header', $title);
 
 $token = filter()['token'];
 if (!empty($token)) {
@@ -34,8 +29,3 @@ if (!empty($token)) {
 } else {
     getSmg('ket noi khong ton tai hoac da het han', 'danger');
 }
-?>
-
-<?php
-layout('footer');
-?>

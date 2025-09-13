@@ -4,19 +4,54 @@ if (!defined('_CODE')) {
 }
 $filterAll = filter();
 $errors = [];
-
 $productId = $filterAll['productId'];
 $product = selectOne("SELECT * FROM products WHERE id = $productId");
 $detail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
 $detailId = $detail['id'];
-
-$data = [
-    'pageTitle' => $product['name_product'],
-];
 $role = -1;
 $userId = -1;
 $cartCount = -1;
 $cartId = -1;
+// thêm vào giỏ
+if (isPost()) {
+    if (!empty($filterAll['detailId'])) {
+        $detailId = $filterAll['detailId'];
+        $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
+        if ($rowProductCart > 0) {
+            $count = $cartCount;
+        } else {
+            $count = $cartCount + 1;
+            $dataUpdate = [
+                'count' => $count,
+            ];
+            $condition = "id_user = $userId";
+            update('cart', $dataUpdate, $condition);
+        }
+        if (!empty($filterAll['amount_buy'])) {
+            $detailId = $filterAll['detailId'];
+            $amount = $filterAll['amount_buy'];
+            $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
+            if ($rowProductCart > 0) {
+                $ProductCart = selectOne("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
+                $dataUpdate = [
+                    'amount_buy' => $ProductCart['amount_buy'] + $amount,
+                ];
+                $condition = "id_product_detail =$detailId";
+                update('products_cart', $dataUpdate, $condition);
+            } else {
+                $dataInsertProductCart = [
+                    'id_product_detail' =>  $detailId,
+                    'amount_buy' => $amount,
+                    'id_cart' => $cartId
+                ];
+                insert('products_cart', $dataInsertProductCart);
+            }
+        }
+    }
+}
+$data = [
+    'pageTitle' => $product['name_product'],
+];
 if (isset($filterAll['role'])) {
     $role = $filterAll['role'];
     $data = [
@@ -77,44 +112,6 @@ if (isset($filterAll['role'])) {
         redirect('?module=home&action=productsSearch&search=' . $value);
     }
     layout('header_dashboard', $data);
-}
-
-// thêm vào giỏ
-if (isPost()) {
-    if (!empty($filterAll['detailId'])) {
-        $detailId = $filterAll['detailId'];
-        $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
-        if ($rowProductCart > 0) {
-            $count = $cartCount;
-        } else {
-            $count = $cartCount + 1;
-            $dataUpdate = [
-                'count' => $count,
-            ];
-            $condition = "id_user = $userId";
-            update('cart', $dataUpdate, $condition);
-        }
-        if (!empty($filterAll['amount_buy'])) {
-            $detailId = $filterAll['detailId'];
-            $amount = $filterAll['amount_buy'];
-            $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
-            if ($rowProductCart > 0) {
-                $ProductCart = selectOne("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
-                $dataUpdate = [
-                    'amount_buy' => $ProductCart['amount_buy'] + $amount,
-                ];
-                $condition = "id_product_detail =$detailId";
-                update('products_cart', $dataUpdate, $condition);
-            } else {
-                $dataInsertProductCart = [
-                    'id_product_detail' =>  $detailId,
-                    'amount_buy' => $amount,
-                    'id_cart' => $cartId
-                ];
-                insert('products_cart', $dataInsertProductCart);
-            }
-        }
-    }
 }
 ?>
 

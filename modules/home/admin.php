@@ -2,17 +2,6 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-$data = [
-    'pageTitle' => 'Trang admin',
-    'role' => 1
-];
-layout('header_admin', $data);
-
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 // Thống kê cơ bản
 $amount_user = getCountRows("SELECT * FROM users ");
 $amount_bill = getCountRows("SELECT * FROM bills ");
@@ -53,6 +42,11 @@ foreach ($topProducts as $row) {
     $productNames[] = $row['name_product'];
     $productSold[] = (int)$row['total_sold'];
 }
+$data = [
+    'pageTitle' => 'Trang admin',
+    'role' => 1
+];
+layout('header_admin', $data);
 ?>
 
 <body>

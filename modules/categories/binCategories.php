@@ -3,17 +3,6 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $filterAll = filter();
-$data = [
-    'pageTitle' => 'Danh sách danh mục đã xoá',
-    'role' => 1
-];
-layout('header_admin', $data);
-
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -27,9 +16,15 @@ if (!empty($filterAll['search'])) {
 } else {
     $listCategories = selectAll("SELECT * FROM categories ORDER BY id");
 }
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+
+$data = [
+    'pageTitle' => 'Danh sách danh mục đã xoá',
+    'role' => 1
+];
+layout('header_admin', $data);
+
 ?>
 
 <body>

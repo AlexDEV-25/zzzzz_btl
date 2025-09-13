@@ -73,20 +73,16 @@ if (isPost()) {
         redirect('?module=products&action=add&role=' . $role);
     }
 }
-$title = [
-    'pageTitle' => 'Thêm sản phẩm'
-];
-
-layout('header', $title);
-
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
 $oldData = getFlashData('oldData');
 
+$data = [
+    'pageTitle' => 'Thêm sản phẩm'
+];
 
-
+layout('header', $data);
 ?>
 
 <div class="container">

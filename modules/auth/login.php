@@ -2,17 +2,10 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
-
-$title = [
-    'pageTitle' => 'Đăng nhập tài khoản'
-];
-
-layout('header_login', $title);
-
-// kiểm tra trạng thái đăng nhập
-if (isLogin()) {
-    redirect('?module=home&action=dashboard');
-}
+// // kiểm tra trạng thái đăng nhập
+// if (isLogin()) {
+//     redirect('?module=home&action=dashboard');
+// }
 
 if (isPost()) {
     $filterAll = filter();
@@ -38,7 +31,7 @@ if (isPost()) {
                     'create_at' => date('Y-m-d H:i:s')
                 ];
 
-                $insertStatus = insert('tokenLogin', $dataInsert);
+                $insertStatus = insert('tokenlogin', $dataInsert);
                 if ($insertStatus) {
                     // insert thành công
                     // lưu loginToken vào session
@@ -50,17 +43,7 @@ if (isPost()) {
                     } else if ($role == 3) {
                         redirect('?module=home&action=employee&role=3');
                     } else {
-                        $selectCart = "SELECT * FROM cart WHERE id_user = $userId";
-                        // $insertProductCart = "SELECT * FROM products_cart WHERE id_user = $userId";
-                        if (getCountRows($selectCart) > 0 && $role != 1 && $role != 2 && $role != 3) {
-                        } else {
-                            // tạo giỏ số lượng
-                            $dataInsertCart = [
-                                'id_user' => $userId,
-                            ];
-                            insert('cart', $dataInsertCart);
-                        }
-                        redirect('?module=home&action=dashboard&role=' . $role . '&userId=' . $userId);
+                        redirect('?module=home&action=dashboard&role=0&userId=' . $userId);
                     }
                 } else {
                     setFlashData('msg', 'khong the dang nhap vui long thu lai sau');
@@ -83,45 +66,41 @@ if (isPost()) {
         redirect('?module=auth&action=login');
     }
 }
-
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 
-// echo '<pre>';
-// print_r($kq);
-// echo '</pre>';
-
+$data = [
+    'pageTitle' => 'Đăng nhập tài khoản'
+];
+layout('header_login', $data);
 ?>
 
-<div class="row">
-    <div class="col-4" style="margin: 100px auto;">
+<body>
+    <div class="row">
+        <div class="col-4" style="margin: 100px auto;">
 
-        <?php
-        if (!empty($msg)) {
-            getSmg($msg, $msg_type);
-        }
-        ?>
+            <?php
+            if (!empty($msg)) {
+                getSmg($msg, $msg_type);
+            }
+            ?>
 
-        <h2 class="text-center text-uppercase">đăng nhập quản lý users</h2>
-        <form action="" method="post">
-            <div class="form-group mg-form">
-                <label for="email">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Email">
-            </div>
-            <div class="form-group mg-form">
-                <label for="password">Password</label>
-                <input name="password" type="password" class="form-control" placeholder="Password">
-            </div>
-            <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Đăng nhập</button>
-            <hr>
-            <p class="text-center"><a href="?module=auth&action=forgot">Quên mật khẩu</a></p>
-            <p class="text-center"><a href="?module=auth&action=register">Đăng ký</a></p>
-        </form>
+            <h2 class="text-center text-uppercase">đăng nhập quản lý users</h2>
+            <form action="" method="post">
+                <div class="form-group mg-form">
+                    <label for="email">Email</label>
+                    <input name="email" type="email" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group mg-form">
+                    <label for="password">Password</label>
+                    <input name="password" type="password" class="form-control" placeholder="Password">
+                </div>
+                <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Đăng nhập</button>
+                <hr>
+                <p class="text-center"><a href="?module=auth&action=forgot">Quên mật khẩu</a></p>
+                <p class="text-center"><a href="?module=auth&action=register">Đăng ký</a></p>
+            </form>
+        </div>
     </div>
-</div>
-
-
-
-<?php
-layout('footer_login');;
-?>
+</body>
+<?php layout('footer_login'); ?>

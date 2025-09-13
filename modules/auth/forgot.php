@@ -3,16 +3,10 @@ if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 
-$title = [
-    'pageTitle' => 'Quên mật khẩu'
-];
-
-layout('header', $title);
-
-// kiểm tra trạng thái đăng nhập
-if (isLogin()) {
-    redirect('?module=home&action=dashboard');
-}
+// // kiểm tra trạng thái đăng nhập
+// if (isLogin()) {
+//     redirect('?module=home&action=dashboard');
+// }
 
 if (isPost()) {
     $filterAll = filter();
@@ -64,44 +58,44 @@ if (isPost()) {
     } else {
         setFlashData('msg', 'vui long nhap email');
         setFlashData('msg_type', 'danger');
-        // redirect('?module=auth&action=forgot');
     }
 }
 
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 
-// echo '<pre>';
-// print_r($kq);
-// echo '</pre>';
-
+$data = [
+    'pageTitle' => 'Quên mật khẩu'
+];
+layout('header_login', $data);
 ?>
 
-<div class="row">
-    <div class="col-4" style="margin: 100px auto;">
+<body>
 
-        <?php
-        if (!empty($msg)) {
-            getSmg($msg, $msg_type);
-        }
-        ?>
 
-        <h2 class="text-center text-uppercase">Quên mật khẩu</h2>
-        <form action="" method="post">
-            <div class="form-group mg-form">
-                <label for="email">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Email">
-            </div>
-            <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Gửi</button>
-            <hr>
-            <p class="text-center"><a href="?module=auth&action=login">Đăng nhập</a></p>
-            <p class="text-center"><a href="?module=auth&action=register">Đăng ký</a></p>
-        </form>
+    <div class="row">
+        <div class="col-4" style="margin: 100px auto;">
+
+            <?php
+            if (!empty($msg)) {
+                getSmg($msg, $msg_type);
+            }
+            ?>
+
+            <h2 class="text-center text-uppercase">Quên mật khẩu</h2>
+            <form action="" method="post">
+                <div class="form-group mg-form">
+                    <label for="email">Email</label>
+                    <input name="email" type="email" class="form-control" placeholder="Email">
+                </div>
+                <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Gửi</button>
+                <hr>
+                <p class="text-center"><a href="?module=auth&action=login">Đăng nhập</a></p>
+                <p class="text-center"><a href="?module=auth&action=register">Đăng ký</a></p>
+            </form>
+        </div>
     </div>
-</div>
-
-
-
+</body>
 <?php
 layout('footer');;
 ?>

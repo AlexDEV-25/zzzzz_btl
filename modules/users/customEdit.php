@@ -100,13 +100,6 @@ if (isPost()) {
 
     redirect('?module=users&action=customEdit&role=0&userId=' . $userId);
 }
-$data = [
-    'pageTitle' => "thông tin người dùng",
-];
-layout('header', $data);
-
-
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
@@ -117,107 +110,107 @@ if (!empty($userDetailll)) {
     //2
     $oldData = $userDetailll;
 }
-
-
+$data = [
+    'pageTitle' => "thông tin người dùng",
+];
+layout('header', $data);
 ?>
 
-<div class="container">
-    <div class="row" style="margin: 50px auto;">
+<body>
+    <div class="container">
+        <div class="row" style="margin: 50px auto;">
 
-        <h2 class="text-center text-uppercase">Update người dùng </h2>
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
+            <h2 class="text-center text-uppercase">Update người dùng </h2>
+            <?php
+            if (!empty($smg)) {
+                getSmg($smg, $smg_type);
+            }
 
-        ?>
-        <form action="" method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Họ tên</label>
-                        <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
-                            value="<?php
-                                    echo oldData($oldData, 'fullname');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'fullname', '<span class="error">', '</span>');
-                        ?>
+            ?>
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Họ tên</label>
+                            <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
+                                value="<?php
+                                        echo oldData($oldData, 'fullname');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'fullname', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group mg-form">
+                            <label for="">Email</label>
+                            <input name="email" type="email" class="form-control" placeholder="Địa chỉ email"
+                                value="<?php
+                                        echo oldData($oldData, 'email');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'email', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group mg-form">
+                            <label for="">Số điện thoại</label>
+                            <input name="phone" type="number" class="form-control" placeholder="Điện thoại"
+                                value="<?php
+                                        echo oldData($oldData, 'phone');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'phone', '<span class="error">', '</span>');
+                            ?>
+                        </div>
                     </div>
-                    <div class="form-group mg-form">
-                        <label for="">Email</label>
-                        <input name="email" type="email" class="form-control" placeholder="Địa chỉ email"
-                            value="<?php
-                                    echo oldData($oldData, 'email');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'email', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                    <div class="form-group mg-form">
-                        <label for="">Số điện thoại</label>
-                        <input name="phone" type="number" class="form-control" placeholder="Điện thoại"
-                            value="<?php
-                                    echo oldData($oldData, 'phone');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'phone', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                </div>
 
-                <div class=" col">
-                    <div class="form-group  mg-form">
-                        <label for="">Địa chỉ</label>
-                        <input name="address" type="text" class="form-control"
-                            placeholdDataer="Nhập địa chỉ"
-                            value="<?php echo oldData($oldData, 'address'); ?>">
-                        <?php
-                        echo form_error($errors, 'address', '<span class="error">', '</span>');
-                        ?>
+                    <div class=" col">
+                        <div class="form-group  mg-form">
+                            <label for="">Địa chỉ</label>
+                            <input name="address" type="text" class="form-control"
+                                placeholdDataer="Nhập địa chỉ"
+                                value="<?php echo oldData($oldData, 'address'); ?>">
+                            <?php
+                            echo form_error($errors, 'address', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group mg-form">
+                            <label for="">Pasword</label>
+                            <input name="password" type="text" class="form-control" placeholder="Mật khẩu (không nhập nếu không thay đổi)">
+                            <?php
+                            echo form_error($errors, 'password', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group  mg-form">
+                            <label for="">Nhập lại Pasword</label>
+                            <input name="re_password" type="password" class="form-control"
+                                placeholdDataer="Nhập lại mật khẩu (không nhập nếu không thay đổi)">
+                            <?php
+                            echo form_error($errors, 're_password', '<span class="error">', '</span>');
+                            ?>
+                        </div>
                     </div>
-                    <div class="form-group mg-form">
-                        <label for="">Pasword</label>
-                        <input name="password" type="text" class="form-control" placeholder="Mật khẩu (không nhập nếu không thay đổi)">
-                        <?php
-                        echo form_error($errors, 'password', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                    <div class="form-group  mg-form">
-                        <label for="">Nhập lại Pasword</label>
-                        <input name="re_password" type="password" class="form-control"
-                            placeholdDataer="Nhập lại mật khẩu (không nhập nếu không thay đổi)">
-                        <?php
-                        echo form_error($errors, 're_password', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                </div>
-                <div class=" col">
-                    <h4>Chọn ảnh</h4>
-                    <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
-                        <div id="uploadForm" class="row">
-                            <div class="file-upload col">
-                                <label for="file">Chọn avatar:</label>
-                                <input type="file" id="file" accept="image/*" name="avatar">
-                            </div>
-                            <div id="preview-container" class="preview-container col">
-                                <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
+                    <div class=" col">
+                        <h4>Chọn ảnh</h4>
+                        <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
+                            <div id="uploadForm" class="row">
+                                <div class="file-upload col">
+                                    <label for="file">Chọn avatar:</label>
+                                    <input type="file" id="file" accept="image/*" name="avatar">
+                                </div>
+                                <div id="preview-container" class="preview-container col">
+                                    <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <input type="hidden" name="userId" value="<?php echo $userId ?>">
-            <input type="hidden" name="role" value="<?php echo $role ?>">
-            <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update thông tin</button>
-            <a href="?module=home&action=dashboard&role=0&userId=<?php echo $userId; ?> " class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+                <input type="hidden" name="userId" value="<?php echo $userId ?>">
+                <input type="hidden" name="role" value="<?php echo $role ?>">
+                <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update thông tin</button>
+                <a href="?module=home&action=dashboard&role=0&userId=<?php echo $userId; ?> " class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
 
-            <hr>
-        </form>
+                <hr>
+            </form>
+        </div>
     </div>
-</div>
-
-
-<?php
-layout('footer');
-?>
+</body>
+<?php layout('footer'); ?>

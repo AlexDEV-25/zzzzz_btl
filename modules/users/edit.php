@@ -102,12 +102,6 @@ if (isPost()) {
 
     redirect('?module=users&action=edit&id=' . $userId);
 }
-$data = [
-    'pageTitle' => 'sửa'
-];
-layout('header', $data);
-
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
@@ -118,92 +112,92 @@ if (!empty($userDetailll)) {
     //2
     $oldData = $userDetailll;
 }
-
-
+$data = [
+    'pageTitle' => 'sửa'
+];
+layout('header', $data);
 ?>
 
-<div class="container">
-    <div class="row" style="margin: 50px auto;">
+<body>
+    <div class="container">
+        <div class="row" style="margin: 50px auto;">
 
-        <h2 class="text-center text-uppercase">Update người dùng </h2>
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
+            <h2 class="text-center text-uppercase">Update người dùng </h2>
+            <?php
+            if (!empty($smg)) {
+                getSmg($smg, $smg_type);
+            }
 
-        ?>
-        <form action="" method="post">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Họ tên</label>
-                        <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
-                            value="<?php
-                                    echo oldData($oldData, 'fullname');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'fullname', '<span class="error">', '</span>');
-                        ?>
+            ?>
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Họ tên</label>
+                            <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
+                                value="<?php
+                                        echo oldData($oldData, 'fullname');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'fullname', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group mg-form">
+                            <label for="">Email</label>
+                            <input name="email" type="email" class="form-control" placeholder="Địa chỉ email"
+                                value="<?php
+                                        echo oldData($oldData, 'email');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'email', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group mg-form">
+                            <label for="">Số điện thoại</label>
+                            <input name="phone" type="number" class="form-control" placeholder="Điện thoại"
+                                value="<?php
+                                        echo oldData($oldData, 'phone');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'phone', '<span class="error">', '</span>');
+                            ?>
+                        </div>
                     </div>
-                    <div class="form-group mg-form">
-                        <label for="">Email</label>
-                        <input name="email" type="email" class="form-control" placeholder="Địa chỉ email"
-                            value="<?php
-                                    echo oldData($oldData, 'email');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'email', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                    <div class="form-group mg-form">
-                        <label for="">Số điện thoại</label>
-                        <input name="phone" type="number" class="form-control" placeholder="Điện thoại"
-                            value="<?php
-                                    echo oldData($oldData, 'phone');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'phone', '<span class="error">', '</span>');
-                        ?>
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Pasword</label>
+                            <input name="password" type="text" class="form-control" placeholder="Mật khẩu (không nhập nếu không thay đổi)">
+                            <?php
+                            echo form_error($errors, 'password', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+                        <div class="form-group  mg-form">
+                            <label for="">Nhập lại Pasword</label>
+                            <input name="re_password" type="password" class="form-control"
+                                placeholdDataer="Nhập lại mật khẩu (không nhập nếu không thay đổi)">
+                            <?php
+                            echo form_error($errors, 're_password', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Trạng thái</label>
+                            <select name="status" id="" class="form-control">
+                                <option value="0" <?php echo (oldData($oldData, 'status') == 0) ? 'selected' : false; ?>>Chưa kích hoạt</option>
+                                <option value="1" <?php echo (oldData($oldData, 'status') == 1) ? 'selected' : false; ?>>Đã kích hoạt</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Pasword</label>
-                        <input name="password" type="text" class="form-control" placeholder="Mật khẩu (không nhập nếu không thay đổi)">
-                        <?php
-                        echo form_error($errors, 'password', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                    <div class="form-group  mg-form">
-                        <label for="">Nhập lại Pasword</label>
-                        <input name="re_password" type="password" class="form-control"
-                            placeholdDataer="Nhập lại mật khẩu (không nhập nếu không thay đổi)">
-                        <?php
-                        echo form_error($errors, 're_password', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Trạng thái</label>
-                        <select name="status" id="" class="form-control">
-                            <option value="0" <?php echo (oldData($oldData, 'status') == 0) ? 'selected' : false; ?>>Chưa kích hoạt</option>
-                            <option value="1" <?php echo (oldData($oldData, 'status') == 1) ? 'selected' : false; ?>>Đã kích hoạt</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" name="id" value="<?php echo $userId ?>">
+                <input type="hidden" name="id" value="<?php echo $userId ?>">
 
 
-            <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update người dùng</button>
-            <a href="?module=users&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+                <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update người dùng</button>
+                <a href="?module=users&action=list" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
 
-            <hr>
-        </form>
+                <hr>
+            </form>
+        </div>
     </div>
-</div>
-
-
-<?php
-layout('header');
-?>
+</body>
+<?php layout('header'); ?>

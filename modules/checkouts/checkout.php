@@ -2,12 +2,6 @@
 if (!defined('_CODE')) {
     die("Truy cập thất bại");
 }
-
-require_once('config.php');
-require_once(_WEB_PATH . '\\includes\\database.php');
-require_once(_WEB_PATH . '\\includes\\session.php');
-require_once(_WEB_PATH . '\\includes\\functions.php');
-
 $errors = [];
 $filterAll = filter();
 // Lấy dữ liệu checkout từ session
@@ -62,7 +56,6 @@ foreach ($productCartIds as $productCartId) {
 // --- Xử lý voucher ---
 $discountValue = 0;
 $voucherCode = '';
-
 
 if (!empty($filterAll['voucher'])) {
     $voucherCode = trim($filterAll['voucher']);
@@ -169,7 +162,8 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
         confirm_vnpay();
     }
 }
-
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 $data = [
     'pageTitle' => "Thanh Toán",
     'count' => $cartCount,
@@ -177,9 +171,6 @@ $data = [
     'userId' => $userId
 ];
 layout('header_custom', $data);
-
-$smg = getFlashData('smg');
-$smg_type = getFlashData('smg_type');
 ?>
 
 <body class="bg-gray-100">

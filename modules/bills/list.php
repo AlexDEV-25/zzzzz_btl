@@ -3,22 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $filterAll = filter();
-$role = '';
-$data = [
-    'pageTitle' => 'Danh sách đơn hàng',
-];
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    }
-}
-
+$role = -1;
 if (isPost()) {
     if (!empty($filterAll['billId'])) {
         $billIdCondition = $filterAll['billId'];
@@ -113,15 +98,23 @@ if (!empty($filterAll['search'])) {
 } else {
     $listBills = selectAll("SELECT * FROM bills ORDER BY date");
 }
-
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 
+$data = [
+    'pageTitle' => 'Danh sách đơn hàng',
+];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    }
+}
 ?>
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">

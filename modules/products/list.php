@@ -3,27 +3,6 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $filterAll = filter();
-
-$data = [
-    'pageTitle' => 'Danh sách sản phẩm',
-];
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } else if ($role == 2) {
-        layout('header_manager', $data);
-    }
-} else {
-    die();
-}
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -40,6 +19,22 @@ if (!empty($filterAll['search'])) {
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+$data = [
+    'pageTitle' => 'Danh sách sản phẩm',
+];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } else if ($role == 2) {
+        layout('header_manager', $data);
+    }
+} else {
+    die();
+}
 ?>
 
 <body>
@@ -133,8 +128,6 @@ $smg_type = getFlashData('smg_type');
             </div>
         </main>
     </div>
-
-
 </body>
 <?php
 if (isset($filterAll['role'])) {

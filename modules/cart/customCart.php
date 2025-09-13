@@ -9,20 +9,16 @@ $errors = [];
 // kiểm tra người dùng
 if (!empty($filterAll['userId'])) {
     $userId = $filterAll['userId'];
-    if ($userId == 1) {
-        redirect('?module=home&action=admin');
-    } else {
-        $cartCount = getCountCart($userId);
-        $rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
-        $data = [
-            'pageTitle' => "Lịch sử đơn hàng",
-            'count' => $cartCount,
-            'role' => 0,
-            'userId' => $userId
-        ];
-        layout('header_custom', $data);
-        $listBill = selectAll("SELECT * FROM bills WHERE id_user = $userId");
-    }
+    $cartCount = getCountCart($userId);
+    $rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
+    $data = [
+        'pageTitle' => "Lịch sử đơn hàng",
+        'count' => $cartCount,
+        'role' => 0,
+        'userId' => $userId
+    ];
+    layout('header_custom', $data);
+    $listBill = selectAll("SELECT * FROM bills WHERE id_user = $userId");
 } else {
     redirect('?module=auth&action=register');
 }

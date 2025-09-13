@@ -2,15 +2,8 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
-
-require_once('config.php');
-require_once(_WEB_PATH . '\\includes\\database.php');
-require_once(_WEB_PATH . '\\includes\\session.php');
-require_once(_WEB_PATH . '\\includes\\functions.php');
-
 $filterAll = filter();
 $errors = [];
-
 // Xử lý POST trước để tránh lỗi header
 if (isPost()) {
     if (!empty($filterAll['amount_buy']) && !empty($filterAll['productCartId'])) {
@@ -47,7 +40,6 @@ if (isPost()) {
             $condition = "id = $item2";
             $UpdateStatusProductCart = update('products_cart', $dataUpdate, $condition);
         }
-
         // Lưu dữ liệu vào session để sử dụng ở trang checkout
         setSession('checkout_data', [
             'productCartIds' => $filterAll['productCartId'],
@@ -83,6 +75,9 @@ if ($rowCart > 0) {
     $cart = selectOne("SELECT * FROM cart WHERE id_user = $userId");
     $cartId = $cart['id'];
 }
+// Lấy thông báo flash
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 
 $data = [
     'pageTitle' => "giỏ hàng",
@@ -91,10 +86,6 @@ $data = [
     'userId' => $userId
 ];
 layout('header_custom', $data);
-
-// Lấy thông báo flash
-$smg = getFlashData('smg');
-$smg_type = getFlashData('smg_type');
 ?>
 
 <body class="bg-gray-100">

@@ -2,7 +2,6 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
 $filterAll = filter();
 $userId =  $filterAll['userId'];
 $billId =  $filterAll['billId'];
@@ -10,18 +9,6 @@ $billId =  $filterAll['billId'];
 $bill = selectOne("SELECT * FROM bills WHERE id = $billId ");
 $billDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId ");
 $cartCount = getCountCart($userId);
-
-$data = [
-    'pageTitle' => 'Chi tiết đơn hàng',
-    'count' => $cartCount,
-    'userId' => $userId
-];
-layout('header_custom', $data);
-
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 // ====== Xử lý voucher ======
 $voucherInfo = null;
 $beforeDiscount = 0;
@@ -54,6 +41,12 @@ if (!empty($bill['id_voucher'])) {
 } else {
     $afterDiscount = $beforeDiscount;
 }
+$data = [
+    'pageTitle' => 'Chi tiết đơn hàng',
+    'count' => $cartCount,
+    'userId' => $userId
+];
+layout('header_custom', $data);
 ?>
 
 <div class="min-h-full bg-gray-100 py-10">

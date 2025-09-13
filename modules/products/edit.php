@@ -95,11 +95,6 @@ if (isPost()) {
 
     redirect('?module=products&action=edit&id=' . $productId . '&role=' . $role);
 }
-
-
-layout('header');
-
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
@@ -108,148 +103,147 @@ $productOld = getFlashData('productOld');
 if (!empty($productOld)) {
     $oldData = $productOld;
 }
+
+layout('header');
 ?>
 
-<div class="container">
-    <div class="row" style="margin: 50px auto;">
+<body>
+    <div class="container">
+        <div class="row" style="margin: 50px auto;">
 
-        <h2 class="text-center text-uppercase">Update sản phẩm </h2>
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
+            <h2 class="text-center text-uppercase">Update sản phẩm </h2>
+            <?php
+            if (!empty($smg)) {
+                getSmg($smg, $smg_type);
+            }
 
-        ?>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="role" value="<?php echo $role ?>">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Tên sản phẩm</label>
-                        <input name="name_product" type="text" class="form-control"
-                            value="<?php
-                                    echo oldData($oldData, 'name_product');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'name_product', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-
-                    <div class="form-group mg-form">
-                        <label for="">Giá gốc</label>
-                        <input name="origin_price" type="number" class="form-control"
-                            value="<?php
-                                    echo oldData($oldData, 'origin_price');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'origin_price', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="">Danh mục</label>
-                        <select name="id_category" class="form-control">
-
+            ?>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="role" value="<?php echo $role ?>">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Tên sản phẩm</label>
+                            <input name="name_product" type="text" class="form-control"
+                                value="<?php
+                                        echo oldData($oldData, 'name_product');
+                                        ?>">
                             <?php
-                            $listCategories = selectAll("SELECT * FROM categories ORDER BY id");
-
-                            if (!empty($listCategories)):
-                                foreach ($listCategories as $item):
+                            echo form_error($errors, 'name_product', '<span class="error">', '</span>');
                             ?>
-                                    <option value="<?php echo $item['id']; ?>
-                                     <?php echo (oldData($oldData, 'id_category') == 0) ? 'selected' : false; ?>"><?php echo $item['name_category']; ?></option>
+                        </div>
+
+                        <div class="form-group mg-form">
+                            <label for="">Giá gốc</label>
+                            <input name="origin_price" type="number" class="form-control"
+                                value="<?php
+                                        echo oldData($oldData, 'origin_price');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'origin_price', '<span class="error">', '</span>');
+                            ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Danh mục</label>
+                            <select name="id_category" class="form-control">
 
                                 <?php
-                                endforeach;
-                            else:
+                                $listCategories = selectAll("SELECT * FROM categories ORDER BY id");
+
+                                if (!empty($listCategories)):
+                                    foreach ($listCategories as $item):
                                 ?>
-                                <tr>
-                                    <td colspan="7">
-                                        <div class="alert alert-danger text-center">Không có danh mục nào nào!!</div>
-                                    </td>
-                                </tr>
+                                        <option value="<?php echo $item['id']; ?>
+                                     <?php echo (oldData($oldData, 'id_category') == 0) ? 'selected' : false; ?>"><?php echo $item['name_category']; ?></option>
+
+                                    <?php
+                                    endforeach;
+                                else:
+                                    ?>
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="alert alert-danger text-center">Không có danh mục nào nào!!</div>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endif;
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">giá bán</label>
+                            <input name="price" type="number" class="form-control"
+                                value="<?php
+                                        echo oldData($oldData, 'price');
+                                        ?>">
                             <?php
-                            endif;
+                            echo form_error($errors, 'price', '<span class="error">', '</span>');
                             ?>
-                        </select>
-                    </div>
-                </div>
+                        </div>
 
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">giá bán</label>
-                        <input name="price" type="number" class="form-control"
-                            value="<?php
-                                    echo oldData($oldData, 'price');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'price', '<span class="error">', '</span>');
-                        ?>
+                        <div class="form-group mg-form">
+                            <label for="">Vật liệu</label>
+                            <input name="material" type="text" class="form-control"
+                                value="<?php
+                                        echo oldData($oldData, 'material');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'material', '<span class="error">', '</span>');
+                            ?>
+                        </div>
                     </div>
 
-                    <div class="form-group mg-form">
-                        <label for="">Vật liệu</label>
-                        <input name="material" type="text" class="form-control"
-                            value="<?php
-                                    echo oldData($oldData, 'material');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'material', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-                </div>
+                    <div>
+                        <div class="form-group mg-form">
+                            <label for="">Mô tả</label>
+                            <input name="description" type="text" class="form-control"
+                                value="<?php
+                                        echo oldData($oldData, 'description');
+                                        ?>">
+                            <?php
+                            echo form_error($errors, 'description', '<span class="error">', '</span>');
+                            ?>
+                        </div>
 
-                <div>
-                    <div class="form-group mg-form">
-                        <label for="">Mô tả</label>
-                        <input name="description" type="text" class="form-control"
-                            value="<?php
-                                    echo oldData($oldData, 'description');
-                                    ?>">
-                        <?php
-                        echo form_error($errors, 'description', '<span class="error">', '</span>');
-                        ?>
-                    </div>
-
-                    <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
-                        <div id="uploadForm" class="row">
-                            <div style=" padding-top: 50px;box-sizing: border-box;" class="col">
-                                <h2 style="font-size: 25px;">Ảnh cũ</h2>
-                                <div>
-                                    <img style="width: 500px; height: 300px;box-sizing: border-box; margin-top: 30px;"
-                                        src="<?php echo  _IMGP_ . $oldData['thumbnail']; ?>"
-                                        alt="Ảnh cũ">
+                        <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
+                            <div id="uploadForm" class="row">
+                                <div style=" padding-top: 50px;box-sizing: border-box;" class="col">
+                                    <h2 style="font-size: 25px;">Ảnh cũ</h2>
+                                    <div>
+                                        <img style="width: 500px; height: 300px;box-sizing: border-box; margin-top: 30px;"
+                                            src="<?php echo  _IMGP_ . $oldData['thumbnail']; ?>"
+                                            alt="Ảnh cũ">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <h2>Chọn ảnh mới</h2>
-                                <div class="file-upload">
-                                    <label for="file">Chọn ảnh:</label>
-                                    <input type="file" id="file" accept="image/*" name="thumbnail">
-                                </div>
-                                <div id="preview-container" class="preview-container">
-                                    <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
+                                <div class="col">
+                                    <h2>Chọn ảnh mới</h2>
+                                    <div class="file-upload">
+                                        <label for="file">Chọn ảnh:</label>
+                                        <input type="file" id="file" accept="image/*" name="thumbnail">
+                                    </div>
+                                    <div id="preview-container" class="preview-container">
+                                        <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <input type="hidden" name="id" value="<?php echo $productId ?>">
+                <input type="hidden" name="id" value="<?php echo $productId ?>">
 
-            <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
-            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+                <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
+                <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
 
-            <hr>
+                <hr>
 
 
-        </form>
+            </form>
+        </div>
     </div>
-</div>
-
-
-<?php
-layout('footer');
-?>
+</body>
+<?php layout('footer'); ?>

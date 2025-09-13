@@ -2,32 +2,11 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-
 $filterAll = filter();
 $billId = $filterAll['billId'];
 
 $bill = selectOne("SELECT * FROM bills WHERE id = $billId ");
 $billDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId ");
-
-$data = [
-    'pageTitle' => 'Chi tiết đơn hàng',
-];
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    }
-}
-
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 // ====== Xử lý voucher ======
 $voucherInfo = null;
 $beforeDiscount = 0;
@@ -60,8 +39,21 @@ if (!empty($bill['id_voucher'])) {
 } else {
     $afterDiscount = $beforeDiscount;
 }
+$data = [
+    'pageTitle' => 'Chi tiết đơn hàng',
+];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    }
+}
 ?>
-
 <div class="min-h-full bg-gray-100 py-10">
     <div class="max-w-4xl mx-auto">
         <!-- Tiêu đề -->

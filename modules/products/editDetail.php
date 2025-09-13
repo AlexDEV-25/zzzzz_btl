@@ -74,8 +74,6 @@ if (isPost()) {
     redirect('?module=products&action=editDetail&id=' . $productId . '&role=' . $role);
 }
 
-layout('header');
-
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 $errors = getFlashData('errors');
@@ -85,77 +83,81 @@ $detailOld = getFlashData('detailOld');
 if (!empty($detailOld)) {
     $oldData = $detailOld;
 }
+layout('header');
 ?>
-<div class="container">
-    <div class="row" style="margin: 50px auto;">
-        <h2 class="text-center text-uppercase">Update chi tiết sản phẩm</h2>
-        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
 
-        <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="role" value="<?php echo $role ?>">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Số lượng</label>
-                        <input name="amount" type="number" class="form-control"
-                            value="<?php echo oldData($oldData, 'amount'); ?>">
-                        <?php echo form_error($errors, 'amount', '<span class="error">', '</span>'); ?>
+<body>
+    <div class="container">
+        <div class="row" style="margin: 50px auto;">
+            <h2 class="text-center text-uppercase">Update chi tiết sản phẩm</h2>
+            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
+
+            <form action="" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="role" value="<?php echo $role ?>">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Số lượng</label>
+                            <input name="amount" type="number" class="form-control"
+                                value="<?php echo oldData($oldData, 'amount'); ?>">
+                            <?php echo form_error($errors, 'amount', '<span class="error">', '</span>'); ?>
+                        </div>
+
+                        <div class="form-group mg-form">
+                            <label for="">Tên màu</label>
+                            <input name="color" type="text" class="form-control"
+                                value="<?php echo oldData($oldData, 'color'); ?>">
+                            <?php echo form_error($errors, 'color', '<span class="error">', '</span>'); ?>
+                        </div>
                     </div>
 
-                    <div class="form-group mg-form">
-                        <label for="">Tên màu</label>
-                        <input name="color" type="text" class="form-control"
-                            value="<?php echo oldData($oldData, 'color'); ?>">
-                        <?php echo form_error($errors, 'color', '<span class="error">', '</span>'); ?>
-                    </div>
-                </div>
+                    <div class="col">
+                        <div class="form-group mg-form">
+                            <label for="">Kích thước</label>
+                            <input name="size" type="text" class="form-control"
+                                value="<?php echo oldData($oldData, 'size'); ?>">
+                            <?php echo form_error($errors, 'size', '<span class="error">', '</span>'); ?>
+                        </div>
 
-                <div class="col">
-                    <div class="form-group mg-form">
-                        <label for="">Kích thước</label>
-                        <input name="size" type="text" class="form-control"
-                            value="<?php echo oldData($oldData, 'size'); ?>">
-                        <?php echo form_error($errors, 'size', '<span class="error">', '</span>'); ?>
+                        <div class="form-group mg-form">
+                            <div class="color-picker">
+                                <div class="color-preview" id="colorPreview"><?php echo oldData($oldData, 'code_color', '#000000'); ?></div>
+                                <div class="color-input">
+                                    <label for="colorInput">Chọn màu:</label>
+                                    <input type="color" id="colorInput" value="<?php echo oldData($oldData, 'code_color', '#000000'); ?>" name="code_color">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group mg-form">
-                        <div class="color-picker">
-                            <div class="color-preview" id="colorPreview"><?php echo oldData($oldData, 'code_color', '#000000'); ?></div>
-                            <div class="color-input">
-                                <label for="colorInput">Chọn màu:</label>
-                                <input type="color" id="colorInput" value="<?php echo oldData($oldData, 'code_color', '#000000'); ?>" name="code_color">
+                    <div class="upload-container row" style="margin-left: 5px;">
+                        <div class="col" style="padding-top: 50px;">
+                            <h2 style="font-size: 25px;">Ảnh cũ</h2>
+                            <div>
+                                <img style="width: 500px; height: 300px; margin-top: 30px;"
+                                    src="<?php echo _IMGP_ . $oldData['image']; ?>" alt="Ảnh cũ">
+                            </div>
+                            <input type="hidden" name="image_old" value="<?php echo $oldData['image']; ?>">
+                        </div>
+                        <div class="col">
+                            <h2>Chọn ảnh mới</h2>
+                            <div class="file-upload">
+                                <label for="file">Chọn ảnh:</label>
+                                <input type="file" id="file" accept="image/*" name="image">
+                            </div>
+                            <div id="preview-container" class="preview-container">
+                                <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
                             </div>
                         </div>
                     </div>
                 </div>
+                <input type="hidden" name="id" value="<?php echo $productId ?>">
 
-                <div class="upload-container row" style="margin-left: 5px;">
-                    <div class="col" style="padding-top: 50px;">
-                        <h2 style="font-size: 25px;">Ảnh cũ</h2>
-                        <div>
-                            <img style="width: 500px; height: 300px; margin-top: 30px;"
-                                src="<?php echo _IMGP_ . $oldData['image']; ?>" alt="Ảnh cũ">
-                        </div>
-                        <input type="hidden" name="image_old" value="<?php echo $oldData['image']; ?>">
-                    </div>
-                    <div class="col">
-                        <h2>Chọn ảnh mới</h2>
-                        <div class="file-upload">
-                            <label for="file">Chọn ảnh:</label>
-                            <input type="file" id="file" accept="image/*" name="image">
-                        </div>
-                        <div id="preview-container" class="preview-container">
-                            <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" name="id" value="<?php echo $productId ?>">
-
-            <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
-            <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
-            <hr>
-        </form>
+                <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update sản phẩm</button>
+                <a href="?module=products&action=list&role=<?php echo $role; ?>" class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+                <hr>
+            </form>
+        </div>
     </div>
-</div>
+</body>
 <?php layout('footer'); ?>

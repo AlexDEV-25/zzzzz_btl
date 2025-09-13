@@ -2,17 +2,6 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-$data = [
-    'pageTitle' => 'Trang manager',
-    'role' => 2
-];
-layout('header_manager', $data);
-
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 $amount_user = getCountRows("SELECT * FROM users ");
 $amount_bill = getCountRows("SELECT * FROM bills ");
 $amount_product = getCountRows("SELECT * FROM products ");
@@ -22,6 +11,12 @@ $listBills = selectAll("SELECT * FROM bills  WHERE status = 2 ");
 foreach ($listBills as $item):
     $statistical += $item['total'];
 endforeach;
+$data = [
+    'pageTitle' => 'Trang manager',
+    'role' => 2
+];
+layout('header_manager', $data);
+
 ?>
 
 <body>

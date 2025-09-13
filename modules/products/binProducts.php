@@ -3,6 +3,23 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $filterAll = filter();
+// Kiểm tra có search hay không
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $amount = getCountRows("SELECT * FROM products WHERE id LIKE '%$value%'");
+    if ($amount > 0) {
+        $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
+    } else {
+        setFlashData('smg', 'danh mục không tồn tại');
+        setFlashData('smg_type', 'danger');
+    }
+} else {
+    $listProducts = selectAll("SELECT * FROM products ORDER BY created_at");
+}
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
+
 $data = [
     'pageTitle' => 'Danh sách sản phẩm',
 ];
@@ -20,26 +37,6 @@ if (isset($filterAll['role'])) {
     die();
 }
 
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-// Kiểm tra có search hay không
-if (!empty($filterAll['search'])) {
-    $value = $filterAll['search'];
-    $amount = getCountRows("SELECT * FROM products WHERE id LIKE '%$value%'");
-    if ($amount > 0) {
-        $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
-    } else {
-        setFlashData('smg', 'danh mục không tồn tại');
-        setFlashData('smg_type', 'danger');
-    }
-} else {
-    $listProducts = selectAll("SELECT * FROM products ORDER BY created_at");
-}
-
-$smg = getFlashData('smg');
-$smg_type = getFlashData('smg_type');
 ?>
 
 <body>

@@ -2,29 +2,11 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
-
-// $data = [
-//     'fullname' => 'khôi',
-//     'email' => 'khoi@gmail.com',
-//     'phone' => '0987654321',
-// ];
-// $kq = insert("users", $data);
-// $kq = update("users", $data, "id = 1");
-// $kq = delete("users", "id = 1");
-// $kq = selectAll("SELECT * FROM  users");
-// $kq = selectByCondition("SELECT * FROM  users", "phone = 0987654123 ");
-
-// echo '<pre>';
-// print_r($kq);
-// echo '</pre>';
 $errors = [];
 $oldData = [];
 if (isPost()) {
     $filterAll = filter();
-
-
     // validate fullname
-
     if (empty($filterAll['fullname'])) {
         $errors['fullname']['required'] = 'lỗi không nhập';
     } else {
@@ -34,7 +16,6 @@ if (isPost()) {
     }
 
     // validate email
-
     if (empty($filterAll['email'])) {
         $errors['email']['required'] = 'lỗi không nhập';
     } else {
@@ -43,9 +24,7 @@ if (isPost()) {
         }
     }
 
-
     // validate phone
-
     if (empty($filterAll['phone'])) {
         $errors['phone']['required'] = 'lỗi không nhập';
     } else {
@@ -55,7 +34,6 @@ if (isPost()) {
     }
 
     // validate password
-
     if (empty($filterAll['password'])) {
         $errors['password']['required'] = 'lỗi không nhập';
     } else {
@@ -64,9 +42,7 @@ if (isPost()) {
         }
     }
 
-
     // validate re_password
-
     if (empty($filterAll['re_password'])) {
         $errors['re_password']['required'] = 'lỗi không nhập';
     } else {
@@ -75,13 +51,8 @@ if (isPost()) {
         }
     }
 
-    // echo '<pre>';
-    // print_r($errors);
-    // echo '</pre>';
-
     if (empty($errors)) {
         // xử lý insert
-
         $activeToken = sha1(uniqid() . time()); // thời gian đăng ký (độc nhất cho mỗi lần đăng kí)
 
         $dataInsert = [
@@ -143,76 +114,71 @@ if (isPost()) {
     $oldData = getFlashData('oldData');
 }
 
-$title = [
+$data = [
     'pageTitle' => 'Đăng ký tài khoản'
 ];
-
-layout('header_login', $title);
-
+layout('header_login', $data);
 ?>
 
-<div class="row">
-    <div class="col-4" style="margin: 100px auto;">
-        <h2 class="text-center text-uppercase">đăng ký tài khoản users</h2>
+<body>
+    <div class="row">
+        <div class="col-4" style="margin: 100px auto;">
+            <h2 class="text-center text-uppercase">đăng ký tài khoản users</h2>
 
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
-        ?>
+            <?php
+            if (!empty($smg)) {
+                getSmg($smg, $smg_type);
+            }
+            ?>
 
-        <form action="?module=auth&action=register" method="post">
+            <form action="?module=auth&action=register" method="post">
 
-            <div class="form-group mg-form">
-                <label for="fullname">Họ tên</label>
-                <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
-                    value="<?php echo oldData($oldData, 'fullname');  ?>">
-                <?php
-                echo form_error($errors, 'fullname', '<span class="error">', '</span>');
-                ?>
-            </div>
+                <div class="form-group mg-form">
+                    <label for="fullname">Họ tên</label>
+                    <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
+                        value="<?php echo oldData($oldData, 'fullname');  ?>">
+                    <?php
+                    echo form_error($errors, 'fullname', '<span class="error">', '</span>');
+                    ?>
+                </div>
 
-            <div class="form-group mg-form">
-                <label for="email">Email</label>
-                <input name="email" type="email" class="form-control" placeholder="Email"
-                    value="<?php echo oldData($oldData, 'email');  ?>">
-                <?php
-                echo form_error($errors, 'email', '<span class="error">', '</span>');
-                ?>
-            </div>
+                <div class="form-group mg-form">
+                    <label for="email">Email</label>
+                    <input name="email" type="email" class="form-control" placeholder="Email"
+                        value="<?php echo oldData($oldData, 'email');  ?>">
+                    <?php
+                    echo form_error($errors, 'email', '<span class="error">', '</span>');
+                    ?>
+                </div>
 
-            <div class="form-group mg-form">
-                <label for="phone">Số điện thoại</label>
-                <input name="phone" type="number" class="form-control" placeholder="Số điện thoại"
-                    value="<?php echo oldData($oldData, 'phone');  ?>">
-                <?php
-                echo form_error($errors, 'phone', '<span class="error">', '</span>');
-                ?>
-            </div>
-            <div class="form-group mg-form">
-                <label for="password">Password</label>
-                <input name="password" type="text" class="form-control" placeholder="Password"
-                    value="<?php echo oldData($oldData, 'password');  ?>">
-                <?php
-                echo form_error($errors, 'password', '<span class="error">', '</span>');
-                ?>
-            </div>
-            <div class="form-group mg-form">
-                <label for="re_password">Nhập lại Password</label>
-                <input name="re_password" type="password" class="form-control" placeholder="Nhập lại Password"
-                    value="<?php echo oldData($oldData, 're_password');  ?>">
-                <?php
-                echo form_error($errors, 're_password', '<span class="error">', '</span>');
-                ?>
-            </div>
-            <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Đăng ký</button>
-            <p class="text-center"><a href="?module=auth&action=login">Đăng nhập tài khoản</a></p>
-        </form>
+                <div class="form-group mg-form">
+                    <label for="phone">Số điện thoại</label>
+                    <input name="phone" type="number" class="form-control" placeholder="Số điện thoại"
+                        value="<?php echo oldData($oldData, 'phone');  ?>">
+                    <?php
+                    echo form_error($errors, 'phone', '<span class="error">', '</span>');
+                    ?>
+                </div>
+                <div class="form-group mg-form">
+                    <label for="password">Password</label>
+                    <input name="password" type="text" class="form-control" placeholder="Password"
+                        value="<?php echo oldData($oldData, 'password');  ?>">
+                    <?php
+                    echo form_error($errors, 'password', '<span class="error">', '</span>');
+                    ?>
+                </div>
+                <div class="form-group mg-form">
+                    <label for="re_password">Nhập lại Password</label>
+                    <input name="re_password" type="password" class="form-control" placeholder="Nhập lại Password"
+                        value="<?php echo oldData($oldData, 're_password');  ?>">
+                    <?php
+                    echo form_error($errors, 're_password', '<span class="error">', '</span>');
+                    ?>
+                </div>
+                <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Đăng ký</button>
+                <p class="text-center"><a href="?module=auth&action=login">Đăng nhập tài khoản</a></p>
+            </form>
+        </div>
     </div>
-</div>
-
-
-
-<?php
-layout('footer_login');;
-?>
+</body>
+<?php layout('footer_login');; ?>

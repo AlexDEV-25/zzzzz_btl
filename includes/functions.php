@@ -210,7 +210,7 @@ function isLogin()
     if (getSession('tokenLogin')) {
         // kiểm tra token có giống trong bảng không
         $tokenLogin = getSession('tokenLogin');
-        $queryToken = selectOne("SELECT user_Id FROM tokenLogin WHERE token = '$tokenLogin'");
+        $queryToken = selectOne("SELECT user_Id FROM tokenlogin WHERE token = '$tokenLogin'");
 
         if (!empty($queryToken)) {
             $checkLogin = true;

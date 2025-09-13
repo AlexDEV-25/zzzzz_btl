@@ -5,6 +5,9 @@ if (!defined('_CODE')) {
 $filterAll = filter();
 $userId =  $filterAll['userId'];
 $cartCount = getCountCart($userId);
+// Lấy thông tin flash
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 $data = [
     'pageTitle' => "Đặt hàng thành công",
     'role' => 0,
@@ -12,10 +15,6 @@ $data = [
     'userId' => $userId
 ];
 layout('header_custom', $data);
-
-// Lấy thông tin flash
-$smg = getFlashData('smg');
-$smg_type = getFlashData('smg_type');
 ?>
 
 <body>
@@ -40,6 +39,4 @@ $smg_type = getFlashData('smg_type');
         </div>
     </div>
 </body>
-<?php
-layout('footer_custom');
-?>
+<?php layout('footer_custom'); ?>

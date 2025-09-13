@@ -2,16 +2,7 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-$data = [
-    'pageTitle' => 'Danh sách người dùng',
-    'role' => 1
-];
-layout('header_admin', $data);
 $filterAll = filter();
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -28,6 +19,11 @@ if (!empty($filterAll['search'])) {
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+$data = [
+    'pageTitle' => 'Danh sách người dùng',
+    'role' => 1
+];
+layout('header_admin', $data);
 ?>
 
 <body>
@@ -116,8 +112,5 @@ $smg_type = getFlashData('smg_type');
             </div>
         </main>
     </div>
-
-    <?php layout('footer_admin'); ?>
 </body>
-
-</html>
+<?php layout('footer_admin'); ?>

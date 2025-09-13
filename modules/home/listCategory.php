@@ -5,62 +5,10 @@ if (!defined('_CODE')) {
 $filterAll = filter();
 $categoryId = $filterAll['categoryId'];
 $category = selectOne("SELECT * FROM categories WHERE id = $categoryId ");
-$data = ['pageTitle' => 'Trang danh mục',];
 $role = -1;
 $userId = -1;
 $cartCount = -1;
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'categoryId' => $filterAll['categoryId'],
-        'pageTitle' => 'Trang danh mục',
-    ];
-    if ($role == -1) {
-        layout('header_dashboard', $data);
-    } elseif ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    } elseif ($role == 3) {
-        layout('header_employee', $data);
-    } else {
-        if (!empty($filterAll['userId'])) {
-            $userId = $filterAll['userId'];
-            $cartCount = getCountCart($userId);
-            if (!empty($filterAll['count'])) {
-                $count = $filterAll['count'];
-            } else {
-                $count = 0;
-            }
-            $data = [
-                'categoryId' => $categoryId,
-                'pageTitle' => 'Trang danh mục',
-                'count' => $cartCount,
-                'userId' => $userId
-            ];
-            layout('header_custom', $data);
-        }
-    }
-} else {
-    layout('header_dashboard', $data);
-}
-if (!empty($filterAll['search'])) {
-    $value = $filterAll['search'];
-    $title = 'Sản phẩm bạn muốn tìm';
-    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
-        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
-    } else {
-        $title = 'Sản phẩm bạn muốn tìm';
-        setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
-        setFlashData('smg_type', "danger");
-        $smg = getFlashData('smg');
-        $smg_type = getFlashData('smg_type');
-        $listProduct = selectAll("SELECT * FROM products");
-    }
-} else {
-    $title = 'Sản phẩm nổi bật';
-    $listProduct = selectAll("SELECT * FROM products");
-}
+
 if (isGet()) {
     if (!empty($filterAll['type'])) {
         if ($filterAll['type'] == 'new') {
@@ -135,6 +83,61 @@ if (isPost()) {
     }
     $errors = getFlashData('errors');
 }
+
+$data = ['pageTitle' => 'Trang danh mục',];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'categoryId' => $filterAll['categoryId'],
+        'pageTitle' => 'Trang danh mục',
+    ];
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } elseif ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
+    } else {
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            if (!empty($filterAll['count'])) {
+                $count = $filterAll['count'];
+            } else {
+                $count = 0;
+            }
+            $data = [
+                'categoryId' => $categoryId,
+                'pageTitle' => 'Trang danh mục',
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            layout('header_custom', $data);
+        }
+    }
+} else {
+    layout('header_dashboard', $data);
+}
+if (!empty($filterAll['search'])) {
+    $value = $filterAll['search'];
+    $title = 'Sản phẩm bạn muốn tìm';
+    if (getCountRows("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'") > 0) {
+        $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%' OR DESCRIPTION LIKE '%$value%'");
+    } else {
+        $title = 'Sản phẩm bạn muốn tìm';
+        setFlashData('smg', "sản phẩm bạn muốn tìm không có đây là các sản phẩm khác");
+        setFlashData('smg_type', "danger");
+        $smg = getFlashData('smg');
+        $smg_type = getFlashData('smg_type');
+        $listProduct = selectAll("SELECT * FROM products");
+    }
+} else {
+    $title = 'Sản phẩm nổi bật';
+    $listProduct = selectAll("SELECT * FROM products");
+}
+
 ?>
 
 <head>

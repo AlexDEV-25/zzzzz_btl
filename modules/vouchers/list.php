@@ -2,17 +2,7 @@
 if (!defined('_CODE')) {
     die('Access denied...');
 }
-$data = [
-    'pageTitle' => 'Danh sách voucher',
-    'role' => 1
-];
-layout('header_admin', $data);
 $filterAll = filter();
-// Kiểm tra trạng thái đăng nhập
-if (!isLogin()) {
-    redirect('?module=auth&action=login');
-}
-
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -29,10 +19,14 @@ if (!empty($filterAll['search'])) {
 
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
+$data = [
+    'pageTitle' => 'Danh sách voucher',
+    'role' => 1
+];
+layout('header_admin', $data);
 ?>
 
 <body>
-
     <div class="min-h-full">
         <header class="bg-white shadow">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -120,8 +114,6 @@ $smg_type = getFlashData('smg_type');
             </div>
         </main>
     </div>
-
-    <?php layout('footer_admin'); ?>
 </body>
 
-</html>
+<?php layout('footer_admin'); ?>

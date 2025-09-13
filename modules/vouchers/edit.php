@@ -77,61 +77,60 @@ if (!empty($voucherOld)) {
 }
 ?>
 
-<div class="container">
-    <div class="row" style="margin: 50px auto;">
-        <h2 class="text-center text-uppercase">Update Voucher</h2>
+<body>
+    <div class="container">
+        <div class="row" style="margin: 50px auto;">
+            <h2 class="text-center text-uppercase">Update Voucher</h2>
 
-        <?php
-        if (!empty($smg)) {
-            getSmg($smg, $smg_type);
-        }
-        ?>
+            <?php
+            if (!empty($smg)) {
+                getSmg($smg, $smg_type);
+            }
+            ?>
 
-        <form action="" method="post">
-            <div class="form-group">
-                <label for="code">Mã voucher</label>
-                <input type="text" class="form-control" name="code"
-                    value="<?php echo oldData($oldData, 'code'); ?>">
-                <?php echo form_error($errors, 'code', '<span class="error">', '</span>'); ?>
-            </div>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="code">Mã voucher</label>
+                    <input type="text" class="form-control" name="code"
+                        value="<?php echo oldData($oldData, 'code'); ?>">
+                    <?php echo form_error($errors, 'code', '<span class="error">', '</span>'); ?>
+                </div>
 
-            <div class="form-group">
-                <label for="discount">Giá trị giảm</label>
-                <input type="number" class="form-control" name="discount"
-                    value="<?php echo oldData($oldData, 'discount'); ?>">
-                <?php echo form_error($errors, 'discount', '<span class="error">', '</span>'); ?>
-            </div>
+                <div class="form-group">
+                    <label for="discount">Giá trị giảm</label>
+                    <input type="number" class="form-control" name="discount"
+                        value="<?php echo oldData($oldData, 'discount'); ?>">
+                    <?php echo form_error($errors, 'discount', '<span class="error">', '</span>'); ?>
+                </div>
 
-            <div class="form-group">
-                <label for="unit">Đơn vị</label>
-                <select name="unit" class="form-control">
-                    <option value="0" <?php echo (oldData($oldData, 'unit') == 0) ? 'selected' : ''; ?>>%</option>
-                    <option value="1" <?php echo (oldData($oldData, 'unit') == 1) ? 'selected' : ''; ?>>VNĐ</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="unit">Đơn vị</label>
+                    <select name="unit" class="form-control">
+                        <option value="0" <?php echo (oldData($oldData, 'unit') == 0) ? 'selected' : ''; ?>>%</option>
+                        <option value="1" <?php echo (oldData($oldData, 'unit') == 1) ? 'selected' : ''; ?>>VNĐ</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="start">Ngày bắt đầu</label>
-                <input type="date" class="form-control" name="start"
-                    value="<?php echo oldData($oldData, 'start'); ?>">
-                <?php echo form_error($errors, 'start', '<span class="error">', '</span>'); ?>
-            </div>
+                <div class="form-group">
+                    <label for="start">Ngày bắt đầu</label>
+                    <input type="date" class="form-control" name="start"
+                        value="<?php echo oldData($oldData, 'start'); ?>">
+                    <?php echo form_error($errors, 'start', '<span class="error">', '</span>'); ?>
+                </div>
 
-            <div class="form-group">
-                <label for="end">Ngày kết thúc</label>
-                <input type="date" class="form-control" name="end"
-                    value="<?php echo oldData($oldData, 'end'); ?>">
-                <?php echo form_error($errors, 'end', '<span class="error">', '</span>'); ?>
-            </div>
+                <div class="form-group">
+                    <label for="end">Ngày kết thúc</label>
+                    <input type="date" class="form-control" name="end"
+                        value="<?php echo oldData($oldData, 'end'); ?>">
+                    <?php echo form_error($errors, 'end', '<span class="error">', '</span>'); ?>
+                </div>
 
-            <input type="hidden" name="id" value="<?php echo $voucherId; ?>">
+                <input type="hidden" name="id" value="<?php echo $voucherId; ?>">
 
-            <button type="submit" class="btn btn-primary btn-block">Cập nhật voucher</button>
-            <a href="?module=vouchers&action=list" class="btn btn-success btn-block">Quay lại</a>
-        </form>
+                <button type="submit" class="btn btn-primary btn-block">Cập nhật voucher</button>
+                <a href="?module=vouchers&action=list" class="btn btn-success btn-block">Quay lại</a>
+            </form>
+        </div>
     </div>
-</div>
-
-<?php
-layout('footer');
-?>
+</body>
+<?php layout('footer'); ?>
