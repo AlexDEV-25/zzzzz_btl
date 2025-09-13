@@ -60,7 +60,8 @@ $voucherCode = '';
 if (!empty($filterAll['voucher'])) {
     $voucherCode = trim($filterAll['voucher']);
     $today = date('Y-m-d');
-    $voucher = selectOne("SELECT * FROM vouchers WHERE code = '$voucherCode' AND start <= '$today' AND end >= '$today'");
+    $voucher = selectOne("SELECT * FROM vouchers WHERE code = '$voucherCode' 
+    AND start <= '$today' AND end >= '$today'AND is_deleted = 0");
 
     if ($voucher) {
         if ($voucher['unit'] == 0) {
