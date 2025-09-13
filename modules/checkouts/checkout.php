@@ -79,8 +79,28 @@ $finalTotal = max(0, $total - $discountValue);
 
 // --- Xử lý POST thanh toán ---
 if (isPost() && isset($filterAll['checkout_submit'])) {
-    $date = date('Y-m-d H:i:s');
+    // Validate thông tin khách hàng
+    if (empty(trim($filterAll['fullname']))) {
+        $errors['fullname'] = 'Vui lòng nhập họ tên';
+    }
+    if (empty(trim($filterAll['email']))) {
+        $errors['email'] = 'Vui lòng nhập email';
+    }
+    if (empty(trim($filterAll['phone']))) {
+        $errors['phone'] = 'Vui lòng nhập số điện thoại';
+    }
+    if (empty(trim($filterAll['address']))) {
+        $errors['address'] = 'Vui lòng nhập địa chỉ';
+    }
 
+    // Nếu có lỗi thì báo lỗi và dừng lại
+    if (!empty($errors)) {
+        setFlashData('smg', 'Vui lòng điền đầy đủ thông tin khách hàng!');
+        setFlashData('smg_type', 'danger');
+        redirect('?module=checkouts&action=checkout'); // load lại form
+    }
+
+    $date = date('Y-m-d H:i:s');
     // lấy phương thức thanh toán từ form
     $paymentMethod = isset($filterAll['payment_method']) ? intval($filterAll['payment_method']) : 0;
     if ($paymentMethod == 0) {
