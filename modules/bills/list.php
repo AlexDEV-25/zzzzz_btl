@@ -3,7 +3,21 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 $filterAll = filter();
-$role = -1;
+$data = [
+    'pageTitle' => 'Danh sách đơn hàng',
+];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'role' => $role,
+    ];
+    if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    }
+}
+
 if (isPost()) {
     if (!empty($filterAll['billId'])) {
         $billIdCondition = $filterAll['billId'];
@@ -101,20 +115,6 @@ if (!empty($filterAll['search'])) {
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 
-$data = [
-    'pageTitle' => 'Danh sách đơn hàng',
-];
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'role' => $role,
-    ];
-    if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    }
-}
 ?>
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">

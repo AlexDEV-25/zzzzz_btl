@@ -84,21 +84,23 @@ layout('header_admin', $data);
                             if (!empty($listVouchers)):
                                 $count = 0;
                                 foreach ($listVouchers as $item):
-                                    $count++;
+                                    if ($item['is_deleted'] != 1):
+                                        $count++;
                             ?>
-                                    <tr class="bg-white hover:bg-gray-50">
-                                        <td class="px-6 py-4"><?php echo $count; ?></td>
-                                        <td class="px-6 py-4 font-bold text-gray-900"><?php echo $item['code']; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['discount']; ?></td>
-                                        <td class="px-6 py-4">
-                                            <?php echo $item['unit'] == 0 ? '%' : 'VNĐ'; ?>
-                                        </td>
-                                        <td class="px-6 py-4"><?php echo $item['start']; ?></td>
-                                        <td class="px-6 py-4"><?php echo $item['end']; ?></td>
-                                        <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
-                                        <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá voucher này?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
-                                    </tr>
+                                        <tr class="bg-white hover:bg-gray-50">
+                                            <td class="px-6 py-4"><?php echo $count; ?></td>
+                                            <td class="px-6 py-4 font-bold text-gray-900"><?php echo $item['code']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['discount']; ?></td>
+                                            <td class="px-6 py-4">
+                                                <?php echo $item['unit'] == 0 ? '%' : 'VNĐ'; ?>
+                                            </td>
+                                            <td class="px-6 py-4"><?php echo $item['start']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['end']; ?></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                            <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=vouchers&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá voucher này?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
+                                        </tr>
                                 <?php
+                                    endif;
                                 endforeach;
                             else:
                                 ?>

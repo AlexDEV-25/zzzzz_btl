@@ -40,6 +40,7 @@ if (isPost()) {
             $condition = "id = $item2";
             $UpdateStatusProductCart = update('products_cart', $dataUpdate, $condition);
         }
+
         // Lưu dữ liệu vào session để sử dụng ở trang checkout
         setSession('checkout_data', [
             'productCartIds' => $filterAll['productCartId'],
@@ -78,7 +79,6 @@ if ($rowCart > 0) {
 // Lấy thông báo flash
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
-
 $data = [
     'pageTitle' => "giỏ hàng",
     'count' => $cartCount,

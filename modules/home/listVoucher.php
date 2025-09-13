@@ -4,8 +4,6 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-$smg = getFlashData('smg');
-$smg_type = getFlashData('smg_type');
 $data = [
     'pageTitle' => 'Voucher khuyến mãi'
 ];
@@ -22,6 +20,7 @@ if (!empty($filterAll['userId'])) {
 } else {
     layout('header_dashboard', $data);
 }
+
 // lấy dữ liệu voucher
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
@@ -36,6 +35,9 @@ if (!empty($filterAll['search'])) {
     $today = date("Y-m-d");
     $listVouchers = selectAll("SELECT * FROM vouchers WHERE start <= '$today' AND end >= '$today' ORDER BY id DESC");
 }
+
+$smg = getFlashData('smg');
+$smg_type = getFlashData('smg_type');
 ?>
 
 <body class="bg-gradient-to-r from-indigo-100 via-white to-pink-100 min-h-screen flex flex-col">
