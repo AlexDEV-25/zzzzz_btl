@@ -29,13 +29,18 @@ if (isPost()) {
     }
 
     if (empty($errors)) {
-        $result = move_uploaded_file(
-            $_FILES['image']['tmp_name'], // đường đẫn gốc
-            _WEB_PATH . '\\templates\\image\\categories\\' . // đường đẫn  mới nhớ thêm \\ ở cuối
-                $_FILES['image']['name']
-        ); // file  muốn chuyển
-        $anh_string = (string)$_FILES['image']['name'];
-        $image = $anh_string;
+        $image = $categoryOld['image']; // mặc định giữ ảnh cũ
+
+        // Nếu có chọn ảnh mới
+        if (!empty($_FILES['image']['name'])) {
+            $result = move_uploaded_file(
+                $_FILES['image']['tmp_name'],
+                _WEB_PATH . '\\templates\\image\\categories\\' . $_FILES['image']['name']
+            );
+            if ($result) {
+                $image = (string)$_FILES['image']['name']; // gán ảnh mới
+            }
+        }
 
         $dataUpdate = [
             'name_category' => $filterAll['name_category'],
