@@ -20,7 +20,7 @@
                 <!-- Menu desktop -->
                 <div class="hidden lg:flex space-x-8">
                     <a href="?module=home&action=dashboard&role=0&userId=<?php echo $data['userId'] ?? ''; ?>" class="font-medium text-gray-700 hover:text-gray-800">Home</a>
-                    <a href="?module=cart&action=customCart&role=0&userId=<?php echo $data['userId'] ?? ''; ?>" class="font-medium text-gray-700 hover:text-gray-800">Thông tin đơn</a>
+                    <a href="?module=billsCustom&action=historyBill&role=0&userId=<?php echo $data['userId'] ?? ''; ?>" class="font-medium text-gray-700 hover:text-gray-800">Thông tin đơn</a>
                 </div>
 
                 <!-- Thanh tìm kiếm -->

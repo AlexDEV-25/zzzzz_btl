@@ -68,7 +68,7 @@ layout('header_custom', $data);
                     <p class="text-lg font-bold text-gray-900">
                         Tổng tiền: <?php echo number_format($item['total'], 0, ',', '.'); ?> đ
                     </p>
-                    <a href="?module=bills&action=customBillDetail&role=0&billId=<?php echo $item['id']; ?>&userId=<?php echo $userId; ?>&billId=<?php echo $item['id']; ?>"
+                    <a href="?module=billsCustom&action=customBillDetail&role=0&userId=<?php echo $userId; ?>&billId=<?php echo $item['id']; ?>"
                         class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition">
                         Chi tiết đơn hàng
                     </a>
