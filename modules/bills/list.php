@@ -4,12 +4,11 @@ if (!defined('_CODE')) {
 }
 
 $filterAll = filter();
-
 if (isPost() && !empty($filterAll['billId'])) {
     $billId = (int) $filterAll['billId'];
 
     // Kiểm tra đơn hàng có tồn tại
-    $bill = selectOne("SELECT status FROM bills WHERE id = ?", [$billId]);
+    $bill = selectOne("SELECT status FROM bills WHERE id = $billId");
     if ($bill) {
         $billStatus = $bill['status'];
         $newStatus  = isset($filterAll['status']) ? (int) $filterAll['status'] : $billStatus;
@@ -18,16 +17,16 @@ if (isPost() && !empty($filterAll['billId'])) {
         if ($billStatus != $newStatus) {
             if ($newStatus === 1) {
                 // ✅ Xác nhận đơn → trừ số lượng sản phẩm
-                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = ?", [$billId]);
+                $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
 
                 foreach ($listBillDetail as $item) {
                     $productDetailId = (int) $item['id_product_detail'];
-                    $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = ?", [$productDetailId]);
+                    $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId");
 
                     if ($productDetail) {
                         $newAmount = max(0, $productDetail['amount'] - $item['amount_buy']);
 
-                        update('products_detail', ['amount' => $newAmount], "id = ?", [$productDetailId]);
+                        update('products_detail', ['amount' => $newAmount], "id =$productDetailId");
 
                         if ($newAmount == 0) {
                             setFlashData('smg', '⚠️ Một số sản phẩm đã hết hàng.');
@@ -46,15 +45,15 @@ if (isPost() && !empty($filterAll['billId'])) {
 
                 if ($newStatus === -1) {
                     // ✅ Hủy đơn → cộng lại số lượng
-                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = ?", [$billId]);
+                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
 
                     foreach ($listBillDetail as $item) {
                         $productDetailId = (int) $item['id_product_detail'];
-                        $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = ?", [$productDetailId]);
+                        $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId");
 
                         if ($productDetail) {
                             $newAmount = $productDetail['amount'] + $item['amount_buy'];
-                            update('products_detail', ['amount' => $newAmount], "id = ?", [$productDetailId]);
+                            update('products_detail', ['amount' => $newAmount], "id = $productDetailId");
                         }
                     }
                 }
@@ -64,7 +63,7 @@ if (isPost() && !empty($filterAll['billId'])) {
         }
 
         // Cập nhật trạng thái đơn
-        $updateOk = update('bills', $dataUpdate, "id = ?", [$billId]);
+        $updateOk = update('bills', $dataUpdate, "id = $billId");
         if ($updateOk) {
             if (empty(getFlashData('smg'))) {
                 setFlashData('smg', '✅ Cập nhật trạng thái thành công!');
