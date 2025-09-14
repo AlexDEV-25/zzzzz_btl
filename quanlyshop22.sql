@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2025 at 11:15 AM
+-- Generation Time: Sep 14, 2025 at 02:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,7 +66,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `count`, `id_user`) VALUES
-(11, 3, 8);
+(11, 2, 8);
 
 -- --------------------------------------------------------
 
@@ -205,7 +205,7 @@ CREATE TABLE `products_cart` (
 
 INSERT INTO `products_cart` (`id`, `amount_buy`, `id_product_detail`, `id_cart`) VALUES
 (57, 1, 18, 11),
-(58, 4, 3, 11);
+(59, 3, 4, 11);
 
 -- --------------------------------------------------------
 
@@ -485,7 +485,7 @@ ALTER TABLE `products_bill`
 -- AUTO_INCREMENT for table `products_cart`
 --
 ALTER TABLE `products_cart`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `products_detail`
@@ -503,7 +503,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `tokenlogin`
 --
 ALTER TABLE `tokenlogin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `users`
