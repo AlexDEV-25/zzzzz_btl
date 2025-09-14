@@ -98,7 +98,7 @@ if (isPost()) {
         setFlashData('old', $filterAll);
     }
 
-    redirect('?module=users&action=customEdit&role=0&userId=' . $userId);
+    redirect('?module=home&action=customEdit&role=0&userId=' . $userId);
 }
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');

@@ -118,6 +118,45 @@ if (isset($filterAll['role'])) {
     <footer class="bg-gray-900 text-white text-center py-6">
         <p class="mb-0">© 2024 META.vn - Mua sắm online chính hãng</p>
     </footer>
+    <!-- Hộp quà -->
+    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+        <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>" class="gift-icon">
+            <img src="<?php echo _IMGG_; ?>git.png"
+                alt="Gift"
+                style="width:60px; height:60px;">
+        </a>
 
+        <style>
+            .gift-icon {
+                position: fixed;
+                bottom: 20px;
+                /* cách đáy */
+                left: 20px;
+                /* cách trái */
+                cursor: pointer;
+                z-index: 9999;
+                animation: bounce 1.5s infinite;
+            }
+
+            @keyframes bounce {
+
+                0%,
+                20%,
+                50%,
+                80%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                40% {
+                    transform: translateY(-20px);
+                }
+
+                60% {
+                    transform: translateY(-10px);
+                }
+            }
+        </style>
+    <?php endif; ?>
 </body>
 <?php layout('footer'); ?>
