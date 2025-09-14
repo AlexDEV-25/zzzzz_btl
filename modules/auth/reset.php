@@ -43,7 +43,7 @@ if (!empty($token)) {
                     'update_at'   => date('Y-m-d H:i:s')
                 ];
 
-                $updateStatus = update('users', $dataUpdate, "id = ?", [$userId]);
+                $updateStatus = update('users', $dataUpdate, "id = $userId");
 
                 if ($updateStatus) {
                     setFlashData('smg', '✅ Thay đổi mật khẩu thành công!!');
