@@ -206,9 +206,6 @@ if (isset($filterAll['role'])) {
             <section class="lg:col-span-3">
                 <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-6">
                     <h2 class="text-2xl font-bold text-gray-900"><?php echo !empty($title) ? $title : 'Sản phẩm nổi bật'; ?></h2>
-                    <div class="hidden sm:flex items-center text-sm text-gray-600 gap-4">
-                        <span>Hiển thị <?php echo isset($count) && $count !== '' ? $count : 'tất cả'; ?></span>
-                    </div>
                 </div>
 
                 <!-- grid -->

@@ -9,10 +9,13 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-function  layout($layoutName = 'header', $data = [])
+function layout($layoutName = 'header', $data = [])
 {
-    if (file_exists(require_once(_WEB_PATH_TEMPLATES . '\\layout\\' . $layoutName . '.php'))) {
-        require_once(require_once(_WEB_PATH_TEMPLATES . '\\layout\\' . $layoutName . '.php'));
+    $filePath = _WEB_PATH_TEMPLATES . '/layout/' . $layoutName . '.php';
+    if (file_exists($filePath)) {
+        require_once $filePath;
+    } else {
+        echo "Layout file not found: " . $filePath;
     }
 }
 

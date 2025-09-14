@@ -4,68 +4,12 @@ if (!defined('_CODE')) {
 }
 $filterAll = filter();
 $errors = [];
-// Xử lý POST trước để tránh lỗi header
-if (isPost()) {
-    if (!empty($filterAll['amount_buy']) && !empty($filterAll['productCartId'])) {
-        // Xóa các amount_buy không hợp lệ
-        foreach ($filterAll['amount_buy'] as $key1 => $item1) {
-            $k = 0;
-            foreach ($filterAll['productCartId'] as $key2 => $item2) {
-                if ($key1 == $item2) {
-                    $k = 1;
-                }
-            }
-            if ($k == 0) {
-                unset($filterAll['amount_buy'][$key1]);
-            }
-        }
 
-        // Lấy userId và cartId
-        $userId = !empty($filterAll['userId']) ? $filterAll['userId'] : null;
-        $cartId = null;
-        if ($userId) {
-            $rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
-            if ($rowCart > 0) {
-                $cart = selectOne("SELECT * FROM cart WHERE id_user = $userId");
-                $cartId = $cart['id'];
-            }
-        }
-
-        // Cập nhật số lượng trong products_cart
-        foreach ($filterAll['productCartId'] as $key2 => $item2) {
-            $amount_buy = $filterAll['amount_buy'][$item2];
-            $dataUpdate = [
-                'amount_buy' => $amount_buy,
-            ];
-            $condition = "id = $item2";
-            $UpdateStatusProductCart = update('products_cart', $dataUpdate, $condition);
-        }
-
-        // Lưu dữ liệu vào session để sử dụng ở trang checkout
-        setSession('checkout_data', [
-            'productCartIds' => $filterAll['productCartId'],
-            'amount_buy' => $filterAll['amount_buy'],
-            'userId' => $userId,
-            'role' => 0,
-            'cartId' => $cartId
-        ]);
-
-        // Chuyển hướng đến trang checkout
-        redirect('?module=checkouts&action=checkout&role=0&userId=' . $userId);
-    } else {
-        setFlashData('smg', '❌ Bạn phải chọn sản phẩm muốn mua!!');
-        setFlashData('smg_type', 'danger');
-    }
-}
-
-// Kiểm tra userId và chuyển hướng trước khi xuất HTML
+// Kiểm tra userId
 if (!empty($filterAll['userId'])) {
     $userId = $filterAll['userId'];
-    if ($filterAll['userId'] == 1) {
-        redirect('?module=home&action=admin');
-    }
 } else {
-    redirect('?module=auth&action=register');
+    die();
 }
 
 // Lấy thông tin giỏ hàng
@@ -76,6 +20,7 @@ if ($rowCart > 0) {
     $cart = selectOne("SELECT * FROM cart WHERE id_user = $userId");
     $cartId = $cart['id'];
 }
+
 // Lấy thông báo flash
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
@@ -93,7 +38,8 @@ layout('header_custom', $data);
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Giỏ Hàng</h1>
         <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
-        <form method="POST" class="space-y-4">
+
+        <form method="POST" action="?module=checkouts&action=checkout&role=0&userId=<?php echo $userId; ?>" class="space-y-4">
             <div id="cart" class="bg-white rounded-lg shadow-md p-6">
                 <?php
                 $listProductCart = selectAll("SELECT * FROM products_cart WHERE id_cart = $cartId");
@@ -110,26 +56,42 @@ layout('header_custom', $data);
                     ?>
                         <div class="flex items-center justify-between border-b py-4">
                             <div class="flex items-center space-x-4">
+                                <!-- Checkbox chọn sản phẩm -->
                                 <input
                                     type="checkbox"
                                     name="productCartId[]"
                                     value="<?php echo $productCartId ?>"
-                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500 product-checkbox">
+
+                                <!-- Ảnh sản phẩm -->
                                 <img
                                     src="<?php echo _IMGP_ . $productDetail['image']; ?>"
                                     alt="<?php echo $product['name_product'] ?>"
                                     class="w-16 h-16 object-cover rounded">
-                                <span class="text-lg font-medium text-gray-700"><?php echo $product['name_product']; ?></span>
+
+                                <span class="text-lg font-medium text-gray-700">
+                                    <?php echo $product['name_product']; ?>
+                                </span>
                             </div>
+
                             <div class="flex items-center space-x-4">
+                                <!-- Số lượng -->
                                 <input
                                     type="number"
                                     name="amount_buy[<?php echo $productCart['id']; ?>]"
                                     value="<?php echo $amount ?>"
                                     min="1"
                                     max="<?php echo $productDetail['amount']; ?>"
-                                    class="w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                                <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price']); ?> đ</span>
+                                    class="w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500 amount-input">
+
+                                <!-- Giá -->
+                                <span
+                                    class="text-lg font-medium text-gray-700 price-item"
+                                    data-price="<?php echo $product['price']; ?>">
+                                    <?php echo number_format($product['price']); ?> đ
+                                </span>
+
+                                <!-- Xóa -->
                                 <a
                                     href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&productCartId=<?php echo $productCartId; ?>&userId=<?php echo $userId; ?>&role=0"
                                     onclick="return confirm('Bạn có chắc chắn muốn xoá?')"
@@ -140,12 +102,21 @@ layout('header_custom', $data);
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+
+                <!-- Hidden input -->
                 <input type="hidden" value="0" name="role">
-                <input type="hidden" value="<?php echo $productDetailId; ?>" name="productDetailId">
-                <input type="hidden" value="<?php echo $productId; ?>" name="productId">
                 <input type="hidden" value="<?php echo $userId; ?>" name="userId">
                 <input type="hidden" value="<?php echo $cartId; ?>" name="cartId">
             </div>
+
+            <!-- Hiển thị tổng tiền -->
+            <div class="flex justify-end mt-4">
+                <span class="text-xl font-bold text-gray-800">
+                    Tổng tiền: <span id="total-price">0 đ</span>
+                </span>
+            </div>
+
+            <!-- Nút thanh toán -->
             <button
                 type="submit"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors mt-4">
@@ -153,5 +124,31 @@ layout('header_custom', $data);
             </button>
         </form>
     </div>
+
+    <!-- Script tính tổng tiền -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const amounts = document.querySelectorAll('.amount-input');
+            const prices = document.querySelectorAll('.price-item');
+            const totalEl = document.getElementById('total-price');
+
+            function calcTotal() {
+                let total = 0;
+                checkboxes.forEach((cb, index) => {
+                    if (cb.checked) {
+                        const amountInput = amounts[index];
+                        const price = parseInt(prices[index].dataset.price);
+                        const amount = parseInt(amountInput.value);
+                        total += price * amount;
+                    }
+                });
+                totalEl.textContent = total.toLocaleString() + " đ";
+            }
+
+            checkboxes.forEach(cb => cb.addEventListener('change', calcTotal));
+            amounts.forEach(input => input.addEventListener('input', calcTotal));
+        });
+    </script>
 </body>
 <?php layout('footer'); ?>
