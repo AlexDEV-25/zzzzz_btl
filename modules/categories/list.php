@@ -7,9 +7,9 @@ $filterAll = filter();
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
-    $amount = getCountRows("SELECT * FROM categories WHERE id LIKE '%$value%'");
+    $amount = getCountRows("SELECT * FROM categories WHERE name_category LIKE '%$value%'");
     if ($amount > 0) {
-        $listCategories = selectAll("SELECT * FROM categories WHERE id LIKE '%$value%'");
+        $listCategories = selectAll("SELECT * FROM categories WHERE name_category LIKE '%$value%'");
     } else {
         setFlashData('smg', '❌ Danh mục không tồn tại');
         setFlashData('smg_type', 'danger');
@@ -36,8 +36,7 @@ layout('header_admin', $data);
                 <div class="flex gap-4">
                     <form method="post" action="">
                         <div class="flex">
-                            <input type="hidden" name='act' value="categories" class="hidden">
-                            <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Danh Mục">
+                            <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Tên Danh Mục">
                             <input type="hidden" class="form-control" name="role" value="<?php echo 1; ?>">
                             <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
@@ -69,7 +68,6 @@ layout('header_admin', $data);
                         <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                             <tr>
                                 <th scope="col" class="px-6 py-3">STT</th>
-                                <th scope="col" class="px-6 py-3">Mã danh mục</th>
                                 <th scope="col" class="px-6 py-3">Tên danh mục</th>
                                 <th scope="col" class="px-6 py-3">Ảnh</th>
                                 <th scope="col" class="px-6 py-3" width="5%">Sửa</th>
@@ -86,7 +84,6 @@ layout('header_admin', $data);
                             ?>
                                         <tr class="bg-white hover:bg-gray-50">
                                             <td class="px-6 py-4"><?php echo $count; ?></td>
-                                            <td class="px-6 py-4"><?php echo $item['id']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['name_category']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['image']; ?></td>
                                             <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=categories&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>

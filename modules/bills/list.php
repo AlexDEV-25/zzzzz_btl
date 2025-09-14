@@ -122,8 +122,8 @@ if (isset($filterAll['role'])) {
         <!-- Form tìm kiếm (giống categories) -->
         <form method="post" action="" class="mb-6">
             <div class="flex items-center gap-2">
-                <input type="search" name="search" placeholder="Nhập mã đơn cần tìm..." class="flex-1 bg-gray-100 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                <input type="hidden" class="form-control" name="role" value="<?php echo 1; ?>">
+                <input type="search" name="search" placeholder="Nhập mã đơn cần tìm..." class="flex-1 bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <input type="hidden" class="form-control" name="role" value="<?php echo $role; ?>">
                 <button type="submit" class="text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-lg text-sm px-5 py-2.5">Tìm kiếm</button>
             </div>
         </form>

@@ -85,7 +85,7 @@ if (isset($filterAll['role'])) {
             <h2 class="text-3xl font-bold text-gray-900 mb-6">
                 <?php echo !empty($value) ? 'Sản phẩm bạn muốn tìm' : 'Sản phẩm nổi bật'; ?>
             </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php
                 $listProduct = selectAll("SELECT * FROM products WHERE name_product LIKE '%$value%'");
                 foreach ($listProduct as $product):

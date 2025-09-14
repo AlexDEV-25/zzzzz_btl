@@ -6,15 +6,15 @@ $filterAll = filter();
 // Kiểm tra có search hay không
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
-    $amount = getCountRows("SELECT * FROM products WHERE id LIKE '%$value%'");
+    $amount = getCountRows("SELECT * FROM products WHERE code_product LIKE '%$value%'");
     if ($amount > 0) {
-        $listProducts = selectAll("SELECT * FROM products WHERE id LIKE '%$value%'");
+        $listProducts = selectAll("SELECT * FROM products WHERE code_product LIKE '%$value%'");
     } else {
         setFlashData('smg', '❌ Sản phẩm không tồn tại');
         setFlashData('smg_type', 'danger');
     }
 } else {
-    $listProducts = selectAll("SELECT * FROM products ORDER BY created_at");
+    $listProducts = selectAll("SELECT * FROM products ORDER BY id");
 }
 
 $smg = getFlashData('smg');
@@ -46,7 +46,7 @@ if (isset($filterAll['role'])) {
                 <div class="flex gap-4">
                     <form method="post" action="">
                         <div class="flex">
-                            <input type="hidden" name='act' value="products" class="hidden">
+                            <input type="hidden" class="form-control" name="role" value="<?php echo $role; ?>">
                             <input type="search" class="form-control bg-gray-100 rounded-md px-2 py-2" name="search" placeholder="Nhập Mã Sản Phẩm">
                             <button type="submit" class="text-white bg-sky-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">Tìm kiếm</button>
                         </div>
@@ -99,7 +99,7 @@ if (isset($filterAll['role'])) {
                             ?>
                                         <tr class="bg-white hover:bg-gray-50">
                                             <td class="px-6 py-4"><?php echo $count; ?></td>
-                                            <td class="px-6 py-4"><?php echo $item['id']; ?></td>
+                                            <td class="px-6 py-4"><?php echo $item['code_product']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['name_product']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['thumbnail']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['price']; ?></td>

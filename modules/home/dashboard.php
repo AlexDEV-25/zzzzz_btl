@@ -82,7 +82,7 @@ if (isset($filterAll['role'])) {
 
             <!-- Phần sản phẩm -->
             <main class="lg:col-span-3">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <?php
                     foreach ($listProduct as $product):
                         $categorieId = $product['id_category'];

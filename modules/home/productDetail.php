@@ -13,44 +13,12 @@ $detailId = $detail['id'];
 $data = [
     'pageTitle' => $product['name_product'],
 ];
-$role = -1;
-$userId = -1;
-$cartCount = -1;
-$cartId = -1;
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'productId' => $productId,
-        'pageTitle' => $product['name_product'],
-    ];
-    if ($role == -1) {
-        layout('header_dashboard', $data);
-    } else if ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    } elseif ($role == 3) {
-        layout('header_employee', $data);
-    } else {
-        if (!empty($filterAll['userId'])) {
-            $userId = $filterAll['userId'];
-            $cartCount = getCountCart($userId);
-            $cartId = selectOne("SELECT * FROM cart WHERE id_user =$userId")['id'];
-            $data = [
-                'productId' => $productId,
-                'pageTitle' => $product['name_product'],
-                'count' => $cartCount,
-                'userId' => $userId
-            ];
-            layout('header_custom', $data);
-        }
-    }
-} else {
-    layout('header_dashboard', $data);
-}
 // thêm vào giỏ
 if (isPost()) {
     if (!empty($filterAll['detailId'])) {
+        $userId = $filterAll['userId'];
+        $cartCount = getCountCart($userId);
+        $cartId = selectOne("SELECT * FROM cart WHERE id_user =$userId")['id'];
         $detailId = $filterAll['detailId'];
         $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
         if ($rowProductCart > 0) {
@@ -84,6 +52,38 @@ if (isPost()) {
             }
         }
     }
+}
+$role = -1;
+$userId = -1;
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'productId' => $productId,
+        'pageTitle' => $product['name_product'],
+    ];
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } else if ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
+    } else {
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            $data = [
+                'productId' => $productId,
+                'pageTitle' => $product['name_product'],
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            layout('header_custom', $data);
+        }
+    }
+} else {
+    layout('header_dashboard', $data);
 }
 ?>
 

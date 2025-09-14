@@ -17,6 +17,14 @@ if (isPost()) {
         }
     }
 
+    if (empty($filterAll['code_product'])) {
+        $errors['code_product']['required'] = 'lỗi không nhập';
+    } else {
+        if (!productUnique($filterAll['name_product'])) {
+            $errors['code_product']['unique'] = 'sản phẩm đã tồn tại';
+        }
+    }
+
     if (empty($filterAll['price'])) {
         $errors['price']['required'] = 'lỗi không nhập';
     } else {
@@ -52,6 +60,7 @@ if (isPost()) {
         $thumbnail = $anh_string;
         $dataInsert = [
             'name_product' => $filterAll['name_product'],
+            'code_product' => $filterAll['code_product'],
             'price' => $filterAll['price'],
             'origin_price' => $filterAll['origin_price'],
             'material' => $filterAll['material'],
@@ -89,7 +98,6 @@ layout('header', $data);
     <div class="row" style="margin: 50px auto;">
         <h2 class="text-center text-uppercase">Thêm sản phẩm</h2>
         <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
-        ?>
         <form action="" method="post" enctype="multipart/form-data">
             <input name="role" type="hidden" value="<?php echo $role; ?>">
             <div class="row">
@@ -148,7 +156,17 @@ layout('header', $data);
 
                 <div class="col">
                     <div class="form-group mg-form">
-                        <label for="">giá bán</label>
+                        <label for="">Mã sản phẩm</label>
+                        <input name="code_product" type="text" class="form-control"
+                            value="<?php
+                                    echo oldData($oldData, 'code_product');
+                                    ?>">
+                        <?php
+                        echo form_error($errors, 'code', '<span class="error">', '</span>');
+                        ?>
+                    </div>
+                    <div class="form-group mg-form">
+                        <label for="">Giá bán</label>
                         <input name="price" type="number" class="form-control"
                             value="<?php
                                     echo oldData($oldData, 'price');

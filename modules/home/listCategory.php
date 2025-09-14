@@ -2,49 +2,13 @@
 if (!defined('_CODE')) {
     die("truy cap that bai");
 }
+$errors = [];
 $filterAll = filter();
 $categoryId = $filterAll['categoryId'];
 $category = selectOne("SELECT * FROM categories WHERE id = $categoryId ");
 $listProduct = selectAll("SELECT * FROM products");
-$data = ['pageTitle' => 'Trang danh mục',];
 $role = -1;
 $userId = -1;
-$cartCount = -1;
-if (isset($filterAll['role'])) {
-    $role = $filterAll['role'];
-    $data = [
-        'categoryId' => $filterAll['categoryId'],
-        'pageTitle' => 'Trang danh mục',
-    ];
-    if ($role == -1) {
-        layout('header_dashboard', $data);
-    } elseif ($role == 1) {
-        layout('header_admin', $data);
-    } elseif ($role == 2) {
-        layout('header_manager', $data);
-    } elseif ($role == 3) {
-        layout('header_employee', $data);
-    } else {
-        if (!empty($filterAll['userId'])) {
-            $userId = $filterAll['userId'];
-            $cartCount = getCountCart($userId);
-            if (!empty($filterAll['count'])) {
-                $count = $filterAll['count'];
-            } else {
-                $count = 0;
-            }
-            $data = [
-                'categoryId' => $categoryId,
-                'pageTitle' => 'Trang danh mục',
-                'count' => $cartCount,
-                'userId' => $userId
-            ];
-            layout('header_custom', $data);
-        }
-    }
-} else {
-    layout('header_dashboard', $data);
-}
 
 if (isGet()) {
     if (!empty($filterAll['type'])) {
@@ -63,11 +27,10 @@ if (isGet()) {
         $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId");
     }
 }
-
-$errors = [];
 if (isPost()) {
+    $role = $filterAll['role'];
+    $userId = $filterAll['userId'];
     $categoryId = $filterAll['categoryId'];
-    // validate
     if (!empty($filterAll['start']) && !empty($filterAll['end'])) {
         if ($filterAll['end'] < $filterAll['start']) {
             $errors['range']['input'] = 'Nhập khoảng không đúng';
@@ -103,6 +66,42 @@ if (isPost()) {
         setFlashData('errors', $errors);
     }
     $errors = getFlashData('errors');
+}
+$data = ['pageTitle' => 'Trang danh mục',];
+if (isset($filterAll['role'])) {
+    $role = $filterAll['role'];
+    $data = [
+        'categoryId' => $filterAll['categoryId'],
+        'pageTitle' => 'Trang danh mục',
+    ];
+    if ($role == -1) {
+        layout('header_dashboard', $data);
+    } elseif ($role == 1) {
+        layout('header_admin', $data);
+    } elseif ($role == 2) {
+        layout('header_manager', $data);
+    } elseif ($role == 3) {
+        layout('header_employee', $data);
+    } else {
+        if (!empty($filterAll['userId'])) {
+            $userId = $filterAll['userId'];
+            $cartCount = getCountCart($userId);
+            if (!empty($filterAll['count'])) {
+                $count = $filterAll['count'];
+            } else {
+                $count = 0;
+            }
+            $data = [
+                'categoryId' => $categoryId,
+                'pageTitle' => 'Trang danh mục',
+                'count' => $cartCount,
+                'userId' => $userId
+            ];
+            layout('header_custom', $data);
+        }
+    }
+} else {
+    layout('header_dashboard', $data);
 }
 ?>
 
