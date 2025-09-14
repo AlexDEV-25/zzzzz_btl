@@ -167,6 +167,22 @@ layout('header_custom', $data);
                     <span><?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ</span>
                 </div>
             </div>
+
+            <!-- Nếu đơn hàng chưa xác nhận thì hiện nút hủy (mục riêng bên phải) -->
+            <?php if ($bill['status'] == 0): ?>
+                <div class="bg-white mt-4 p-6 shadow-md rounded-md flex justify-end">
+                    <form action="?module=billsCustom&action=cancelBill" method="POST"
+                        onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">
+                        <input type="hidden" name="billId" value="<?php echo $billId; ?>">
+                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                        <input type="hidden" name="role" value="0">
+                        <button type="submit"
+                            class="py-2 px-4 bg-red-600 text-white rounded hover:bg-red-500 transition">
+                            Hủy đơn
+                        </button>
+                    </form>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </body>

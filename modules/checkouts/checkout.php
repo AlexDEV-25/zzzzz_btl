@@ -170,7 +170,7 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
         $dataInsertBill = [
             'id_user' => $userId,
             'total' => $finalTotal,
-            'status' => 0,
+            'status' => 1,
             'date' => $date,
             'id_voucher' => $voucher['id'] ?? null,
             'payment_method' => $paymentMethod
