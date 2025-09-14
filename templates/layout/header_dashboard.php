@@ -24,7 +24,6 @@
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex space-x-8">
                     <a href="<?php echo _WEB_HOST; ?>?module=home&action=dashboard&role=-1" class="font-medium text-gray-700 hover:text-gray-800">Home</a>
-                    <a href="<?php echo _WEB_HOST; ?>?module=error&action=404" class="font-medium text-gray-700 hover:text-gray-800">Hotline</a>
                 </div>
 
                 <!-- Form tìm kiếm ở giữa -->

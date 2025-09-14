@@ -53,7 +53,6 @@
                                                                     ?>" alt="User avatar">
                         </button>
                         <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cài đặt</a>
                             <a href="?module=home&action=customEdit&role=0&userId=<?php echo $data['userId'] ?? ''; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thông tin người dùng</a>
                             <a href="?module=auth&action=logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
                         </div>
