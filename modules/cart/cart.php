@@ -114,7 +114,7 @@ layout('header_custom', $data);
                                     type="checkbox"
                                     name="productCartId[]"
                                     value="<?php echo $productCartId ?>"
-                                    class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+                                    class="product-check h-5 w-5 text-blue-600 focus:ring-blue-500">
                                 <img
                                     src="<?php echo _IMGP_ . $productDetail['image']; ?>"
                                     alt="<?php echo $product['name_product'] ?>"
@@ -128,7 +128,8 @@ layout('header_custom', $data);
                                     value="<?php echo $amount ?>"
                                     min="1"
                                     max="<?php echo $productDetail['amount']; ?>"
-                                    class="w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                    class="amount-input w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                    data-price="<?php echo $product['price']; ?>">
                                 <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price']); ?> đ</span>
                                 <a
                                     href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&productCartId=<?php echo $productCartId; ?>&userId=<?php echo $userId; ?>&role=0"
@@ -141,11 +142,16 @@ layout('header_custom', $data);
                     <?php endforeach; ?>
                 <?php endif; ?>
                 <input type="hidden" value="0" name="role">
-                <input type="hidden" value="<?php echo $productDetailId; ?>" name="productDetailId">
-                <input type="hidden" value="<?php echo $productId; ?>" name="productId">
                 <input type="hidden" value="<?php echo $userId; ?>" name="userId">
                 <input type="hidden" value="<?php echo $cartId; ?>" name="cartId">
             </div>
+
+            <!-- Tổng tiền -->
+            <div class="flex justify-between items-center mt-4">
+                <span class="text-xl font-semibold text-gray-800">Tổng tiền:</span>
+                <span id="total-price" class="text-2xl font-bold text-red-600">0 đ</span>
+            </div>
+
             <button
                 type="submit"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors mt-4">
@@ -153,5 +159,25 @@ layout('header_custom', $data);
             </button>
         </form>
     </div>
+
+    <script>
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll(".product-check:checked").forEach(check => {
+                const parent = check.closest("div.flex.items-center.justify-between");
+                const input = parent.querySelector(".amount-input");
+                const price = parseInt(input.getAttribute("data-price"));
+                const amount = parseInt(input.value);
+                total += price * amount;
+            });
+            document.getElementById("total-price").textContent = total.toLocaleString("vi-VN") + " đ";
+        }
+
+        // Sự kiện cho checkbox và input số lượng
+        document.querySelectorAll(".product-check, .amount-input").forEach(el => {
+            el.addEventListener("input", updateTotal);
+            el.addEventListener("change", updateTotal);
+        });
+    </script>
 </body>
 <?php layout('footer'); ?>
