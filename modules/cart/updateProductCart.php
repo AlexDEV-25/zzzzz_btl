@@ -6,7 +6,6 @@ $filterAll = filter();
 if (!empty($filterAll['productCartId']) && !empty($filterAll['userId'])) {
     $userId = $filterAll['userId'];
     $productCartId = $filterAll['productCartId'];
-    $productDetailId = $filterAll['productDetailId'];
     $amount = $filterAll['amount'];
     $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id =$productCartId");
     if ($rowProductCart > 0) {
