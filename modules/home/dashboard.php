@@ -82,7 +82,7 @@ if (isset($filterAll['role'])) {
 
             <!-- Phần sản phẩm -->
             <main class="lg:col-span-3">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <?php
                     foreach ($listProduct as $product):
                         $categorieId = $product['id_category'];
@@ -120,9 +120,10 @@ if (isset($filterAll['role'])) {
     </footer>
     <!-- Hộp quà -->
     <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
-        <a href="?module=home&action=listVoucher&role=0&userId=<?php echo $userId; ?>" class="gift-icon">
+        <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>" class="gift-icon">
             <img src="<?php echo _IMGG_; ?>git.png"
-                alt="Gift">
+                alt="Gift"
+                style="width:60px; height:60px;">
         </a>
 
         <style>
@@ -135,12 +136,6 @@ if (isset($filterAll['role'])) {
                 cursor: pointer;
                 z-index: 9999;
                 animation: bounce 1.5s infinite;
-            }
-
-            .gift-icon img {
-                width: 100px;
-                /* to hơn */
-                height: 100px;
             }
 
             @keyframes bounce {

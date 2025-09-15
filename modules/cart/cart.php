@@ -131,8 +131,14 @@ layout('header_custom', $data);
                                     class="amount-input w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     data-price="<?php echo $product['price']; ?>">
                                 <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price']); ?> đ</span>
+                                <a href="javascript:void(0)"
+                                    class="update-link text-green-600 hover:text-green-800"
+                                    data-id="<?php echo $productCartId; ?>"
+                                    data-user="<?php echo $userId; ?>">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </a>
                                 <a
-                                    href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&productCartId=<?php echo $productCartId; ?>&userId=<?php echo $userId; ?>&role=0"
+                                    href="<?php echo _WEB_HOST; ?>?module=cart&action=deleteProductCart&userId=<?php echo $userId; ?>&productCartId=<?php echo $productCartId; ?>"
                                     onclick="return confirm('Bạn có chắc chắn muốn xoá?')"
                                     class="text-red-600 hover:text-red-800">
                                     <i class="fa-solid fa-trash"></i>
@@ -177,6 +183,19 @@ layout('header_custom', $data);
         document.querySelectorAll(".product-check, .amount-input").forEach(el => {
             el.addEventListener("input", updateTotal);
             el.addEventListener("change", updateTotal);
+        });
+
+        document.querySelectorAll(".update-link").forEach(link => {
+            link.addEventListener("click", function() {
+                let id = this.dataset.id;
+                let userId = this.dataset.user;
+                let input = document.querySelector(`input[name='amount_buy[${id}]']`);
+                let amount = input.value;
+
+                if (confirm("Cập nhật số lượng sản phẩm này?")) {
+                    window.location.href = `?module=cart&action=updateProductCart&userId=${userId}&productCartId=${id}&amount=${amount}`;
+                }
+            });
         });
     </script>
 </body>
