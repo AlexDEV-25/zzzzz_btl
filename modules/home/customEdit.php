@@ -116,95 +116,93 @@ $data = [
 layout('header', $data);
 ?>
 
-<body>
-    <div class="container">
-        <div class="row" style="margin: 50px auto;">
-            <h2 class="text-center text-uppercase">Update người dùng </h2>
-            <?php if (!empty($smg))  getSmg($smg, $smg_type); ?>
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group mg-form">
-                            <label for="">Họ tên</label>
-                            <input name="fullname" type="text" class="form-control" placeholder="Họ tên"
-                                value="<?php
-                                        echo oldData($oldData, 'fullname');
-                                        ?>">
-                            <?php
-                            echo form_error($errors, 'fullname', '<span class="error">', '</span>');
-                            ?>
-                        </div>
-                        <div class="form-group mg-form">
-                            <label for="">Email</label>
-                            <input name="email" type="email" class="form-control" placeholder="Địa chỉ email"
-                                value="<?php
-                                        echo oldData($oldData, 'email');
-                                        ?>">
-                            <?php
-                            echo form_error($errors, 'email', '<span class="error">', '</span>');
-                            ?>
-                        </div>
-                        <div class="form-group mg-form">
-                            <label for="">Số điện thoại</label>
-                            <input name="phone" type="number" class="form-control" placeholder="Điện thoại"
-                                value="<?php
-                                        echo oldData($oldData, 'phone');
-                                        ?>">
-                            <?php
-                            echo form_error($errors, 'phone', '<span class="error">', '</span>');
-                            ?>
-                        </div>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-6xl bg-white shadow-2xl rounded-3xl p-12">
+        <h2 class="text-3xl font-extrabold text-center uppercase text-gray-700 mb-10">Update người dùng</h2>
+
+        <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
+
+        <form action="" method="POST" enctype="multipart/form-data" class="space-y-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+                <!-- Cột 1 -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Họ tên</label>
+                        <input name="fullname" type="text" placeholder="Họ tên"
+                            value="<?php echo oldData($oldData, 'fullname'); ?>"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 'fullname', '<span class="text-red-500 text-base">', '</span>'); ?>
                     </div>
 
-                    <div class=" col">
-                        <div class="form-group  mg-form">
-                            <label for="">Địa chỉ</label>
-                            <input name="address" type="text" class="form-control"
-                                placeholdDataer="Nhập địa chỉ"
-                                value="<?php echo oldData($oldData, 'address'); ?>">
-                            <?php
-                            echo form_error($errors, 'address', '<span class="error">', '</span>');
-                            ?>
-                        </div>
-                        <div class="form-group mg-form">
-                            <label for="">Pasword</label>
-                            <input name="password" type="text" class="form-control" placeholder="Mật khẩu (không nhập nếu không thay đổi)">
-                            <?php
-                            echo form_error($errors, 'password', '<span class="error">', '</span>');
-                            ?>
-                        </div>
-                        <div class="form-group  mg-form">
-                            <label for="">Nhập lại Pasword</label>
-                            <input name="re_password" type="password" class="form-control"
-                                placeholdDataer="Nhập lại mật khẩu (không nhập nếu không thay đổi)">
-                            <?php
-                            echo form_error($errors, 're_password', '<span class="error">', '</span>');
-                            ?>
-                        </div>
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Email</label>
+                        <input name="email" type="email" placeholder="Địa chỉ email"
+                            value="<?php echo oldData($oldData, 'email'); ?>"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 'email', '<span class="text-red-500 text-base">', '</span>'); ?>
                     </div>
-                    <div class=" col">
-                        <h4>Chọn ảnh</h4>
-                        <div style="box-sizing: border-box; margin-left: 5px;" class="upload-container ">
-                            <div id="uploadForm" class="row">
-                                <div class="file-upload col">
-                                    <label for="file">Chọn avatar:</label>
-                                    <input type="file" id="file" accept="image/*" name="avatar">
-                                </div>
-                                <div id="preview-container" class="preview-container col">
-                                    <img id="preview" src="#" alt="Xem trước ảnh" style="display: none;">
-                                </div>
-                            </div>
+
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Số điện thoại</label>
+                        <input name="phone" type="number" placeholder="Điện thoại"
+                            value="<?php echo oldData($oldData, 'phone'); ?>"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 'phone', '<span class="text-red-500 text-base">', '</span>'); ?>
+                    </div>
+                </div>
+
+                <!-- Cột 2 -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Địa chỉ</label>
+                        <input name="address" type="text" placeholder="Nhập địa chỉ"
+                            value="<?php echo oldData($oldData, 'address'); ?>"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 'address', '<span class="text-red-500 text-base">', '</span>'); ?>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Password</label>
+                        <input name="password" type="text" placeholder="Mật khẩu (không nhập nếu không thay đổi)"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 'password', '<span class="text-red-500 text-base">', '</span>'); ?>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg text-gray-700 mb-2">Nhập lại Password</label>
+                        <input name="re_password" type="password" placeholder="Nhập lại mật khẩu (không nhập nếu không thay đổi)"
+                            class="w-full text-lg rounded-xl border border-gray-300 px-5 py-3 focus:ring-4 focus:ring-blue-400 focus:outline-none">
+                        <?php echo form_error($errors, 're_password', '<span class="text-red-500 text-base">', '</span>'); ?>
+                    </div>
+                </div>
+
+                <!-- Cột 3 -->
+                <div class="space-y-6">
+                    <h4 class="font-bold text-xl text-gray-700">Chọn ảnh</h4>
+                    <div class="p-6 border-2 border-dashed border-gray-400 rounded-2xl">
+                        <label class="block text-lg text-gray-600 mb-3">Chọn avatar:</label>
+                        <input type="file" id="file" accept="image/*" name="avatar"
+                            class="block w-full text-lg text-gray-600 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition">
+
+                        <div id="preview-container" class="mt-6">
+                            <img id="preview" src="#" alt="Xem trước ảnh" class="hidden w-40 h-40 object-cover rounded-xl border border-gray-300">
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="userId" value="<?php echo $userId ?>">
-                <input type="hidden" name="role" value="<?php echo $role ?>">
-                <button type="submit" class="btn-user mg-btn btn btn-primary btn-block">Update thông tin</button>
-                <a href="?module=home&action=dashboard&role=0&userId=<?php echo $userId; ?> " class="btn-user mg-btn btn btn-success btn-block">Quay lại</a>
+            </div>
 
-                <hr>
-            </form>
-        </div>
+            <input type="hidden" name="userId" value="<?php echo $userId ?>">
+            <input type="hidden" name="role" value="<?php echo $role ?>">
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <button type="submit"
+                    class="flex-1 text-lg bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:bg-blue-700 transition">Update thông tin</button>
+                <a href="?module=home&action=dashboard&role=0&userId=<?php echo $userId; ?>"
+                    class="flex-1 text-lg bg-green-600 text-white font-semibold py-4 px-6 rounded-xl text-center hover:bg-green-700 transition">Quay lại</a>
+            </div>
+        </form>
     </div>
 </body>
+
 <?php layout('footer'); ?>
