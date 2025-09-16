@@ -6,6 +6,8 @@ if (!defined('_CODE')) {
 $filterAll = filter();
 if (!empty($filterAll['search'])) {
     $value = $filterAll['search'];
+} else {
+    $value = '';
 }
 $role = -1;
 $userId = -1;
