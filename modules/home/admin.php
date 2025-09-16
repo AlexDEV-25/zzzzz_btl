@@ -7,7 +7,7 @@ $amount_user = getCountRows("SELECT * FROM users ");
 $amount_bill = getCountRows("SELECT * FROM bills ");
 $amount_product = getCountRows("SELECT * FROM products ");
 $statistical = 0;
-$listBills = selectAll("SELECT * FROM bills WHERE status = 2 ");
+$listBills = selectAll("SELECT * FROM bills WHERE status = 4 ");
 
 foreach ($listBills as $item) {
     $statistical += $item['total'];
@@ -16,7 +16,7 @@ foreach ($listBills as $item) {
 // Dữ liệu cho biểu đồ doanh thu theo ngày
 $revenueData = selectAll("SELECT DATE(date) as sale_date, SUM(total) as total_revenue 
                          FROM bills 
-                         WHERE status = 2 
+                         WHERE status = 4
                          GROUP BY DATE(date) 
                          ORDER BY sale_date ASC");
 $revenueDates = [];
@@ -26,13 +26,13 @@ foreach ($revenueData as $row) {
     $revenueValues[] = (float)$row['total_revenue'];
 }
 
-// Dữ liệu cho biểu đồ sản phẩm bán chạy (chỉ tính hóa đơn status = 2)
+// Dữ liệu cho biểu đồ sản phẩm bán chạy (chỉ tính hóa đơn status = 4)
 $topProducts = selectAll("SELECT p.name_product, SUM(pb.amount_buy) as total_sold 
                          FROM products_bill pb 
                          JOIN products_detail pd ON pb.id_product_detail = pd.id 
                          JOIN products p ON pd.id_product = p.id 
                          JOIN bills b ON pb.id_bill = b.id 
-                         WHERE b.status = 2 
+                         WHERE b.status = 4 
                          GROUP BY p.id, p.name_product 
                          ORDER BY total_sold DESC 
                          LIMIT 5");

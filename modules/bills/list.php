@@ -15,8 +15,8 @@ if (isPost() && !empty($filterAll['billId'])) {
 
         // Nếu trạng thái thay đổi
         if ($billStatus != $newStatus) {
-            if ($newStatus === 1) {
-                // ✅ Xác nhận đơn → trừ số lượng sản phẩm
+            if ($newStatus == 2) {
+                // ✅ Xác đóng đơn → trừ số lượng sản phẩm
                 $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
 
                 foreach ($listBillDetail as $item) {
@@ -27,23 +27,21 @@ if (isPost() && !empty($filterAll['billId'])) {
                         $newAmount = max(0, $productDetail['amount'] - $item['amount_buy']);
 
                         update('products_detail', ['amount' => $newAmount], "id =$productDetailId");
-
                         if ($newAmount == 0) {
                             setFlashData('smg', '⚠️ Một số sản phẩm đã hết hàng.');
                             setFlashData('smg_type', 'warning');
                         }
                     }
                 }
-
                 $dataUpdate = ['status' => $newStatus];
-            } elseif ($newStatus === 2 || $newStatus === -1) {
+            } elseif ($newStatus == 4 || $newStatus == -1) {
                 // ✅ Hoàn tất hoặc Hủy đơn
                 $dataUpdate = [
                     'end_date' => date('Y-m-d H:i:s'),
                     'status'   => $newStatus
                 ];
 
-                if ($newStatus === -1) {
+                if ($newStatus == -1) {
                     // ✅ Hủy đơn → cộng lại số lượng
                     $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
 
@@ -57,6 +55,8 @@ if (isPost() && !empty($filterAll['billId'])) {
                         }
                     }
                 }
+            } else {
+                $dataUpdate = ['status' => $newStatus];
             }
         } else {
             $dataUpdate = ['status' => $newStatus];
@@ -157,11 +157,15 @@ if (isset($filterAll['role'])) {
                                 <td class="px-6 py-4"><?php echo $user['fullname']; ?></td>
                                 <td class="px-6 py-4"><?php echo number_format($item['total'], 0, '.', '.'); ?> &#8363;</td>
                                 <td class="px-6 py-4">
-                                    <?php if ($item['status'] == 1): ?>
-                                        <span class="badge bg-blue-100 text-blue-800">Đã xác nhận</span>
-                                    <?php elseif ($item['status'] == 0): ?>
+                                    <?php if ($item['status'] == 0): ?>
                                         <span class="badge bg-yellow-100 text-yellow-800">Chưa xác nhận</span>
+                                    <?php elseif ($item['status'] == 1): ?>
+                                        <span class="badge bg-blue-100 text-blue-800">Đã xác nhận</span>
                                     <?php elseif ($item['status'] == 2): ?>
+                                        <span class="badge bg-purple-100 text-purple-800">Đang đóng gói</span>
+                                    <?php elseif ($item['status'] == 3): ?>
+                                        <span class="badge bg-orange-100 text-orange-800">Đang vận chuyển</span>
+                                    <?php elseif ($item['status'] == 4): ?>
                                         <span class="badge bg-green-100 text-green-800">Đã hoàn thành</span>
                                     <?php else: ?>
                                         <span class="badge bg-red-100 text-red-800">Đã hủy đơn</span>
@@ -172,8 +176,10 @@ if (isset($filterAll['role'])) {
                                         <select name="status"
                                             class="border-gray-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500">
                                             <option value="1">Xác nhận Đơn</option>
+                                            <option value="2">Đang đóng gói</option>
+                                            <option value="3">Đang giao hàng</option>
+                                            <option value="4">Đã hoàn thành</option>
                                             <option value="-1">Hủy đơn</option>
-                                            <option value="2">Đã hoàn thành</option>
                                         </select>
                                         <input type="hidden" name="role" value="<?php echo $role ?>">
                                         <input type="hidden" name="userId" value="<?php echo $userId ?>">
@@ -195,6 +201,13 @@ if (isset($filterAll['role'])) {
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+        <div class="mt-6 flex justify-end">
+            <form action="?module=bills&action=exportBills" method="POST" target="_blank">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md text-sm font-medium">
+                    Xuất đơn đã xác nhận
+                </button>
+            </form>
         </div>
     </div>
 </body>

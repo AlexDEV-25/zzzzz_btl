@@ -67,11 +67,15 @@ layout('header_custom', $data);
                         <p><span class="font-medium text-gray-600">Ngày đặt:</span> <?php echo $bill['date']; ?></p>
                         <p class="mt-2"><span class="font-medium text-gray-600">Trạng thái:</span>
                             <?php
-                            if ($bill['status'] == 1) {
-                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">Đã xác nhận</span>';
-                            } else if ($bill['status'] == 0) {
+                            if ($bill['status'] == 0) {
                                 echo '<span class="ml-2 inline-flex items-center rounded-md bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">Chưa xác nhận</span>';
-                            } else if ($bill['status'] == 2) {
+                            } elseif ($bill['status'] == 1) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">Đã xác nhận</span>';
+                            } elseif ($bill['status'] == 2) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700">Đang đóng gói</span>';
+                            } elseif ($bill['status'] == 3) {
+                                echo '<span class="ml-2 inline-flex items-center rounded-md bg-orange-100 px-2 py-1 text-xs font-medium text-orange-700">Đang vận chuyển</span>';
+                            } elseif ($bill['status'] == 4) {
                                 echo '<span class="ml-2 inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã hoàn thành</span>';
                             } else {
                                 echo '<span class="ml-2 inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Đã hủy</span>';
@@ -121,7 +125,7 @@ layout('header_custom', $data);
                                 <td class="px-6 py-4 font-semibold text-gray-900">
                                     <?php echo number_format($item['amount_buy'] * $product['price'], 0, ',', '.'); ?> đ
                                 </td>
-                                <?php if ($bill['status'] == 2): ?>
+                                <?php if ($bill['status'] == 4): ?>
                                     <td class="px-6 py-4">
                                         <!-- Form đánh giá -->
                                         <form action="?module=home&action=productDetail" method="POST">
@@ -169,7 +173,7 @@ layout('header_custom', $data);
             </div>
 
             <!-- Nếu đơn hàng chưa xác nhận thì hiện nút hủy (mục riêng bên phải) -->
-            <?php if ($bill['status'] == 0): ?>
+            <?php if ($bill['status'] == 0 || $bill['status'] == 1 || $bill['status'] == 2): ?>
                 <div class="bg-white mt-4 p-6 shadow-md rounded-md flex justify-end">
                     <form action="?module=billsCustom&action=cancelBill" method="POST"
                         onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">

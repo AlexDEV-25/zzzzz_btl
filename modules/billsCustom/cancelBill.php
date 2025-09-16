@@ -8,7 +8,9 @@ $billId = $filterAll['billId'] ?? null;
 $userId = $filterAll['userId'] ?? null;
 
 if ($billId) {
-    $sql = "UPDATE bills SET status = -1 WHERE id = $billId AND status = 0";
+    $sql = "UPDATE bills 
+    SET status = -1 
+    WHERE id = $billId AND status IN (0,1,2)";
     if (query($sql)) {
         setFlashData('msg', '✅ Hủy đơn thành công!');
         setFlashData('msg_type', 'success');
