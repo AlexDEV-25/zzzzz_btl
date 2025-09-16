@@ -18,6 +18,7 @@ define('_IMGB_', '/zzzzzz_btl/zzzzz_btl/templates/image/banner/');
 define('_IMGC_', '/zzzzzz_btl/zzzzz_btl/templates/image/categories/');
 define('_IMGG_', '/zzzzzz_btl/zzzzz_btl/templates/image/gift/');
 define('_IMGP_', '/zzzzzz_btl/zzzzz_btl/templates/image/products/');
+define('_IMGCS_', '/zzzzzz_btl/zzzzz_btl/templates/image/codes/');
 
 // database
 const _HOST = "localhost";
