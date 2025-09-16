@@ -28,8 +28,9 @@
 
                 <!-- Form tìm kiếm ở giữa -->
                 <div class="flex-1 flex justify-center px-4">
-                    <form autocomplete="off" autocapitalize="off" method="POST" action="" class="flex items-center w-full max-w-3xl gap-2" action="?module=home&action=productsSearch">
+                    <form autocomplete="off" autocapitalize="off" method="POST" class="flex items-center w-full max-w-3xl gap-2" action="?module=home&action=productsSearch">
                         <input type="text" name="search" placeholder="Nhập từ khóa..." class="flex-1 h-10 rounded-md pl-4 bg-gray-100">
+                        <input type="hidden" name="userId" value="-1">
                         <input type="hidden" name="role" value="-1">
                         <?php if (!empty($data['categoryId'])): ?><input type="hidden" name="categoryId" value="<?php echo $data['categoryId']; ?>"><?php endif; ?>
                         <?php if (!empty($data['productId'])): ?><input type="hidden" name="productId" value="<?php echo $data['productId']; ?>"><?php endif; ?>
