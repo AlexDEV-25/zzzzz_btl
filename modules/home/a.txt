@@ -1,0 +1,28 @@
+ <!-- Hộp quà -->
+    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+        <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>"
+            class="gift-icon fixed bottom-6 left-6 w-16 h-16 cursor-pointer z-50 animate-bounce">
+            <img src="<?php echo _IMGG_; ?>git.png"
+                alt="Gift"
+                class="w-full h-full object-contain drop-shadow-lg">
+        </a>
+    <?php endif; ?>
+
+    <!-- Thêm animation -->
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+    </style>

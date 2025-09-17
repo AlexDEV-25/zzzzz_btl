@@ -87,141 +87,208 @@ if (isset($filterAll['role'])) {
 }
 ?>
 
-<body class="bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- Breadcrumb -->
-        <nav class="text-sm text-gray-500 mb-6">
-            <a href="?module=home&action=dashboard&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>" class="hover:text-gray-700">Trang chủ</a> ›
-            <span><?php echo $product['name_product']; ?></span>
+
+<body class="luxury-gradient min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb Élégant -->
+        <nav class="mb-8">
+            <div class="flex items-center space-x-2 text-sm">
+                <a href="?module=home&action=dashboard&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
+                    class="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200">
+                    Trang chủ
+                </a>
+                <span class="text-gray-400">•</span>
+                <span class="text-gray-900 font-semibold luxury-text"><?php echo $product['name_product']; ?></span>
+            </div>
         </nav>
 
-        <div class="lg:grid lg:grid-cols-3 lg:gap-x-8 lg:items-start">
-            <!-- Ảnh sản phẩm -->
-            <div class="lg:col-span-2 flex flex-col items-center">
-                <img src="<?php echo _IMGP_ . $detail['image']; ?>"
-                    alt="<?php echo $product['name_product']; ?>"
-                    class="rounded-lg shadow-md max-h-[500px] object-contain">
-            </div>
-
-            <!-- Thông tin sản phẩm -->
-            <div class="mt-6 lg:mt-0 lg:col-span-1 lg:sticky lg:top-20 bg-white p-6 rounded-lg shadow">
-                <h1 class="text-2xl font-bold text-gray-900 mb-2"><?php echo $product['name_product']; ?></h1>
-
-                <div class="flex items-center gap-4 mb-4">
-                    <span class="text-2xl text-red-600 font-semibold">
-                        <?php echo number_format($product['price'], 0, ',', '.') . ' đ'; ?>
-                    </span>
-                    <span class="text-gray-400 line-through">
-                        <?php echo number_format($product['origin_price'], 0, ',', '.') . ' đ'; ?>
-                    </span>
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <!-- Section Image Produit -->
+            <div class="relative">
+                <div class="bg-white rounded-2xl product-shadow p-8 mb-6">
+                    <div class="relative overflow-hidden rounded-xl">
+                        <img src="<?php echo _IMGP_ . $detail['image']; ?>"
+                            alt="<?php echo $product['name_product']; ?>"
+                            class="w-full h-96 lg:h-[500px] object-cover transition-transform duration-500 hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                 </div>
-
-                <form action="" method="POST" class="space-y-4">
-                    <div>
-                        <label class="text-sm text-gray-600">Màu sắc:</label>
-                        <input type="color" value="<?php echo $detail['code_color']; ?>" disabled class="ml-2">
-                    </div>
-
-                    <div>
-                        <label for="quantity" class="text-sm text-gray-600">Số lượng:</label>
-                        <input type="number" id="quantity" name="amount_buy"
-                            value="1" min="1" max="<?php echo $detail['amount'] ?>"
-                            class="w-20 ml-2 border rounded-md px-2 py-1">
-                    </div>
-
-                    <p class="text-sm text-gray-700">Vật liệu: <span class="font-medium"><?php echo $product['material']; ?></span></p>
-                    <p class="text-sm text-gray-700">Kích thước: <span class="font-medium"><?php echo $detail['size']; ?></span></p>
-                    <p class="text-gray-600 text-sm"> Còn lại: <?php echo $detail['amount']; ?> sản phẩm </p>
-
-                    <input type="hidden" value="<?php echo $detailId; ?>" name="detailId">
-                    <input type="hidden" value="<?php echo $userId; ?>" name="userId">
-                    <input type="hidden" value="<?php echo $role; ?>" name="role">
-                    <input type="hidden" value="<?php echo $productId; ?>" name="productId">
-
-                    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
-                        <button type="submit"
-                            class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500 transition">
-                            Thêm vào giỏ hàng
-                        </button>
-                    <?php endif; ?>
-                </form>
             </div>
-        </div>
 
-        <!-- Mô tả -->
-        <div class="mt-10 bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-2">Mô tả sản phẩm</h2>
-            <p class="text-gray-700 leading-relaxed"><?php echo $product['description']; ?></p>
-        </div>
+            <!-- Section Informations Produit -->
+            <div class="lg:sticky lg:top-8">
+                <div class="bg-white rounded-2xl product-shadow p-8 elegant-border">
+                    <!-- Titre et Prix -->
+                    <div class="mb-8">
+                        <h1 class="text-3xl lg:text-4xl font-bold luxury-text mb-4 leading-tight">
+                            <?php echo $product['name_product']; ?>
+                        </h1>
 
-        <!-- Đánh giá -->
-        <div class="mt-10 bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Đánh giá sản phẩm</h2>
-
-            <!-- Form đánh giá: chỉ hiện nếu người dùng đã đăng nhập và không phải admin -->
-            <?php if (!empty($userId)): ?>
-                <?php if (!empty($filterAll['billId'])): ?>
-                    <form action="?module=reviews&action=review" method="POST" class="mb-6 space-y-2">
-                        <input type="hidden" name="productId" value="<?php echo $productId; ?>">
-                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
-                        <input type="hidden" name="role" value="<?php echo $role; ?>">
-
-                        <label for="content" class="block text-sm font-medium text-gray-700">Viết đánh giá:</label>
-                        <textarea id="content" name="content" rows="4"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            placeholder="Chia sẻ cảm nhận của bạn..." required></textarea>
-
-                        <label class="block text-sm font-medium text-gray-700 mt-2">Đánh giá sao:</label>
-                        <div class="flex space-x-1">
-                            <?php for ($i = 1; $i <= 5; $i++): ?>
-                                <input type="radio" name="stars" value="<?php echo $i; ?>" id="star<?php echo $i; ?>" required>
-                                <label for="star<?php echo $i; ?>" class="text-yellow-400 cursor-pointer">★</label>
-                            <?php endfor; ?>
+                        <div class="flex items-baseline space-x-4 mb-6">
+                            <span class="text-3xl font-bold price-accent">
+                                <?php echo number_format($product['price'], 0, ',', '.') . ' đ'; ?>
+                            </span>
+                            <span class="text-lg text-gray-500 line-through">
+                                <?php echo number_format($product['origin_price'], 0, ',', '.') . ' đ'; ?>
+                            </span>
                         </div>
+                    </div>
 
-                        <button type="submit"
-                            class="mt-2 py-2 px-4 bg-sky-500 text-white rounded-lg hover:bg-sky-600">
-                            Gửi đánh giá
-                        </button>
-                    </form>
-                <?php else: ?>
-                    <p class="text-gray-500 mb-4">Bạn cần mua hàng để đánh giá sản phẩm.</p>
-                <?php endif; ?>
-            <?php else: ?>
-                <p class="text-gray-500 mb-4">Bạn cần <a href="?module=auth&action=login" class="text-blue-500 underline">đăng nhập</a> để đánh giá sản phẩm.</p>
-            <?php endif; ?>
-
-            <!-- Hiển thị danh sách đánh giá -->
-            <div class="space-y-4">
-
-                <?php
-                $listReviews = selectAll("SELECT * FROM reviews WHERE id_product = $productId");
-                if (!empty($listReviews)): ?>
-                    <?php foreach ($listReviews as $review):
-                        $userId = selectOne("SELECT * FROM reviews")['id_user'];
-                        $username = selectOne("SELECT * FROM users WHERE id = $userId")['fullname'];
-                    ?>
-                        <div class="border-b pb-4">
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold"><?php echo $username; ?></span>
-                                <span class="text-yellow-400">
-                                    <?php echo str_repeat('★', $review['stars']) . str_repeat('☆', 5 - $review['stars']); ?>
-                                </span>
+                    <!-- Formulaire Commande -->
+                    <form action="" method="POST" class="space-y-6">
+                        <!-- Spécifications Produit -->
+                        <div class="grid grid-cols-2 gap-6 mb-8">
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="text-gray-600 font-medium text-sm uppercase tracking-wide">Màu sắc</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-full border-2 border-gray-300 shadow-sm"
+                                        style="background-color: <?php echo $detail['code_color']; ?>"></div>
+                                    <span class="text-gray-700 font-medium"><?php echo $detail['code_color']; ?></span>
+                                </div>
                             </div>
-                            <p class="text-gray-700 mt-1"><?php echo $review['content']; ?></p>
+
+                            <div class="space-y-3">
+                                <label for="quantity" class="text-gray-600 font-medium text-sm uppercase tracking-wide">
+                                    Số lượng
+                                </label>
+                                <input type="number" id="quantity" name="amount_buy"
+                                    value="1" min="1" max="<?php echo $detail['amount'] ?>"
+                                    class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200">
+                            </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-gray-500">Chưa có đánh giá nào cho sản phẩm này.</p>
-                <?php endif; ?>
+
+                        <!-- Détails Techniques -->
+                        <div class="space-y-4 py-6 border-t border-b border-gray-100">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Vật liệu</span>
+                                <span class="text-gray-900 font-semibold luxury-text"><?php echo $product['material']; ?></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Kích thước</span>
+                                <span class="text-gray-900 font-semibold luxury-text"><?php echo $detail['size']; ?></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Còn lại</span>
+                                <span class="text-green-600 font-semibold"><?php echo $detail['amount']; ?> sản phẩm</span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" value="<?php echo $detailId; ?>" name="detailId">
+                        <input type="hidden" value="<?php echo $userId; ?>" name="userId">
+                        <input type="hidden" value="<?php echo $role; ?>" name="role">
+                        <input type="hidden" value="<?php echo $productId; ?>" name="productId">
+
+                        <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+                            <button type="submit"
+                                class="w-full py-4 px-8 btn-luxury text-white font-semibold rounded-xl text-lg">
+                                Thêm vào giỏ hàng
+                            </button>
+                        <?php endif; ?>
+                    </form>
+                </div>
             </div>
         </div>
 
+        <!-- Section Description -->
+        <div class="mt-16">
+            <div class="bg-white rounded-2xl product-shadow p-8 elegant-border">
+                <h2 class="text-2xl font-bold luxury-text mb-6 border-b border-gray-100 pb-4">
+                    Mô tả sản phẩm
+                </h2>
+                <div class="prose prose-lg max-w-none">
+                    <p class="text-gray-700 leading-relaxed text-lg"><?php echo $product['description']; ?></p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Sản phẩm tương tự -->
-        <div class="mt-10">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Sản phẩm tương tự</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <!-- Section Évaluations -->
+        <div class="mt-16">
+            <div class="bg-white rounded-2xl product-shadow p-8 elegant-border">
+                <h2 class="text-2xl font-bold luxury-text mb-8 border-b border-gray-100 pb-4">
+                    Đánh giá sản phẩm
+                </h2>
+
+                <!-- Formulaire d'évaluation -->
+                <?php if (!empty($userId)): ?>
+                    <?php if (!empty($filterAll['billId'])): ?>
+                        <div class="review-card rounded-xl p-6 mb-8">
+                            <form action="?module=reviews&action=review" method="POST" class="space-y-4">
+                                <input type="hidden" name="productId" value="<?php echo $productId; ?>">
+                                <input type="hidden" name="userId" value="<?php echo $userId; ?>">
+                                <input type="hidden" name="role" value="<?php echo $role; ?>">
+
+                                <div>
+                                    <label for="content" class="block text-sm font-semibold text-gray-800 mb-3">
+                                        Chia sẻ trải nghiệm của bạn:
+                                    </label>
+                                    <textarea id="content" name="content" rows="4"
+                                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200"
+                                        placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm..." required></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-800 mb-3">Đánh giá:</label>
+                                    <div class="flex space-x-2">
+                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                            <input type="radio" name="stars" value="<?php echo $i; ?>" id="star<?php echo $i; ?>" class="hidden" required>
+                                            <label for="star<?php echo $i; ?>" class="text-2xl text-gray-300 cursor-pointer hover:text-yellow-400 transition-colors duration-200">★</label>
+                                        <?php endfor; ?>
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                    class="px-6 py-3 btn-luxury text-white rounded-lg font-medium hover:shadow-lg transition-all duration-200">
+                                    Gửi đánh giá
+                                </button>
+                            </form>
+                        </div>
+                    <?php else: ?>
+                        <div class="review-card rounded-xl p-6 mb-8">
+                            <p class="text-gray-600 italic">Bạn cần mua hàng để có thể đánh giá sản phẩm.</p>
+                        </div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <div class="review-card rounded-xl p-6 mb-8">
+                        <p class="text-gray-600">
+                            Bạn cần <a href="?module=auth&action=login" class="text-gray-900 font-semibold hover:underline">đăng nhập</a> để đánh giá sản phẩm.
+                        </p>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Liste des évaluations -->
+                <div class="space-y-6">
+                    <?php
+                    $listReviews = selectAll("SELECT * FROM reviews WHERE id_product = $productId");
+                    if (!empty($listReviews)): ?>
+                        <?php foreach ($listReviews as $review):
+                            $userId = selectOne("SELECT * FROM reviews")['id_user'];
+                            $username = selectOne("SELECT * FROM users WHERE id = $userId")['fullname'];
+                        ?>
+                            <div class="review-card rounded-xl p-6 border-l-4 border-gray-900">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="font-bold text-gray-900 luxury-text"><?php echo $username; ?></span>
+                                    <div class="flex text-yellow-400 text-lg">
+                                        <?php echo str_repeat('★', $review['stars']) . str_repeat('☆', 5 - $review['stars']); ?>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 leading-relaxed"><?php echo $review['content']; ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="review-card rounded-xl p-8 text-center">
+                            <p class="text-gray-500 italic">Chưa có đánh giá nào cho sản phẩm này.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Produits Similaires -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold luxury-text mb-8">Sản phẩm tương tự</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <?php
                 $categoryId = $product['id_category'];
                 $listProduct = selectAll("SELECT * FROM products WHERE id_category = $categoryId AND id <> $productId");
@@ -233,15 +300,26 @@ if (isset($filterAll['role'])) {
                         $productId = $productItem['id'];
                 ?>
                         <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
-                            class="bg-white p-4 rounded-lg shadow hover:shadow-md transition block">
-                            <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
-                                alt="<?php echo $productItem['thumbnail']; ?>"
-                                class="rounded-md h-40 w-full object-cover mb-3">
-                            <h3 class="text-sm font-medium text-gray-900 line-clamp-2"><?php echo $productItem['name_product']; ?></h3>
-                            <p class="text-red-600 font-semibold mt-1">
-                                <?php echo number_format($productItem['price'], 0, ',', '.'); ?> đ
-                            </p>
-                            <p class="text-gray-600 text-sm"> Còn lại: <?php echo $detail['amount']; ?> sản phẩm </p>
+                            class="group bg-white rounded-xl product-shadow overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                            <div class="relative overflow-hidden">
+                                <img src="<?php echo _IMGP_ . $productItem['thumbnail']; ?>"
+                                    alt="<?php echo $productItem['thumbnail']; ?>"
+                                    class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-semibold text-gray-900 luxury-text line-clamp-2 mb-3 text-sm lg:text-base">
+                                    <?php echo $productItem['name_product']; ?>
+                                </h3>
+                                <div class="space-y-2">
+                                    <p class="text-lg font-bold price-accent">
+                                        <?php echo number_format($productItem['price'], 0, ',', '.'); ?> đ
+                                    </p>
+                                    <p class="text-sm text-green-600 font-medium">
+                                        Còn lại: <?php echo $detail['amount']; ?> sản phẩm
+                                    </p>
+                                </div>
+                            </div>
                         </a>
                 <?php
                     endif;
@@ -249,5 +327,34 @@ if (isset($filterAll['role'])) {
             </div>
         </div>
     </div>
+    <!-- Hộp quà -->
+    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+        <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>"
+            class="gift-icon fixed bottom-6 left-6 w-16 h-16 cursor-pointer z-50 animate-bounce">
+            <img src="<?php echo _IMGG_; ?>git.png"
+                alt="Gift"
+                class="w-full h-full object-contain drop-shadow-lg">
+        </a>
+    <?php endif; ?>
+
+    <script>
+        // Gestion des étoiles pour l'évaluation
+        document.querySelectorAll('input[name="stars"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const value = parseInt(this.value);
+                const labels = document.querySelectorAll('label[for^="star"]');
+
+                labels.forEach((label, index) => {
+                    if (index < value) {
+                        label.classList.add('text-yellow-400');
+                        label.classList.remove('text-gray-300');
+                    } else {
+                        label.classList.remove('text-yellow-400');
+                        label.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 <?php layout('footer'); ?>
