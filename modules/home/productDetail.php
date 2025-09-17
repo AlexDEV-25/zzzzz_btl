@@ -196,12 +196,14 @@ if (isset($filterAll['role'])) {
 
                 <?php
                 $listReviews = selectAll("SELECT * FROM reviews WHERE id_product = $productId");
-                $user = selectOne("SELECT * FROM users");
                 if (!empty($listReviews)): ?>
-                    <?php foreach ($listReviews as $review): ?>
+                    <?php foreach ($listReviews as $review):
+                        $userId = selectOne("SELECT * FROM reviews")['id_user'];
+                        $username = selectOne("SELECT * FROM users WHERE id = $userId")['fullname'];
+                    ?>
                         <div class="border-b pb-4">
                             <div class="flex items-center gap-2">
-                                <span class="font-semibold"><?php echo $user['fullname']; ?></span>
+                                <span class="font-semibold"><?php echo $username; ?></span>
                                 <span class="text-yellow-400">
                                     <?php echo str_repeat('★', $review['stars']) . str_repeat('☆', 5 - $review['stars']); ?>
                                 </span>
