@@ -71,21 +71,21 @@ echo "<html><head>
         font-size: 10pt;
         font-weight: 600;
     }
-.barcode {
-    text-align: center;
-    margin: 2mm 0;
-    background-color: #f9f9f9;
-    padding: 1mm;
-    width: 60mm; /* Đặt chiều rộng cố định */
-    height: 20mm; /* Chiều cao tự động điều chỉnh theo tỷ lệ */
-    box-sizing: border-box; /* Bao gồm padding trong kích thước */
-}
+    .barcode {
+        text-align: center;
+        margin: 2mm 0;
+        background-color: #f9f9f9;
+        padding: 1mm;
+        width: 60mm; /* Đặt chiều rộng cố định */
+        height: 20mm; /* Chiều cao tự động điều chỉnh theo tỷ lệ */
+        box-sizing: border-box; /* Bao gồm padding trong kích thước */
+    }
 
-.barcode img {
-    width: 60mm; /* Hình ảnh lấp đầy container */
-    height: 20mm; /* Giữ tỷ lệ gốc */
-    image-rendering: crisp-edges; /* Tối ưu hóa độ nét khi scale */
-}
+    .barcode img {
+        width: 60mm; /* Hình ảnh lấp đầy container */
+        height: 20mm; /* Giữ tỷ lệ gốc */
+        image-rendering: crisp-edges; /* Tối ưu hóa độ nét khi scale */
+    }
     .header-info {
         text-align: right; /* Căn phải cho thông tin */
     }
@@ -171,11 +171,9 @@ echo "<html><head>
     .page-break { page-break-after: always; }
 </style>
 </head><body>";
-
 foreach ($listBills as $index => $bill) {
     $billId = (int)$bill['id'];
     update('bills', ['status' => 2], "id = $billId");
-
     // user
     $user = ['fullname' => 'Khách hàng không xác định', 'address' => 'Địa chỉ không xác định'];
     if (!empty($bill['id_user'])) {
@@ -192,6 +190,11 @@ foreach ($listBills as $index => $bill) {
 
     // sản phẩm
     $products_bill_list = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
+    $tong = 0;
+    foreach ($products_bill_list as $products_bill) {
+        $amount_buy = (int)$products_bill['amount_buy'];
+        $tong += $amount_buy;
+    }
     echo "
     <div class='label'>
         <!-- Header -->
@@ -225,10 +228,9 @@ foreach ($listBills as $index => $bill) {
                 <p>" . htmlspecialchars($user['address']) . "</p>
             </div>
         </div>
-
         <!-- Nội dung hàng -->
         <div class='items'>
-            <p><b>Nội dung hàng (Tổng SL sản phẩm: " . (empty($products_bill_list) ? 0 : count($products_bill_list)) . "):</b></p>";
+            <p><b>Nội dung hàng (Tổng SL sản phẩm: " . $tong . "):</b></p>";
     if (!empty($products_bill_list)) {
         echo "<ul>";
         foreach ($products_bill_list as $products_bill) {
