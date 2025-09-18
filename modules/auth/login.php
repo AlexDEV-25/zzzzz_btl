@@ -67,30 +67,86 @@ if (isPost()) {
 $smg = getFlashData('smg');
 $smg_type = getFlashData('smg_type');
 
-$data = ['pageTitle' => 'Đăng nhập tài khoản'];
+$data = ['pageTitle' => 'Đăng nhập - Luxury Furniture'];
 layout('header_login', $data);
 ?>
 
 <body>
-    <div class="row">
-        <div class="col-4" style="margin: 100px auto;">
-            <h2 class="text-center text-uppercase">Đăng nhập</h2>
-            <?php if (!empty($smg)) getSmg($smg, $smg_type); ?>
-            <form action="" method="post">
-                <div class="form-group mg-form">
-                    <label for="email">Email</label>
-                    <input name="email" type="email" class="form-control" placeholder="Email">
+    <div class="main-content">
+        <div class="furniture-showcase">
+            <div class="showcase-content">
+                <h1 class="showcase-title">Luxury Interior</h1>
+                <p class="showcase-subtitle">
+                    Khám phá bộ sưu tập nội thất cao cấp được tuyển chọn kỹ lưỡng,
+                    mang đến không gian sống đẳng cấp và tinh tế cho ngôi nhà của bạn.
+                </p>
+                <div class="showcase-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="feature-text">Cao Cấp</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="feature-text">Tinh Tế</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="feature-text">Chất Lượng</div>
+                    </div>
                 </div>
-                <div class="form-group mg-form">
-                    <label for="password">Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="Password">
+            </div>
+        </div>
+
+        <div class="login-section">
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="brand-logo">LF</div>
+                    <h1 class="login-title">Chào mừng trở lại</h1>
+                    <p class="login-subtitle">Đăng nhập để trải nghiệm thế giới nội thất đẳng cấp</p>
                 </div>
-                <button class="btn btn-primary btn-block mg-form mg-btn" type="submit">Đăng nhập</button>
-                <hr>
-                <p class="text-center"><a href="?module=auth&action=forgot">Quên mật khẩu</a></p>
-                <p class="text-center"><a href="?module=auth&action=register">Đăng ký</a></p>
-            </form>
+
+                <?php if (!empty($smg)) : ?>
+                    <div class="alert alert-<?php echo $smg_type == 'danger' ? 'danger' : 'success'; ?>">
+                        <?php echo $smg; ?>
+                    </div>
+                <?php endif; ?>
+
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Địa chỉ email</label>
+                        <input name="email" type="email" class="form-control" placeholder="your@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input name="password" type="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        Đăng nhập
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span class="divider-text">Tùy chọn khác</span>
+                </div>
+
+                <div class="link-group">
+                    <a href="?module=auth&action=forgot" class="auth-link">Quên mật khẩu?</a>
+                </div>
+
+                <div class="link-group">
+                    <a href="?module=auth&action=register" class="auth-link">Tạo tài khoản mới</a>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+
 <?php layout('footer'); ?>
