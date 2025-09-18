@@ -3,10 +3,6 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 
-
-//  Kiểm tra id trong datase -> tồn tại -> tiến hành xoá
-// Xoá dữ liệu bảng tokenlogin -> Xoá dữ liệu bảng users
-
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $userId = $filterAll['id'];

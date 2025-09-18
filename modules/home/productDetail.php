@@ -57,6 +57,7 @@ if (isPost()) {
 }
 $role = -1;
 $userId = -1;
+$userStatus = -1;
 if (isset($filterAll['role'])) {
     $role = $filterAll['role'];
     $data = [
@@ -74,6 +75,8 @@ if (isset($filterAll['role'])) {
     } else {
         if (!empty($filterAll['userId'])) {
             $userId = $filterAll['userId'];
+            $user = selectOne("SELECT * FROM users WHERE id = $userId");
+            $userStatus = $user['status'];
             $cartCount = getCountCart($userId);
             $data = [
                 'productId' => $productId,
@@ -342,7 +345,7 @@ if (isset($filterAll['role'])) {
         </div>
     </div>
     <!-- Hộp quà -->
-    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+    <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3 && $userStatus == 1): ?>
         <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>"
             class="gift-icon fixed bottom-6 left-6 w-24 h-24 cursor-pointer z-50 animate-bounce">
             <img src="<?php echo _IMGG_; ?>git.png"

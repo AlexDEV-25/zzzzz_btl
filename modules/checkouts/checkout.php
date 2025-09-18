@@ -238,16 +238,16 @@ layout('header_custom', $data);
                             <span><?php echo number_format($finalTotal); ?> đ</span>
                         </div>
                     <?php endif; ?>
-
-                    <!-- Ô nhập voucher -->
-                    <div class="mt-4">
-                        <label for="voucher" class="block text-sm font-medium text-gray-700">Mã giảm giá</label>
-                        <div class="flex gap-2 mt-1">
-                            <input type="text" name="voucher" id="voucher" value="<?php echo htmlspecialchars($voucherCode); ?>" class="flex-1 border rounded p-2" placeholder="Nhập mã giảm giá">
-                            <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Áp dụng</button>
+                    <?php if ($user['status'] == 1): ?>
+                        <!-- Ô nhập voucher -->
+                        <div class="mt-4">
+                            <label for="voucher" class="block text-sm font-medium text-gray-700">Mã giảm giá</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="text" name="voucher" id="voucher" value="<?php echo htmlspecialchars($voucherCode); ?>" class="flex-1 border rounded p-2" placeholder="Nhập mã giảm giá">
+                                <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded">Áp dụng</button>
+                            </div>
                         </div>
-                    </div>
-
+                    <?php endif; ?>
                     <!-- Chọn phương thức thanh toán -->
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Phương thức thanh toán</label>
