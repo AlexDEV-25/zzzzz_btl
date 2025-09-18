@@ -130,7 +130,7 @@ layout('header_custom', $data);
                                     max="<?php echo $productDetail['amount']; ?>"
                                     class="amount-input w-20 p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
                                     data-price="<?php echo $product['price']; ?>">
-                                <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price']); ?> đ</span>
+                                <span class="text-lg font-medium text-gray-700"><?php echo number_format($product['price'] * $productCart['amount_buy']); ?> đ</span>
                                 <a href="javascript:void(0)"
                                     class="update-link text-green-600 hover:text-green-800"
                                     data-id="<?php echo $productCartId; ?>"
