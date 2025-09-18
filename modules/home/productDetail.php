@@ -330,7 +330,7 @@ if (isset($filterAll['role'])) {
     <!-- Hộp quà -->
     <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
         <a href="?module=home&action=listVoucher&userId=<?php echo $userId; ?>"
-            class="gift-icon fixed bottom-6 left-6 w-16 h-16 cursor-pointer z-50 animate-bounce">
+            class="gift-icon fixed bottom-6 left-6 w-24 h-24 cursor-pointer z-50 animate-bounce">
             <img src="<?php echo _IMGG_; ?>git.png"
                 alt="Gift"
                 class="w-full h-full object-contain drop-shadow-lg">
