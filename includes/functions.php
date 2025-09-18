@@ -251,6 +251,8 @@ function checkDie($data)
     echo '</pre>';
     die();
 }
+
+// VNPAY FUNCTIONS - GIỮ NGUYÊN
 function confirm_vnpay()
 {
     date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -332,5 +334,94 @@ function confirm_vnpay()
         die();
     } else {
         print_r($returnData);
+    }
+}
+
+// MOMO FUNCTIONS - SỬA LẠI
+function execPostRequest($url, $data)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data)
+        )
+    );
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    //execute post
+    $result = curl_exec($ch);
+    //close connection
+    curl_close($ch);
+    return $result;
+}
+
+// SỬA LẠI HÀM MOMO_PAYMENT - TƯƠNG TỰ NHƯ VNPAY
+function confirm_momo()
+{
+    $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+    $partnerCode = 'MOMOBKUN20180529';
+    $accessKey   = 'klm05TvNBzhg7h7j';
+    $secretKey   = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+    $orderInfo   = "Thanh toán qua MoMo";
+    $amount      = $_POST['sotien'] ?? 0;
+    $orderId     = time() . "";
+    // SỬA LẠI RETURNURL - DÙNG CHUNG VỚI VNPAY
+    $redirectUrl = _WEB_HOST . "/?module=checkouts&action=momo_return";
+    $ipnUrl      = _WEB_HOST . "/?module=checkouts&action=momo_return";
+    $extraData   = "";
+
+    $requestId   = time() . "";
+    $requestType = "payWithATM";
+
+    //before sign HMAC SHA256 signature
+    $rawHash = "accessKey=" . $accessKey
+        . "&amount=" . $amount
+        . "&extraData=" . $extraData
+        . "&ipnUrl=" . $ipnUrl
+        . "&orderId=" . $orderId
+        . "&orderInfo=" . $orderInfo
+        . "&partnerCode=" . $partnerCode
+        . "&redirectUrl=" . $redirectUrl
+        . "&requestId=" . $requestId
+        . "&requestType=" . $requestType;
+
+    $signature = hash_hmac("sha256", $rawHash, $secretKey);
+
+    $data = array(
+        'partnerCode' => $partnerCode,
+        'partnerName' => "Test",
+        "storeId"     => "MomoTestStore",
+        'requestId'   => $requestId,
+        'amount'      => $amount,
+        'orderId'     => $orderId,
+        'orderInfo'   => $orderInfo,
+        'redirectUrl' => $redirectUrl,
+        'ipnUrl'      => $ipnUrl,
+        'lang'        => 'vi',
+        'extraData'   => $extraData,
+        'requestType' => $requestType,
+        'signature'   => $signature
+    );
+
+    $result = execPostRequest($endpoint, json_encode($data));
+    $jsonResult = json_decode($result, true);  // decode json
+
+    // chuyển hướng tới payUrl
+    if (isset($jsonResult['payUrl'])) {
+        if (isset($_POST['checkout_submit'])) {
+            header('Location: ' . $jsonResult['payUrl']);
+            exit;
+        }
+    } else {
+        echo "Lỗi khi tạo thanh toán MoMo:<br>";
+        echo "<pre>" . htmlspecialchars($result) . "</pre>";
+        exit;
     }
 }

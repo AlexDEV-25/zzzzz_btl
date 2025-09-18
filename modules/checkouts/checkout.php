@@ -103,7 +103,9 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
     $date = date('Y-m-d H:i:s');
     // lấy phương thức thanh toán từ form
     $paymentMethod = isset($filterAll['payment_method']) ? intval($filterAll['payment_method']) : 0;
+
     if ($paymentMethod == 0) {
+        // THANH TOÁN COD - GIỮ NGUYÊN CODE CŨ
         $dataInsertBill = [
             'id_user' => $userId,
             'total' => $finalTotal,
@@ -166,7 +168,8 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
             setFlashData('smg', '❌ Không thể tạo hóa đơn. Vui lòng thử lại!');
             setFlashData('smg_type', 'danger');
         }
-    } else {
+    } elseif ($paymentMethod == 1) {
+        // THANH TOÁN VNPAY - GIỮ NGUYÊN CODE CŨ
         $dataInsertBill = [
             'id_user' => $userId,
             'total' => $finalTotal,
@@ -181,6 +184,22 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
         setSession('voucher', $voucher);
         setSession('vnpay', $dataInsertBill);
         confirm_vnpay();
+    } elseif ($paymentMethod == 2) {
+        // ✅ THÊM MỚI: THANH TOÁN MOMO
+        $dataInsertBill = [
+            'id_user' => $userId,
+            'total' => $finalTotal,
+            'status' => 1, // pending payment
+            'date' => $date,
+            'id_voucher' => $voucher['id'] ?? null,
+            'payment_method' => $paymentMethod
+        ];
+        $voucher = [
+            'voucher' => $voucherCode ?? null
+        ];
+        setSession('voucher', $voucher);
+        setSession('momo', $dataInsertBill); // Lưu vào session với key 'momo'
+        confirm_momo();
     }
 }
 $smg = getFlashData('smg');
@@ -252,6 +271,10 @@ layout('header_custom', $data);
                             <label class="flex items-center">
                                 <input type="radio" name="payment_method" value="1" class="mr-2">
                                 <span>Thanh toán qua VNPay</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="payment_method" value="2" class="mr-2">
+                                <span>Thanh toán qua Momo</span>
                             </label>
                         </div>
                     </div>
