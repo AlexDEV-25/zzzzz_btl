@@ -306,7 +306,7 @@ if (isset($filterAll['role'])) {
                                                     <?php echo number_format($product['price'], 0, ',', '.'); ?>₫
                                                 </span>
                                                 <span class="text-gray-400 line-through ml-2 text-sm">
-                                                    <?php echo number_format($product['price'] * 1.3, 0, ',', '.'); ?>₫
+                                                    <?php echo number_format($product['origin_price'], 0, ',', '.'); ?>₫
                                                 </span>
                                             </div>
 
