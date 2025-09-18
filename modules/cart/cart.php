@@ -190,7 +190,14 @@ layout('header_custom', $data);
                 let id = this.dataset.id;
                 let userId = this.dataset.user;
                 let input = document.querySelector(`input[name='amount_buy[${id}]']`);
-                let amount = input.value;
+                let amount = parseInt(input.value);
+                let max = parseInt(input.getAttribute("max")); // lấy số lượng tồn từ attribute
+
+                if (amount > max) {
+                    alert("❌ Chỉ còn " + max + " sản phẩm trong kho!");
+                    input.value = max;
+                    return;
+                }
 
                 if (confirm("Cập nhật số lượng sản phẩm này?")) {
                     window.location.href = `?module=cart&action=updateProductCart&userId=${userId}&productCartId=${id}&amount=${amount}`;
