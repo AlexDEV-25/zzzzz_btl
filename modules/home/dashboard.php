@@ -124,9 +124,9 @@ if (isset($filterAll['role'])) {
                             $productId = $product['id'];
                             $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                     ?>
-                            <article class="card-minimal rounded-2xl overflow-hidden group">
+                            <article class="card-minimal rounded-2xl overflow-hidden group h-full flex flex-col">
                                 <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
-                                    class="block">
+                                    class="block h-full flex flex-col">
 
                                     <div class="relative overflow-hidden bg-gray-50">
                                         <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>"
@@ -148,7 +148,7 @@ if (isset($filterAll['role'])) {
                                         </div>
                                     </div>
 
-                                    <div class="p-6">
+                                    <div class="p-6 flex flex-col flex-grow relative">
                                         <h3 class="font-display text-xl font-medium text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                             <?php echo $product['name_product']; ?>
                                         </h3>
@@ -173,7 +173,7 @@ if (isset($filterAll['role'])) {
                                             </div>
                                         </div>
 
-                                        <div class="space-y-2 text-sm text-gray-600">
+                                        <div class="space-y-2 text-sm text-gray-600 mb-10">
                                             <div class="flex items-center">
                                                 <span class="w-1 h-1 bg-gray-400 rounded-full mr-2"></span>
                                                 Miễn phí vận chuyển
@@ -182,6 +182,12 @@ if (isset($filterAll['role'])) {
                                                 <span class="w-1 h-1 bg-gray-400 rounded-full mr-2"></span>
                                                 Bảo hành 24 tháng
                                             </div>
+                                        </div>
+                                        <!-- Sold out bottom right -->
+                                        <div class="absolute bottom-4 right-6">
+                                            <span class="text-sm font-medium text-orange-600">
+                                                🔥 Đã bán <?php echo $product['sold']; ?>
+                                            </span>
                                         </div>
                                     </div>
                                 </a>

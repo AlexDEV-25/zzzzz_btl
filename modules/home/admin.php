@@ -3,7 +3,7 @@ if (!defined('_CODE')) {
     die('Access denied...');
 }
 // Thống kê cơ bản
-$amount_user = getCountRows("SELECT * FROM users ");
+$amount_user = getCountRows("SELECT * FROM users WHERE role = 0");
 $amount_bill = getCountRows("SELECT * FROM bills ");
 $amount_product = getCountRows("SELECT * FROM products ");
 $statistical = 0;
@@ -87,7 +87,7 @@ layout('header_admin', $data);
                     <div class="rounded-xl border-2 bg-green-50 p-6 text-green-600 border-green-600">
                         <h4 class="capitalize font-medium">Khách hàng</h4>
                         <div class="flex items-end justify-between">
-                            <p class="text-3xl font-semibold"><?php echo $amount_user - 1; ?></p>
+                            <p class="text-3xl font-semibold"><?php echo $amount_user; ?></p>
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
                                     <path fill="currentColor"

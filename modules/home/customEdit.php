@@ -61,20 +61,25 @@ if (isPost()) {
 
 
     if (empty($errors)) {
-        $result = move_uploaded_file(
-            $_FILES['avatar']['tmp_name'], // đường đẫn gốc
-            _WEB_PATH . '\\templates\\image\\avatars\\' . // đường đẫn  mới nhớ thêm \\ ở cuối
-                $_FILES['avatar']['name']
-        ); // file  muốn chuyển
-        $anh_string = (string)$_FILES['avatar']['name'];
-        $avatar = $anh_string;
+        $avatar = $userDetail['avatar']; // mặc định giữ ảnh cũ
+
+        if (!empty($_FILES['avatar']['name'])) {
+            // Có upload ảnh mới
+            $result = move_uploaded_file(
+                $_FILES['avatar']['tmp_name'],
+                _WEB_PATH . '\\templates\\image\\avatars\\' . $_FILES['avatar']['name']
+            );
+            if ($result) {
+                $avatar = $_FILES['avatar']['name']; // ghi đè ảnh mới
+            }
+        }
 
         $dataUpdate = [
             'fullname' => $filterAll['fullname'],
-            'email' => $filterAll['email'],
-            'phone' => $filterAll['phone'],
-            'address' => $filterAll['address'],
-            'avatar' => $avatar,
+            'email'    => $filterAll['email'],
+            'phone'    => $filterAll['phone'],
+            'address'  => $filterAll['address'],
+            'avatar'   => $avatar,
             'update_at' => date('Y-m-d H:i:s')
         ];
 

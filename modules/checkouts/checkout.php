@@ -135,21 +135,9 @@ if (isPost() && isset($filterAll['checkout_submit'])) {
                 ];
                 $insertStatusBillDetail = insert('products_bill', $dataInsertBillDetail);
 
-                $productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId");
-                $dataUpdateProductDetail = [
-                    'amount' => $productDetail['amount'] - $amount
-                ];
-                $updateProductDetail = update('products_detail', $dataUpdateProductDetail, "id = $productDetailId");
-
-                $product = selectOne("SELECT * FROM products WHERE id = " . intval($productDetail['id_product']));
-                $dataUpdateProduct = [
-                    'sold' => $product['sold'] + $amount
-                ];
-                $updateProduct = update('products', $dataUpdateProduct, "id = " . intval($productDetail['id_product']));
-
                 $deleteProductCart = delete('products_cart', "id = $productCartId");
 
-                $success = $success && $insertStatusBillDetail && $updateProductDetail && $updateProduct && $deleteProductCart;
+                $success = $success && $insertStatusBillDetail  && $deleteProductCart;
             }
 
             $count = $cartCount - count($productCartIds);

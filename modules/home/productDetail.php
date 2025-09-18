@@ -6,6 +6,7 @@ $filterAll = filter();
 $errors = [];
 
 $productId = $filterAll['productId'];
+$userId = $filterAll['userId'];
 $product = selectOne("SELECT * FROM products WHERE id = $productId");
 $detail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
 $detailId = $detail['id'];
@@ -16,7 +17,6 @@ $data = [
 // thêm vào giỏ
 if (isPost()) {
     if (!empty($filterAll['detailId'])) {
-        $userId = $filterAll['userId'];
         $cartCount = getCountCart($userId);
         $cartId = selectOne("SELECT * FROM cart WHERE id_user =$userId")['id'];
         $detailId = $filterAll['detailId'];
@@ -32,7 +32,6 @@ if (isPost()) {
             update('cart', $dataUpdate, $condition);
         }
         if (!empty($filterAll['amount_buy'])) {
-            $detailId = $filterAll['detailId'];
             $amount = $filterAll['amount_buy'];
             $rowProductCart = getCountRows("SELECT * FROM products_cart WHERE id_product_detail =$detailId");
             if ($rowProductCart > 0) {
@@ -51,6 +50,9 @@ if (isPost()) {
                 insert('products_cart', $dataInsertProductCart);
             }
         }
+    }
+    if (isset($filterAll['buy_now'])) {
+        redirect('?module=cart&action=cart&role=0&userId=' . $userId . '&detailId=' . $detailId);
     }
 }
 $role = -1;
@@ -181,10 +183,21 @@ if (isset($filterAll['role'])) {
                         <input type="hidden" value="<?php echo $productId; ?>" name="productId">
 
                         <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
-                            <button type="submit"
-                                class="w-full py-4 px-8 btn-luxury text-white font-semibold rounded-xl text-lg">
-                                Thêm vào giỏ hàng
-                            </button>
+                            <?php if (isset($role) && $role != -1 && $role != 1 && $role != 2 && $role != 3): ?>
+                                <div class="flex gap-4">
+                                    <!-- Thêm vào giỏ -->
+                                    <button type="submit" name="add_cart"
+                                        class="w-1/2 py-4 px-8 btn-luxury text-white font-semibold rounded-xl text-lg">
+                                        Thêm vào giỏ hàng
+                                    </button>
+
+                                    <!-- Mua ngay -->
+                                    <button type="submit" name="buy_now"
+                                        class="w-1/2 py-4 px-8 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl text-lg">
+                                        Mua ngay
+                                    </button>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </form>
                 </div>
@@ -316,7 +329,8 @@ if (isset($filterAll['role'])) {
                                         <?php echo number_format($productItem['price'], 0, ',', '.'); ?> đ
                                     </p>
                                     <p class="text-sm text-green-600 font-medium">
-                                        Còn lại: <?php echo $detail['amount']; ?> sản phẩm
+                                        <?php $productDetailItem = selectOne("SELECT * FROM products_detail WHERE id_product = $productId "); ?>
+                                        Còn lại: <?php echo $productDetailItem['amount']; ?> sản phẩm
                                     </p>
                                 </div>
                             </div>

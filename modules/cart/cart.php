@@ -4,6 +4,7 @@ if (!defined('_CODE')) {
 }
 $filterAll = filter();
 $errors = [];
+$selectedDetailId = !empty($filterAll['detailId']) ? (int)$filterAll['detailId'] : null;
 // Xử lý POST trước để tránh lỗi header
 if (isPost()) {
     if (!empty($filterAll['amount_buy']) && !empty($filterAll['productCartId'])) {
@@ -114,7 +115,8 @@ layout('header_custom', $data);
                                     type="checkbox"
                                     name="productCartId[]"
                                     value="<?php echo $productCartId ?>"
-                                    class="product-check h-5 w-5 text-blue-600 focus:ring-blue-500">
+                                    class="product-check h-5 w-5 text-blue-600 focus:ring-blue-500"
+                                    <?php echo ($selectedDetailId && $productDetailId == $selectedDetailId) ? 'checked' : ''; ?>>
                                 <img
                                     src="<?php echo _IMGP_ . $productDetail['image']; ?>"
                                     alt="<?php echo $product['name_product'] ?>"
@@ -204,6 +206,9 @@ layout('header_custom', $data);
                 }
             });
         });
+
+        // 👉 Gọi khi trang vừa load
+        window.addEventListener("DOMContentLoaded", updateTotal);
     </script>
 </body>
 <?php layout('footer'); ?>

@@ -107,21 +107,9 @@ if ($resultCode == 0) {
             ];
             $insertStatusBillDetail = insert('products_bill', $dataInsertBillDetail);
 
-            $productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId");
-            $dataUpdateProductDetail = [
-                'amount' => $productDetail['amount'] - $amount
-            ];
-            $updateProductDetail = update('products_detail', $dataUpdateProductDetail, "id = $productDetailId");
-
-            $product = selectOne("SELECT * FROM products WHERE id = " . intval($productDetail['id_product']));
-            $dataUpdateProduct = [
-                'sold' => $product['sold'] + $amount
-            ];
-            $updateProduct = update('products', $dataUpdateProduct, "id = " . intval($productDetail['id_product']));
-
             $deleteProductCart = delete('products_cart', "id = $productCartId");
 
-            $success = $success && $insertStatusBillDetail && $updateProductDetail && $updateProduct && $deleteProductCart;
+            $success = $success && $insertStatusBillDetail && $deleteProductCart;
         }
 
         $count = $cartCount - count($productCartIds);
@@ -132,7 +120,7 @@ if ($resultCode == 0) {
             removeSession('checkout_data');
             removeSession('momo');
             removeSession('voucher');
-            
+
             setFlashData('smg', '✅ Thanh toán MoMo thành công! Đặt hàng hoàn tất.');
             setFlashData('smg_type', 'success');
             redirect('?module=checkouts&action=checkout_success&role=0&userId=' . $userId);
@@ -147,11 +135,11 @@ if ($resultCode == 0) {
 } else {
     // THANH TOÁN THẤT BẠI
     $userId = $data['id_user'];
-    
+
     // Xóa session khi thanh toán thất bại
     removeSession('momo');
     removeSession('voucher');
-    
+
     setFlashData('smg', '❌ Thanh toán MoMo thất bại hoặc bị hủy!');
     setFlashData('smg_type', 'danger');
     redirect('?module=checkouts&action=checkout&role=0&userId=' . $userId);

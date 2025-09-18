@@ -54,6 +54,22 @@ if (isPost() && !empty($filterAll['billId'])) {
                             update('products_detail', ['amount' => $newAmount], "id = $productDetailId");
                         }
                     }
+                } else {
+                    // ✅ Đơn thành công → cộng vào sold
+                    $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
+
+                    foreach ($listBillDetail as $item) {
+                        $productDetailId = (int) $item['id_product_detail'];
+                        $productDetail   = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId");
+
+                        if ($productDetail) {
+                            $product = selectOne("SELECT * FROM products WHERE id = " . intval($productDetail['id_product']));
+                            $dataUpdateProduct = [
+                                'sold' => $product['sold'] + $item['amount_buy'],
+                            ];
+                            $updateProduct = update('products', $dataUpdateProduct, "id = " . intval($productDetail['id_product']));
+                        }
+                    }
                 }
             } else {
                 $dataUpdate = ['status' => $newStatus];
@@ -172,25 +188,29 @@ if (isset($filterAll['role'])) {
                                     <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4 flex gap-2 items-center">
-                                    <form action="" method="POST" class="flex gap-2 items-center">
-                                        <select name="status"
-                                            class="border-gray-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500">
-                                            <option value="1">Xác nhận Đơn</option>
-                                            <option value="2">Đang đóng gói</option>
-                                            <option value="3">Đang giao hàng</option>
-                                            <option value="4">Đã hoàn thành</option>
-                                            <option value="-1">Hủy đơn</option>
-                                        </select>
-                                        <input type="hidden" name="role" value="<?php echo $role ?>">
-                                        <input type="hidden" name="userId" value="<?php echo $userId ?>">
-                                        <input type="hidden" name="billId" value="<?php echo $billId ?>">
-                                        <button type="submit"
-                                            class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm">
-                                            Cập nhật
-                                        </button>
-                                    </form>
-                                    <a href="<?php echo _WEB_HOST; ?>?module=bills&action=billDetail&role=<?php echo $role; ?>&userId=<?php echo $item['id_user']; ?>&billId=<?php echo $item['id']; ?>"
-                                        class="text-sky-600 font-semibold hover:underline">Chi tiết</a>
+                                    <?php
+                                    if ($item['status'] != -1):
+                                    ?>
+                                        <form action="" method="POST" class="flex gap-2 items-center">
+                                            <select name="status"
+                                                class="border-gray-300 rounded-md text-sm focus:ring-sky-500 focus:border-sky-500">
+                                                <option value="1">Xác nhận Đơn</option>
+                                                <option value="2">Đang đóng gói</option>
+                                                <option value="3">Đang giao hàng</option>
+                                                <option value="4">Đã hoàn thành</option>
+                                                <option value="-1">Hủy đơn</option>
+                                            </select>
+                                            <input type="hidden" name="role" value="<?php echo $role ?>">
+                                            <input type="hidden" name="userId" value="<?php echo $userId ?>">
+                                            <input type="hidden" name="billId" value="<?php echo $billId ?>">
+                                            <button type="submit"
+                                                class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-md text-sm">
+                                                Cập nhật
+                                            </button>
+                                        <?php endif; ?>
+                                        </form>
+                                        <a href="<?php echo _WEB_HOST; ?>?module=bills&action=billDetail&role=<?php echo $role; ?>&userId=<?php echo $item['id_user']; ?>&billId=<?php echo $item['id']; ?>"
+                                            class="text-sky-600 font-semibold hover:underline">Chi tiết</a>
                                 </td>
                             </tr>
                         <?php endforeach;

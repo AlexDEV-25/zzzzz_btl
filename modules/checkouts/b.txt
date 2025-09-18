@@ -1,0 +1,14 @@
+$product = selectOne("SELECT * FROM products WHERE id = " . intval($productDetail['id_product']));
+                $dataUpdateProduct = [
+                    'sold' => $product['sold'] + $amount
+                ];
+                $updateProduct = update('products', $dataUpdateProduct, "id = " . intval($productDetail['id_product']));
+
+
+$productDetail = selectOne("SELECT * FROM products_detail WHERE id = $productDetailId");
+            $dataUpdateProductDetail = [
+                'amount' => $productDetail['amount'] - $amount
+            ];
+            $updateProductDetail = update('products_detail', $dataUpdateProductDetail, "id = $productDetailId");
+
+

@@ -133,9 +133,9 @@ if (isset($filterAll['role'])) {
                             $productId = $product['id'];
                             $productDetail = selectOne("SELECT * FROM products_detail WHERE id_product = $productId");
                     ?>
-                            <article class="card-minimal rounded-2xl overflow-hidden group">
+                            <article class="card-minimal rounded-2xl overflow-hidden group h-full flex flex-col">
                                 <a href="?module=home&action=productDetail&productId=<?php echo $productId; ?>&role=<?php echo $role; ?>&userId=<?php echo $userId; ?>"
-                                    class="block">
+                                    class="block h-full flex flex-col">
 
                                     <div class="relative overflow-hidden bg-gray-50">
                                         <img src="<?php echo _IMGP_ . $product['thumbnail']; ?>"
@@ -157,7 +157,7 @@ if (isset($filterAll['role'])) {
                                         </div>
                                     </div>
 
-                                    <div class="p-6">
+                                    <div class="p-6 flex flex-col flex-grow relative">
                                         <h3 class="font-display text-xl font-medium text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                             <?php echo $product['name_product']; ?>
                                         </h3>
@@ -175,14 +175,14 @@ if (isset($filterAll['role'])) {
                                             <span class="minimal-badge">
                                                 Còn <?php echo $productDetail['amount']; ?> sản phẩm
                                             </span>
-                                            <div class="text-gray-400 text-sm">
+                                            <div class="text-yellow-400 text-sm">
                                                 ★★★★★ (<?php
                                                         $start = getCountRows("SELECT * FROM reviews WHERE id_product = $productId");
                                                         echo $start; ?>)
                                             </div>
                                         </div>
 
-                                        <div class="space-y-2 text-sm text-gray-600">
+                                        <div class="space-y-2 text-sm text-gray-600 mb-10">
                                             <div class="flex items-center">
                                                 <span class="w-1 h-1 bg-gray-400 rounded-full mr-2"></span>
                                                 Miễn phí vận chuyển
@@ -192,6 +192,13 @@ if (isset($filterAll['role'])) {
                                                 Bảo hành 24 tháng
                                             </div>
                                         </div>
+
+                                        <!-- Sold out bottom right -->
+                                        <div class="absolute bottom-4 right-6">
+                                            <span class="px-2 py-1 text-xs font-semibold text-white bg-orange-600 rounded-full shadow">
+                                                Đã bán <?php echo $product['sold']; ?>
+                                            </span>
+                                        </div>
                                     </div>
                                 </a>
                             </article>
@@ -199,6 +206,7 @@ if (isset($filterAll['role'])) {
                         endif;
                     endforeach; ?>
                 </div>
+
             </main>
         </div>
     </div>

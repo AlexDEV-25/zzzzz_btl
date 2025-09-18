@@ -50,13 +50,18 @@ layout('header_custom', $data);
 ?>
 
 <body>
-    <div class="min-h-full bg-gray-100 py-10">
+    <div class="min-h-full bg-gray-100 py-10 mt-20">
         <div class="max-w-4xl mx-auto">
             <!-- Tiêu đề -->
             <header class="bg-white shadow mb-6">
                 <div class="px-6 py-4">
                     <h1 class="text-2xl font-bold tracking-tight text-gray-900">Chi tiết đơn hàng</h1>
-                    <p class="text-sm text-gray-500">Mã đơn hàng #<?php echo $bill['id']; ?></p>
+                    <p class="font-medium text-gray-600">Mã đơn hàng #<?php echo $bill['id']; ?></p>
+                    <?php $userAddres = selectOne("SELECT * FROM users WHERE id = $userId ")['address']; ?>
+                    <p class="font-medium text-gray-600">Địa chỉ : <?php echo $userAddres; ?></p>
+                    <?php if ($bill['end_date'] != null) : ?>
+                        <p><span class="font-medium text-gray-600">Ngày giao:</span> <?php echo $bill['end_date']; ?></p>
+                    <?php endif; ?>
                 </div>
             </header>
 
@@ -166,6 +171,23 @@ layout('header_custom', $data);
                     </div>
                 <?php endif; ?>
 
+                <?php $payment_method = $bill['payment_method']; ?>
+                <?php if ($payment_method == 0): ?>
+                    <div class="flex justify-between text-gray-700">
+                        <span>Phương thức thanh toán : </span>
+                        <span>COD</span>
+                    </div>
+                <?php elseif ($payment_method == 1):  ?>
+                    <div class="flex justify-between text-gray-700">
+                        <span>Phương thức thanh toán : </span>
+                        <span>VNPAY</span>
+                    </div>
+                <?php elseif ($payment_method == 2):  ?>
+                    <div class="flex justify-between text-gray-700">
+                        <span>Phương thức thanh toán : MOMO</span>
+                        <span>MOMO</span>
+                    </div>
+                <?php endif; ?>
                 <div class="flex justify-between text-lg font-bold text-gray-900 border-t pt-3">
                     <span>Thành tiền</span>
                     <span><?php echo number_format($afterDiscount, 0, ',', '.'); ?> đ</span>
