@@ -38,7 +38,7 @@ if (isPost()) {
                     } else if ($role == 2) {
                         redirect('?module=home&action=manager&role=2');
                     } else if ($role == 3) {
-                        redirect('?module=home&action=employee&role=3');
+                        redirect('?module=bills&action=list&role=3');
                     } else {
                         redirect('?module=home&action=dashboard&role=0&userId=' . $userId);
                     }

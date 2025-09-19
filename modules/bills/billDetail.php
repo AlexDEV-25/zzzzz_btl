@@ -49,7 +49,10 @@ if (isset($filterAll['role'])) {
         layout('header_admin', $data);
     } elseif ($role == 2) {
         layout('header_manager', $data);
+    } else {
+        layout('header_employee',$data);
     }
+
 }
 ?>
 

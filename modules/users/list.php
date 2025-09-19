@@ -69,6 +69,7 @@ layout('header_admin', $data);
                                 <th scope="col" class="px-6 py-3">Họ tên</th>
                                 <th scope="col" class="px-6 py-3">Email</th>
                                 <th scope="col" class="px-6 py-3">Số điện thoại</th>
+                                <th scope="col" class="px-6 py-3">Vai trò</th>
                                 <th scope="col" class="px-6 py-3">Trạng thái</th>
                                 <th scope="col" class="px-6 py-3" width="5%">Sửa</th>
                                 <th scope="col" class="px-6 py-3" width="5%">Xoá</th>
@@ -87,6 +88,18 @@ layout('header_admin', $data);
                                             <td class="px-6 py-4"><?php echo $item['fullname']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['email']; ?></td>
                                             <td class="px-6 py-4"><?php echo $item['phone']; ?></td>
+                                            <td class="px-6 py-4"><?php
+                                                                    $role = $item['role'];
+                                                                    if ($role == 1) {
+                                                                        echo "Chủ hệ thống";
+                                                                    } elseif ($role == 2) {
+                                                                        echo "Quản lý";
+                                                                    } elseif ($role == 3) {
+                                                                        echo "Nhân viên";
+                                                                    } else {
+                                                                        echo "Người dùng";
+                                                                    }
+                                                                    ?></td>
                                             <td class="px-6 py-4"><?php echo $item['status'] == 1 ? '<span class="inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã kích hoạt</span>' : '<span class="inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Chưa kích hoạt</span>'; ?></td>
                                             <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=edit&id=<?php echo $item['id']; ?>" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-pen-to-square"></i></a></td>
                                             <td class="px-6 py-4"><a href="<?php echo _WEB_HOST; ?>?module=users&action=delete&id=<?php echo $item['id']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xoá?')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"><i class="fa-solid fa-trash"></i></a></td>
