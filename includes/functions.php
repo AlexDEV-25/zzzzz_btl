@@ -192,14 +192,12 @@ function redirect($path = 'index.php')
 
 
 // thông báo lỗi dưới
-
 function form_error($errors, $fileName, $beforeHtml = '', $afterHtml = '')
 {
     return (!empty($errors[$fileName])) ? $beforeHtml . reset($errors[$fileName]) . $afterHtml : null;
 }
 
 // hiển thị dữ liệu cũ
-
 function oldData($old_data, $fileName, $defaul = null)
 {
     return (!empty($old_data[$fileName])) ? $old_data[$fileName] : $defaul;
@@ -233,6 +231,7 @@ function productUnique($product)
     }
     return true;
 }
+
 function getCountCart($userId)
 {
     $rowCart = getCountRows("SELECT * FROM cart WHERE id_user = $userId");
@@ -244,6 +243,7 @@ function getCountCart($userId)
     }
     return $cartCount;
 }
+
 function checkDie($data)
 {
     echo '<pre>';

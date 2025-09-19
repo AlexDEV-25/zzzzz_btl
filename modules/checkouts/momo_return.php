@@ -36,7 +36,6 @@ if ($resultCode == 0) {
 
     // Lấy sản phẩm giỏ hàng và tính tổng
     $total = 0;
-    $products = [];
     foreach ($productCartIds as $productCartId) {
         $productCartId = intval($productCartId);
         $productCart = selectOne("SELECT * FROM products_cart WHERE id = $productCartId");
@@ -53,12 +52,12 @@ if ($resultCode == 0) {
         $amount = intval($amount_buy[$productCartId]);
         $total += $product['price'] * $amount;
 
-        $products[] = [
-            'name' => $product['name_product'],
-            'image' => $productDetail['image'],
-            'amount' => $amount,
-            'price' => $product['price']
-        ];
+        if ($amount <= $productDetail['amount']) {
+            $dataAmount = [
+                'amount' => $productDetail['amount'] - $amount,
+            ];
+            update('products_detail', $dataAmount, "id = $productDetailId");
+        }
     }
 
     // --- Xử lý voucher ---

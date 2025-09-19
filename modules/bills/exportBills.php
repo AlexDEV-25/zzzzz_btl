@@ -19,8 +19,8 @@ foreach ($listBills as $bill) {
 }
 
 // Xuất file Word
-// header("Content-type: application/vnd.ms-word");
-// header("Content-Disposition: attachment;Filename=don_hang_A7.doc");
+header("Content-type: application/vnd.ms-word");
+header("Content-Disposition: attachment;Filename=don_hang_A7.doc");
 
 echo "<html><head>
 <style>

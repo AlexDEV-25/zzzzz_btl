@@ -29,6 +29,21 @@ layout('header_custom', $data);
                 <div class="mb-4">
                     <h2 class="text-lg font-semibold text-gray-800">Mã đơn: #<?php echo $item['id']; ?></h2>
                     <p class="text-sm text-gray-500">Ngày đặt: <?= $item['date'] ?></p>
+                    <?php
+                    if ($item['status'] == 0) {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">Chưa xác nhận</span>';
+                    } elseif ($item['status'] == 1) {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">Đã xác nhận</span>';
+                    } elseif ($item['status'] == 2) {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700">Đang đóng gói</span>';
+                    } elseif ($item['status'] == 3) {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-orange-100 px-2 py-1 text-xs font-medium text-orange-700">Đang vận chuyển</span>';
+                    } elseif ($item['status'] == 4) {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">Đã hoàn thành</span>';
+                    } else {
+                        echo '<span class="ml-2 inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700">Đã hủy</span>';
+                    }
+                    ?>
                 </div>
 
                 <!-- Danh sách sản phẩm -->

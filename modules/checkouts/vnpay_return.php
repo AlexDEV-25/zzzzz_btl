@@ -16,21 +16,15 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
     }
 
     $userId = intval($checkoutData['userId']);
-    $productCartIds = $checkoutData['productCartIds'];
-    $amount_buy = $checkoutData['amount_buy'];
+    $productCartIds = $checkoutData['productCartIds']; // mảng
+    $amount_buy = $checkoutData['amount_buy']; // mảng
     $cartId = intval($checkoutData['cartId']);
-
-    // Nếu là admin thì redirect sang admin
-    if ($userId == 1) {
-        redirect('?module=home&action=admin');
-    }
 
     $user = selectOne("SELECT * FROM users WHERE id = $userId");
     $cartCount = getCountCart($userId);
 
     // Lấy sản phẩm giỏ hàng và tính tổng
     $total = 0;
-    $products = [];
     foreach ($productCartIds as $productCartId) {
         $productCartId = intval($productCartId);
         $productCart = selectOne("SELECT * FROM products_cart WHERE id = $productCartId");
@@ -47,12 +41,12 @@ if ($filterAll['vnp_TransactionNo'] != 0) {
         $amount = intval($amount_buy[$productCartId]);
         $total += $product['price'] * $amount;
 
-        $products[] = [
-            'name' => $product['name_product'],
-            'image' => $productDetail['image'],
-            'amount' => $amount,
-            'price' => $product['price']
-        ];
+        if ($amount <= $productDetail['amount']) {
+            $dataAmount = [
+                'amount' => $productDetail['amount'] - $amount,
+            ];
+            update('products_detail', $dataAmount, "id = $productDetailId");
+        }
     }
 
     // --- Xử lý voucher ---

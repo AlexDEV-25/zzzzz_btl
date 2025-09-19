@@ -4,7 +4,7 @@ if (!defined('_CODE')) {
     die("Truy cập thất bại!");
 }
 
-$token = filter()['token'] ?? null ;
+$token = filter()['token'] ?? null;
 if (!empty($token)) {
     // Truy vấn để kiểm tra token với database
     $tokenQuery = selectOne("SELECT id FROM users WHERE activeToken = '$token'");

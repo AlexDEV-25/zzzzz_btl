@@ -15,25 +15,43 @@ if (isPost() && !empty($filterAll['billId'])) {
 
         // Nếu trạng thái thay đổi
         if ($billStatus != $newStatus) {
-            if ($newStatus == 2) {
-                // ✅ Xác đóng đơn → trừ số lượng sản phẩm
+            if ($newStatus == 1) {
+                // ✅ Lấy chi tiết sản phẩm trong đơn
                 $listBillDetail = selectAll("SELECT * FROM products_bill WHERE id_bill = $billId");
 
+                $notEnough = []; // Danh sách sản phẩm thiếu hàng
+
+                // 1️⃣ Kiểm tra trước
                 foreach ($listBillDetail as $item) {
                     $productDetailId = (int) $item['id_product_detail'];
-                    $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId");
+                    $productDetail   = selectOne("SELECT amount, id_product FROM products_detail WHERE id = $productDetailId");
 
                     if ($productDetail) {
-                        $newAmount = max(0, $productDetail['amount'] - $item['amount_buy']);
-
-                        update('products_detail', ['amount' => $newAmount], "id =$productDetailId");
-                        if ($newAmount == 0) {
-                            setFlashData('smg', '⚠️ Một số sản phẩm đã hết hàng.');
-                            setFlashData('smg_type', 'warning');
+                        if ($productDetail['amount'] < $item['amount_buy']) {
+                            // Lấy tên sản phẩm để báo lỗi
+                            $product = selectOne("SELECT name_product FROM products WHERE id = " . intval($productDetail['id_product']));
+                            $notEnough[] = $product['name_product'] . " (cần {$item['amount_buy']}, còn {$productDetail['amount']})";
                         }
                     }
                 }
-                $dataUpdate = ['status' => $newStatus];
+
+                if (!empty($notEnough)) {
+                    // Không cập nhật trạng thái
+                    $dataUpdate = ['status' => $billStatus];
+                } else {
+                    // 3️⃣ Nếu đủ → trừ số lượng và cập nhật trạng thái
+                    foreach ($listBillDetail as $item) {
+                        $productDetailId = (int) $item['id_product_detail'];
+                        $productDetail   = selectOne("SELECT amount FROM products_detail WHERE id = $productDetailId");
+
+                        if ($productDetail) {
+                            $newAmount = $productDetail['amount'] - $item['amount_buy'];
+                            update('products_detail', ['amount' => $newAmount], "id = $productDetailId");
+                        }
+                    }
+
+                    $dataUpdate = ['status' => $newStatus];
+                }
             } elseif ($newStatus == 4 || $newStatus == -1) {
                 // ✅ Hoàn tất hoặc Hủy đơn
                 $dataUpdate = [
@@ -89,6 +107,12 @@ if (isPost() && !empty($filterAll['billId'])) {
             setFlashData('smg', '❌ Hệ thống đang lỗi, vui lòng thử lại sau.');
             setFlashData('smg_type', 'danger');
         }
+        if (!empty($notEnough)) {
+            // 2️⃣ Nếu có sản phẩm thiếu → báo lỗi và giữ nguyên trạng thái
+            $msg = "❌ Không đủ hàng cho các sản phẩm: <br>" . implode("<br>", $notEnough);
+            setFlashData('smg', $msg);
+            setFlashData('smg_type', 'danger');
+        }
     } else {
         setFlashData('smg', '❌ Đơn hàng không tồn tại.');
         setFlashData('smg_type', 'danger');
@@ -124,7 +148,7 @@ if (isset($filterAll['role'])) {
     } elseif ($role == 2) {
         layout('header_manager', $data);
     } else {
-        layout('header_employee',$data);
+        layout('header_employee', $data);
     }
 }
 ?>
@@ -224,13 +248,21 @@ if (isset($filterAll['role'])) {
                 </tbody>
             </table>
         </div>
-        <div class="mt-6 flex justify-end">
+        <div class="mt-6 flex justify-end gap-3">
+            <form action="?module=bills&action=bulkConfirm" method="POST">
+                <input type="hidden" class="form-control" name="role" value="<?php echo $role; ?>">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium">
+                    Xác nhận hàng loạt
+                </button>
+            </form>
+
             <form action="?module=bills&action=exportBills" method="POST" target="_blank">
                 <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md text-sm font-medium">
                     Xuất đơn đã xác nhận
                 </button>
             </form>
         </div>
+
     </div>
 </body>
 <?php layout('footer'); ?>
