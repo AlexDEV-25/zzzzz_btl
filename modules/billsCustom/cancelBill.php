@@ -9,7 +9,7 @@ $userId = $filterAll['userId'] ?? null;
 $billStatus = selectOne("SELECT * FROM bills WHERE id = $billId")['status'];
 
 if ($billId) {
-    if ($status == 0) {
+    if ($billStatus == 0) {
         $sql = "UPDATE bills 
         SET status = -1 
         WHERE id = $billId AND status IN (0)";
@@ -20,7 +20,7 @@ if ($billId) {
             setFlashData('msg', '❌ Hủy đơn thất bại!');
             setFlashData('msg_type', 'danger');
         }
-    } elseif ($status == 1 || $status == 2) {
+    } elseif ($billStatus == 1 || $billStatus == 2) {
         $sql = "UPDATE bills 
         SET status = -1 
         WHERE id = $billId AND status IN (1,2)";
