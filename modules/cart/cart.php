@@ -3,7 +3,6 @@ if (!defined('_CODE')) {
     die("truy cap that bai");
 }
 $filterAll = filter();
-checkDie($filterAll);
 $errors = [];
 $selectedDetailId = !empty($filterAll['detailId']) ? (int)$filterAll['detailId'] : null;
 // Xử lý POST trước để tránh lỗi header
