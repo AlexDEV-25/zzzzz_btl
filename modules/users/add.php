@@ -133,7 +133,7 @@ layout('header', $data);
                         </div>
                         <div class="form-group mg-form">
                             <label for="">Số điện thoại</label>
-                            <input name="phone" type="number" class="form-control" placeholder="Địa chỉ email"
+                            <input name="phone" type="number" class="form-control" placeholder="Số điện thoại"
                                 value="<?php
                                         echo oldData($oldData, 'phone');
                                         ?>">
